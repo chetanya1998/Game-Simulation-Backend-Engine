@@ -5,14 +5,15 @@ module.exports = {
   forbidden: [
     {
       name: 'not-to-unresolvable',
-      comment: 'Every import must resolve (catches imports of workspace packages that are not declared).',
+      comment:
+        'Every import must resolve (catches imports of workspace packages that are not declared).',
       severity: 'error',
       from: {},
       to: { couldNotResolve: true },
     },
     {
       name: 'no-undeclared-dependencies',
-      comment: "Packages may only import dependencies declared in their own package.json.",
+      comment: 'Packages may only import dependencies declared in their own package.json.',
       severity: 'error',
       from: {},
       to: { dependencyTypes: ['npm-no-pkg', 'npm-unknown'] },

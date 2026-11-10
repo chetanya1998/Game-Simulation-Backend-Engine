@@ -7,17 +7,17 @@ GameX Engine). Design: `docs/ARCHITECTURE.md`. Plan and phase status: `docs/PLAN
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
-| `pnpm install` | Install (Node ≥ 22.18, pnpm 10 via Corepack). |
-| `pnpm build` | Build every package (`tsc -b`), the CLI bundle (`tsup`) and the studio (`vite build`). |
-| `pnpm typecheck` | Type-check sources **and tests** of every package. Needs dependencies built (turbo does it). |
-| `pnpm test` | Vitest in every package, with coverage (≥ 85 % enforced for `model` and `engine`). |
-| `pnpm lint` | ESLint (type-aware, zero warnings) + Prettier check. `pnpm format` fixes formatting. |
-| `pnpm depcruise` | Architecture rules (no cycles, pure core, declared deps). Run after `pnpm build`. |
-| `pnpm check` | Everything above, in CI order. |
-| `pnpm --filter @gamex/<pkg> test` | One package. |
-| `node packages/cli/dist/gamex.js doctor --json` | Run the built CLI. |
+| Command                                         | What it does                                                                                 |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `pnpm install`                                  | Install (Node ≥ 22.18, pnpm 10 via Corepack).                                                |
+| `pnpm build`                                    | Build every package (`tsc -b`), the CLI bundle (`tsup`) and the studio (`vite build`).       |
+| `pnpm typecheck`                                | Type-check sources **and tests** of every package. Needs dependencies built (turbo does it). |
+| `pnpm test`                                     | Vitest in every package, with coverage (≥ 85 % enforced for `model` and `engine`).           |
+| `pnpm lint`                                     | ESLint (type-aware, zero warnings) + Prettier check. `pnpm format` fixes formatting.         |
+| `pnpm depcruise`                                | Architecture rules (no cycles, pure core, declared deps). Run after `pnpm build`.            |
+| `pnpm check`                                    | Everything above, in CI order.                                                               |
+| `pnpm --filter @gamex/<pkg> test`               | One package.                                                                                 |
+| `node packages/cli/dist/gamex.js doctor --json` | Run the built CLI.                                                                           |
 
 **Definition of done:** `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm depcruise` pass
 from a clean checkout, and the change has tests that would fail without it.
