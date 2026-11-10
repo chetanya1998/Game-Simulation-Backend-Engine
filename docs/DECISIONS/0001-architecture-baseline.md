@@ -13,7 +13,7 @@ code, we need to agree on the boundaries that are expensive to change later: pac
 
 1. **TypeScript monorepo** (pnpm 10 + Turborepo, Node ≥ 22.18, ESM-only, strict TS). Libraries build with
    `tsc -b`; CLI bundled with `tsup`; studio with Vite.
-2. **Pure core.** `@gamespec/model` and `@gamespec/engine` have no I/O, no `node:*` imports, no LLM SDK,
+2. **Pure core.** `@gamex/model` and `@gamex/engine` have no I/O, no `node:*` imports, no LLM SDK,
    enforced by ESLint and dependency-cruiser in CI.
 3. **Single enforcement path.** One rule interpreter (`engine.step`) drives simulation, exploit search,
    golden-test generation, and the reference runner shipped in the Spec Pack.

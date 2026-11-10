@@ -1,7 +1,8 @@
-# GameSpec Studio — Architecture
+# GameX Engine — Architecture
 
-> Status: **DRAFT v0.1 — awaiting approval.** Items marked **⟨Q n⟩** depend on the clarifying
-> questions in [`PLAN.md`](./PLAN.md#clarifying-questions); the text shows the recommended default.
+> Status: **v0.2 — approved.** Answers to the planning questions are recorded in
+> [`DECISIONS/0002-planning-answers.md`](./DECISIONS/0002-planning-answers.md).
+> Product name: **GameX Engine** · npm scope `@gamex/*` · CLI `gamex` · Spec Pack folder `gamex/` · Apache-2.0.
 > This document is written for both game designers and engineers. Designer-facing summaries are
 > in the boxed "In plain words" notes.
 
@@ -9,7 +10,7 @@
 
 ## 1. What we are building
 
-GameSpec turns a game design (a GDD and/or an existing game repo) into a **canonical Game Model**,
+GameX turns a game design (a GDD and/or an existing game repo) into a **canonical Game Model**,
 lets a human review every detected item, explores the model's outcomes with **deterministic**
 simulation, and writes a **Spec Pack** into the game repo that coding agents build the backend from.
 
@@ -29,7 +30,7 @@ flowchart LR
   ENG --> RES[(run results<br/>+ reproducibility record)]
   GM --> SP[specpack<br/>render → write]
   RES --> SP
-  SP --> OUT[/target repo: AGENTS.md section,<br/>gamespec/ folder/]
+  SP --> OUT[/target repo: AGENTS.md section,<br/>gamex/ folder/]
   OUT --> DR[drift<br/>code/config vs model]
   GM --> DR
 ```
@@ -43,7 +44,7 @@ flowchart LR
 
 | Principle | How it is enforced |
 |---|---|
-| One canonical model | Every consumer (`engine`, `specpack`, `drift`, `studio`) takes a `GameModel` value produced by `@gamespec/model`'s `parseGameModel()`. There is no other input type. |
+| One canonical model | Every consumer (`engine`, `specpack`, `drift`, `studio`) takes a `GameModel` value produced by `@gamex/model`'s `parseGameModel()`. There is no other input type. |
 | LLM proposes, code decides | `engine` and `specpack` have no dependency on `extract` or any LLM SDK (lint rule + dependency-cruiser check in CI). Golden-test expectations are produced by the engine's rule interpreter. |
 | Provenance on everything | Every node schema extends `NodeBase = { id, key, provenance, … }`; provenance is a required Zod field. |
 | Determinism | No `Math.random`, `Date.now`, `new Date()` or `Math.{exp,log,pow,sin,cos,…}` in `model`/`engine` (ESLint `no-restricted-properties/globals`). Seeded PRNG + in-house deterministic math (§4.2). Byte-identical output tested in CI. |
@@ -58,13 +59,13 @@ flowchart LR
 /AGENTS.md  /CLAUDE.md
 /docs/{MASTER_PROMPT,ARCHITECTURE,PLAN}.md  /docs/DECISIONS/NNNN-*.md
 /packages/
-  model/      @gamespec/model     Zod schemas, types, expression language, validation, JSON Schema gen
-  engine/     @gamespec/engine    PRNG, interpreter, reachability, sim, sweeps, sensitivity, exploits, invariants
-  ingest/     @gamespec/ingest    SafeFileSystem, discovery, readers (md/txt/pdf/json/yaml/toml/cs/gd/ts/asset), chunking
-  extract/    @gamespec/extract   LlmProvider, pass prompts, structured-output calls, merge/dedupe, gaps
-  specpack/   @gamespec/specpack  pure renderers (model → FileMap) + Node writer + AGENTS.md section manager
-  drift/      @gamespec/drift     deterministic config/code scanners + optional LLM re-extraction, diff, report
-  cli/        @gamespec/cli       `gamespec` binary (commander), --json everywhere, `studio` server
+  model/      @gamex/model     Zod schemas, types, expression language, validation, JSON Schema gen
+  engine/     @gamex/engine    PRNG, interpreter, reachability, sim, sweeps, sensitivity, exploits, invariants
+  ingest/     @gamex/ingest    SafeFileSystem, discovery, readers (md/txt/pdf/json/yaml/toml/cs/gd/ts/asset), chunking
+  extract/    @gamex/extract   LlmProvider, pass prompts, structured-output calls, merge/dedupe, gaps
+  specpack/   @gamex/specpack  pure renderers (model → FileMap) + Node writer + AGENTS.md section manager
+  drift/      @gamex/drift     deterministic config/code scanners + optional LLM re-extraction, diff, report
+  cli/        @gamex/cli       `gamex` binary (commander), --json everywhere, `studio` server
 /apps/studio/                     Vite + React app (talks to engine in a Worker; to CLI server for I/O + LLM)
 /fixtures/swarm-rescue/           GDD.md, sample-repo/, swarm-rescue.game-model.json, expected outputs
 /tooling/                         shared tsconfig / eslint config / test helpers
@@ -92,8 +93,8 @@ Rules:
 
 - **`model` and `engine` are pure**: no `node:*` imports, no I/O, no globals, no LLM. They run
   unchanged in Node, Vitest, and a Web Worker.
-- `specpack` exposes two entry points: `@gamespec/specpack` (pure: `renderSpecPack(model, results) → FileMap`,
-  browser-safe, used by the studio preview) and `@gamespec/specpack/node` (`writeFileMap(repoRoot, fileMap)`).
+- `specpack` exposes two entry points: `@gamex/specpack` (pure: `renderSpecPack(model, results) → FileMap`,
+  browser-safe, used by the studio preview) and `@gamex/specpack/node` (`writeFileMap(repoRoot, fileMap)`).
 - `ingest` has the only code allowed to touch a target repo's filesystem for *reading*; `specpack/node`
   is the only code allowed to *write* to it.
 - No cycles (checked by `dependency-cruiser` in CI).
@@ -103,7 +104,7 @@ Rules:
 
 ---
 
-## 3. The Game Model (`@gamespec/model`)
+## 3. The Game Model (`@gamex/model`)
 
 ### 3.1 Top-level shape
 
@@ -131,16 +132,16 @@ Every node extends:
 ```ts
 NodeBase = {
   id: string;          // stable kebab-case, unique within its section, e.g. "max-revives-per-mission"
-  key: string;         // camelCase identifier derived from id, used in expressions/code/golden tests ⟨Q2⟩
+  key: string;         // camelCase identifier derived from id, used in expressions/code/golden tests
   name?: string; description?: string; tags?: string[];
   provenance: Provenance;
 }
 Provenance = {
-  source: string;               // repo-relative path, or "gamespec:assumed"
+  source: string;               // repo-relative path, or "gamex:assumed"
   location: string;             // "§4.2 / lines 88–94", "p.7", "Assets/Tuning/Economy.asset:L14"
   excerpt: string;              // ≤ 200 chars
   confidence: "high" | "medium" | "low";
-  status: "detected" | "confirmed" | "edited" | "assumed";   // + "rejected" via review ledger ⟨Q4⟩
+  status: "detected" | "confirmed" | "edited" | "assumed";   // + "rejected" via review ledger
   alternatives?: { source, location, excerpt, value }[];    // conflicting evidence (GDD vs code)
 }
 ```
@@ -158,7 +159,7 @@ Constant = NodeBase & {
   value: number | Curve;
   min?: number; max?: number; step?: number;     // required for anything sweepable
   integer?: boolean;
-  balanceFile: string;                           // which gamespec/balance/<file>.json it is written to
+  balanceFile: string;                           // which gamex/balance/<file>.json it is written to
 }
 Curve =
   | { type: "linear",    params: { base, perStep, from?: 1 } }
@@ -169,7 +170,7 @@ Curve =
 ```
 
 Curves are evaluated by one function, `evalCurve(curve, n)`, which is also emitted verbatim (as
-dependency-free TypeScript) into `gamespec/formulas/reference.ts`, so game backends and our engine
+dependency-free TypeScript) into `gamex/formulas/reference.ts`, so game backends and our engine
 share one definition.
 
 ### 3.3 Variables, actions, rules
@@ -184,7 +185,8 @@ Action    = NodeBase & {
   effects: Effect[],                      // { set|add|sub|grant|consume, target, value: Expr } — applied atomically
   cooldown?: { seconds: Expr, scope },    // implemented via an implicit last-used timestamp variable
   limits?:   { max: Expr, per: "mission"|"session"|"day"|"lifetime" }[],
-  outcomes?: { id, weight: Expr, effects: Effect[], next?: StateRef }[],   // randomness (e.g. mission win/lose) ⟨Q8⟩
+  outcomes?: { id, weight: Expr, effects: Effect[], next?: StateRef }[],   // Level 1 mission model (always present for missions)
+  combat?:   CombatModel,                 // optional Level 2 model; when present it DERIVES outcome weights (§3.3.1)
   duration?: Expr,                        // simulated seconds the action takes
   errorCode: string,                      // e.g. REVIVE_LIMIT_REACHED, used by golden tests + openapi
 }
@@ -194,6 +196,37 @@ Rule      = NodeBase & { appliesTo: ActionRef[] | StateRef[] | "always", expr: E
 
 Cooldowns and per-scope limits are sugar: the model normalizer desugars them into implicit
 variables + rules, so the interpreter has exactly one enforcement path (and so do golden tests).
+
+#### 3.3.1 Two-level mission model
+
+How detailed a mission is depends on the GDD; the designer adds detail only where it matters.
+
+- **Level 1 — weighted outcomes (always there).** Every mission action resolves through `outcomes`
+  (win/lose, stars, duration, civilians saved) whose weights are expressions. This is the stable contract
+  the simulator, golden tests and Spec Pack depend on.
+- **Level 2 — optional `combat` block, per mission.** Instead of a hand-tuned win formula, a mission can
+  declare a stylized combat model and the engine derives the outcome distribution from it:
+
+  ```ts
+  CombatModel = {
+    waves: { count: Expr, dronesPerWave: Expr, droneHp: Expr, damageToPlayer: Expr }[] | WaveTemplate,
+    boss?: { hp: Expr, damagePerPhase: Expr[], phases: Expr },          // e.g. L5 Grand Central
+    heroPower: { laserDamage: Expr, fireRate: Expr },                  // from upgrade constants → Armory ties to win rate
+    playerSkill: { accuracy: Expr, dodgeRate: Expr },                  // from persona.*
+    modifiers: { comboMultiplier?: Expr, nearMissSlowMo?: Expr },      // multipliers
+    playerHp: Expr,
+    starsFrom: Expr,                                                   // e.g. hp remaining + civilians saved
+  }
+  ```
+
+  Resolution is a fast, seeded wave-by-wave sampled simulation producing win/lose, stars, duration and
+  **where the player died** (wave n or boss phase), which makes revive value measurable (revives happen at
+  a specific wave). All combat parameters are ordinary constants, so sweeps and the sensitivity tornado
+  cover them automatically. Missions without a `combat` block fall back to Level 1.
+- Reports state explicitly that outcomes come from a stylized model, not real gameplay. Every combat number
+  starts as `assumed` and is flagged as a gap until the designer confirms it.
+- Golden tests never depend on combat sampling: they test rules/eligibility/economy at `step()` level with
+  the outcome given as input (`when: { action, outcome: "win" }`).
 
 ### 3.4 State machine
 
@@ -209,8 +242,10 @@ live gameplay" rule refers to.
 reward?: Effect[], forbiddenIn?: StateRef[], inWorld?: boolean }`. Interstitial pacing
 ("≥180 s apart, max 1/mission, from Level 3, never after defeat") is expressed as ordinary
 eligibility expressions + caps over model variables — no special-cased ad logic in the engine.
-`RevenueAssumptions` holds eCPM per format per market and fill rate as constants (status `assumed`
-until the user supplies real numbers) ⟨Q9⟩.
+`RevenueAssumptions` is **optional**: eCPM per format per market and fill rate, as sweepable constants.
+When absent, the simulator still reports impressions/opt-ins but skips revenue KPIs (ad revenue/DAU,
+ARPDAU) and says so. When present with placeholder values they are `assumed` and flagged as gaps; the
+user is asked for real numbers (or estimates from their mediation dashboard).
 
 ### 3.6 Personas, KPIs, invariants, gaps
 
@@ -221,7 +256,7 @@ until the user supplies real numbers) ⟨Q9⟩.
 - `Invariant` = `{ expr over results, quantifier: "all-runs" | { atLeast: ratio }, scope: persona? }`.
 - `Gap` = `{ id, kind: "missing"|"ambiguous"|"contradiction"|"assumption", question, relatedRefs[], blocking }`.
 
-### 3.7 Expression language ⟨Q2⟩
+### 3.7 Expression language
 
 A tiny, total, side-effect-free language. **Stored as strings** in the model for readability
 (designers and LLMs both write it naturally), parsed to an AST at load time; the AST is cached and
@@ -268,7 +303,7 @@ When the model came from a file we keep a JSON source map so issues point to fil
 
 ---
 
-## 4. The engine (`@gamespec/engine`)
+## 4. The engine (`@gamex/engine`)
 
 ### 4.1 Core: the rule interpreter
 
@@ -293,7 +328,7 @@ and the reference runner shipped in the Spec Pack. That is how "golden tests pro
   specified by IEEE-754/ECMAScript). Distributions (normal, lognormal, Poisson, exponential) use
   in-house `dlog`/`dexp` implemented with fixed-iteration algorithms on those primitives, never the
   platform's `Math.log`/`Math.exp` (which are implementation-approximated and differ across engines).
-  ⟨Q3⟩
+ 
 - Integer resources: currencies/counters are integers; curves declare rounding; aggregate statistics
   are floats computed in a fixed order.
 - Output serialization through the canonical JSON writer; determinism test = hash of output for a fixed
@@ -317,11 +352,11 @@ with node refs and a human message.
 
 ### 4.4 Monte Carlo simulation
 
-Time model ⟨Q8⟩: a simulated clock in seconds. For each player: days 1..D → sessions per day (persona
+Time model: a simulated clock in seconds. For each player: days 1..D → sessions per day (persona
 distribution) → within a session, walk the state machine. In each state the **persona policy** picks
 among currently-legal actions (weights from persona parameters, e.g. ad opt-in probability for
-rewarded placements); gameplay itself is abstracted as an action with weighted `outcomes`
-(win/lose with probability = f(persona skill, level difficulty constant)) and a duration. Churn is a
+rewarded placements); gameplay itself is resolved by the two-level mission model (§3.3.1): Level 1
+weighted `outcomes`, or, where a mission declares `combat`, the derived wave-by-wave resolution. Churn is a
 hazard function of persona churn sensitivity and frustration signals (consecutive defeats, walls).
 
 Outputs per run:
@@ -367,10 +402,10 @@ counterexample.
 
 ## 5. Ingestion & extraction
 
-### 5.1 `@gamespec/ingest`
+### 5.1 `@gamex/ingest`
 
 - `SafeFileSystem(root)` — the only reader for target repos:
-  - honors `.gitignore` (+ `.gamespecignore`),
+  - honors `.gitignore` (+ `.gamexignore`),
   - hard deny-list that cannot be overridden by config: `.env*`, `*.pem`, `*.key`, `*.p12`, `*.pfx`,
     `*.keystore`, `*.jks`, `id_rsa*`, `*.mobileprovision`, `google-services.json`,
     `GoogleService-Info.plist`, `credentials*.json`, `secrets.*`, `.npmrc`, `.git/`, plus a content scan
@@ -385,13 +420,19 @@ counterexample.
 - Readers return `Chunk { file, startLine, endLine, page?, heading?, text }`. Markdown chunks on headings;
   code chunks on top-level declarations; PDF via `unpdf` per page.
 
-### 5.2 `@gamespec/extract`
+### 5.2 `@gamex/extract`
 
 - `LlmProvider` interface: `structured<T>(request: { system, input: Chunk[], schema: ZodType<T>, name }) → T`.
-  - `AnthropicProvider` (official `@anthropic-ai/sdk`): model from `GAMESPEC_MODEL` (default
-    `claude-opus-5-5` ⟨Q10⟩), structured outputs (`output_config.format` / `messages.parse` with Zod),
-    streaming for long inputs, refusal handling, prompt caching of the shared system prompt + GDD prefix
-    across passes.
+  - **The user chooses the model/agent.** Resolution order: `--model` flag → `GAMEX_MODEL` env →
+    `gamex/config.json` → default `claude-opus-5-5`. `--provider` selects the provider.
+  - `AnthropicProvider` (official `@anthropic-ai/sdk`): structured outputs (`output_config.format` /
+    `messages.parse` with Zod), streaming for long inputs, refusal handling, prompt caching of the shared
+    system prompt + GDD prefix across passes.
+  - `AgentHandoffProvider` ("bring your own agent session"): instead of calling an API, GameX writes each
+    pass request (instructions + chunks + JSON Schema) to `gamex/.work/requests/` and the user's coding agent
+    (Claude Code, Codex, Cursor, …) fills `gamex/.work/responses/`; GameX then validates them with the same
+    Zod schemas and retry/issue feedback. No API key needed; same provenance verification.
+  - Other API providers can be added behind the same interface later.
   - `MockProvider` (fixtures keyed by pass + input hash) for all unit tests; `RecordingProvider` to
     capture fixtures from an opt-in live run.
 - Passes A–D as specified; each output is Zod-validated; on failure, re-ask with the validation issues
@@ -407,35 +448,35 @@ counterexample.
 
 ### 5.3 Review
 
-Review operates on the candidate model + a **review ledger** ⟨Q4⟩ (`gamespec/review.json`):
+Review operates on the candidate model + a **review ledger** (`gamex/review.json`):
 decisions keyed by node id + content hash, so re-running extraction does not resurrect rejected items
-or overwrite edits. `gamespec review` is an interactive TUI (approve / edit in `$EDITOR` / reject /
+or overwrite edits. `gamex review` is an interactive TUI (approve / edit in `$EDITOR` / reject /
 mark assumed / skip) and also accepts a decisions file non-interactively (`--decisions file.json`) for
 agents and CI. Only `confirmed | edited | assumed` items are promoted to `game-model.json`.
 
 ---
 
-## 6. Spec Pack (`@gamespec/specpack`)
+## 6. Spec Pack (`@gamex/specpack`)
 
 - **Pure render**: `renderSpecPack(model, latestRun?) → FileMap` (`Map<path, { content, ownership }>`), where
   `ownership ∈ "generated" | "section" | "create-if-missing" | "editable-seeded"`.
 - **Writer** (`specpack/node`): computes a plan (create / update / unchanged / skip-editable /
   conflict), shows it (or `--json`), then writes atomically (temp file + rename). Never touches paths outside
-  `gamespec/`, except the delimited `AGENTS.md` block and the shims.
-- `AGENTS.md` block delimited by `<!-- GAMESPEC:BEGIN v1 -->` … `<!-- GAMESPEC:END -->`; content outside it is
+  `gamex/`, except the delimited `AGENTS.md` block and the shims.
+- `AGENTS.md` block delimited by `<!-- GAMEX:BEGIN v1 -->` … `<!-- GAMEX:END -->`; content outside it is
   preserved byte-for-byte; block kept ≈30–60 lines (snapshot-tested for length).
-- Generated files begin with `GENERATED BY GAMESPEC — edit via the studio or the gamespec CLI` (as a
+- Generated files begin with `GENERATED BY GAMEX — edit via the studio or the gamex CLI` (as a
   comment where the format allows; for JSON, a top-level `"$comment"` key — JSON has no comments).
 - **Editable files** (RULES.md narrative sections, `tasks/*.md`) contain
-  `<!-- GAMESPEC:EDITABLE -->` regions; regeneration preserves them. If a user edited a generated region,
+  `<!-- GAMEX:EDITABLE -->` regions; regeneration preserves them. If a user edited a generated region,
   the writer reports a conflict instead of overwriting (hash of last-written content is kept in
-  `gamespec/.gamespec-lock.json`).
+  `gamex/.gamex-lock.json`).
 - **Idempotency**: no timestamps or absolute paths in generated content; stable ordering everywhere;
   `sync` twice ⇒ zero diff (tested).
 - **Golden tests** are generated by the engine, not the LLM: for every rule / limit / cooldown /
   placement eligibility, boundary-value cases (at limit − 1, at limit, over limit; cooldown gap − 1 s, = gap)
   plus accepted-path cases sampled from simulation traces. Expected `then` = interpreter output.
-- **Reference runner** in the pack (`gamespec/tests/runner/`) ⟨Q6⟩: a dependency-free TypeScript
+- **Reference runner** in the pack (`gamex/tests/runner/`): a dependency-free TypeScript
   interpreter of `game-model.json` + `run-golden.ts` that executes every golden case and prints TAP.
   Runs with plain `node` (≥ 22.18, native type stripping; code uses only erasable TS syntax). This is the
   executable definition of the rules; a backend in any language is "done" when it produces the same
@@ -450,31 +491,31 @@ agents and CI. Only `confirmed | edited | assumed` items are promoted to `game-m
 
 ---
 
-## 7. Drift (`@gamespec/drift`)
+## 7. Drift (`@gamex/drift`)
 
 - **Deterministic first**: parse JSON/YAML/TOML/`.asset` configs and simple constant declarations in
-  C#/GDScript/TS (regex + light tokenizer) using a **binding map** (`gamespec/bindings.json`, generated
+  C#/GDScript/TS (regex + light tokenizer) using a **binding map** (`gamex/bindings.json`, generated
   on first sync and refined by the user) from model `key` → file + path/symbol. This catches the planted
   "code allows 3 revives" with exact file/line without an LLM.
 - **Optional LLM re-extraction** (Pass C only) for unbound code, results marked `confidence` accordingly.
 - Classification: `value-mismatch | missing-in-code | missing-in-spec | rule-violation`; severity
-  `blocking | warning`; `gamespec drift` exits non-zero on blocking drift. Writes `reports/drift.md` and
+  `blocking | warning`; `gamex drift` exits non-zero on blocking drift. Writes `reports/drift.md` and
   `--json`.
 
 ---
 
-## 8. CLI (`@gamespec/cli`)
+## 8. CLI (`@gamex/cli`)
 
-`gamespec <command> [--json] [--cwd <repo>]`. Commands: `init, ingest, extract, review, validate, sim,
+`gamex <command> [--json] [--cwd <repo>]`. Commands: `init, ingest, extract, review, validate, sim,
 explore, sync, drift, studio`. Conventions:
 
 - `--json` prints exactly one JSON document to stdout (`{ ok, command, data, issues }`); human output and
   progress go to stderr. Exit codes: `0` ok, `1` validation/blocking findings, `2` usage error, `3` I/O/LLM error.
-- Work files live in `gamespec/.work/` (gitignored via a generated `gamespec/.gitignore`): ingest plan,
-  chunk cache, raw extraction outputs, run results. ⟨Q4⟩
-- `gamespec studio` starts a local server on `127.0.0.1` (random port, per-launch token) that serves the
+- Work files live in `gamex/.work/` (gitignored via a generated `gamex/.gitignore`): ingest plan,
+  chunk cache, raw extraction outputs, run results.
+- `gamex studio` starts a local server on `127.0.0.1` (random port, per-launch token) that serves the
   built studio and exposes a small local API for repo reading (via `SafeFileSystem`), extraction (keeps
-  `ANTHROPIC_API_KEY` server-side), and Spec Pack writing. ⟨Q5⟩
+  `ANTHROPIC_API_KEY` server-side), and Spec Pack writing.
 
 ---
 
@@ -484,7 +525,7 @@ explore, sync, drift, studio`. Conventions:
   state machine (auto-layout with ELK); **ECharts** for time series, distributions, tornado.
 - Engine runs in a **Web Worker pool** (Comlink); runs are chunked by persona/player ranges — thanks to
   stream splitting, results are identical to the CLI's.
-- Works offline when served by `gamespec studio` or as a static build (static mode: model import/export
+- Works offline when served by `gamex studio` or as a static build (static mode: model import/export
   via file picker, Spec Pack as a downloadable zip; no extraction).
 - Light/dark via CSS variables + `prefers-color-scheme` + manual toggle. Accessible chart palettes.
 - Views 1–10 from the master prompt; variant compare = two model snapshots + two run records side by side
@@ -494,7 +535,7 @@ explore, sync, drift, studio`. Conventions:
 
 ## 10. Cross-cutting
 
-- **Errors**: one `GameSpecError { code, message, where: { file?, line?, col?, path?, nodeRef? }, hint }`
+- **Errors**: one `GameXError { code, message, where: { file?, line?, col?, path?, nodeRef? }, hint }`
   used across packages; CLI renders them with code frames.
 - **Testing**: Vitest workspace; `fast-check` for model/engine; snapshot tests for renderers; golden
   end-to-end test on Swarm Rescue (`fixtures/swarm-rescue/expected/`) with an "update snapshots" script;

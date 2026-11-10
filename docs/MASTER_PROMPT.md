@@ -1,5 +1,7 @@
 # MASTER PROMPT — GameSpec Studio (working name)
 
+> **Naming note:** the product is now **GameX Engine** (ADR 0002). This brief is kept verbatim; read "GameSpec" as GameX Engine, `gamespec` as `gamex`, and `/gamespec/` as `/gamex/`.
+
 > **How to use:** place this file at `docs/MASTER_PROMPT.md` in an empty repo, open Claude Code in the repo root, and say: "Read docs/MASTER_PROMPT.md in full and follow it. Start with Section 12 (Session Protocol)." Rename "GameSpec" anywhere once a final product name is chosen.
 
 ## 1. Your role

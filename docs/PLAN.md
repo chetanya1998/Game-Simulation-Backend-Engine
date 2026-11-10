@@ -1,6 +1,6 @@
-# GameSpec Studio — Phase Plan
+# GameX Engine — Phase Plan
 
-> Status: **DRAFT — awaiting approval.** Read alongside [`ARCHITECTURE.md`](./ARCHITECTURE.md).
+> Status: **Approved** (answers in [`DECISIONS/0002-planning-answers.md`](./DECISIONS/0002-planning-answers.md)). Read alongside [`ARCHITECTURE.md`](./ARCHITECTURE.md).
 > Each phase ends with a stop-and-report (what was built, how to run it, actual test output, known
 > limitations, next). Nothing in phase N+1 starts before "continue".
 
@@ -20,7 +20,7 @@ The default stack in the master prompt holds up; I'm keeping it with these speci
 | Worker RPC | Comlink | |
 | PDF | `unpdf` | Per-page text, small, works in Node. |
 | Arch checks | `dependency-cruiser` | Enforces "engine has no I/O / no extract import", no cycles. |
-| LLM | `@anthropic-ai/sdk`, structured outputs + Zod, default model `claude-opus-5-5` | Behind `LlmProvider`. |
+| LLM | `@anthropic-ai/sdk`, structured outputs + Zod, user-selectable model (default `claude-opus-5-5`) | Behind `LlmProvider`; also an agent-handoff provider. |
 
 ## Phases
 
@@ -31,7 +31,7 @@ Deliverables
   `exactOptionalPropertyTypes`, ESM), ESLint flat config (typescript-eslint, determinism bans for
   `model`/`engine`), Prettier, Vitest workspace with coverage.
 - Empty-but-real packages (`model, engine, ingest, extract, specpack, drift, cli`) and `apps/studio`
-  skeleton, each with one meaningful test (e.g. package exports resolve; `gamespec --version` prints the version).
+  skeleton, each with one meaningful test (e.g. package exports resolve; `gamex --version` prints the version).
 - `dependency-cruiser` rules (no cycles; `model`/`engine` cannot import `node:*`, `ingest`, `extract`, LLM SDKs).
 - `.github/workflows/ci.yml`: install (frozen lockfile) → lint → typecheck → test → build → depcruise.
 - `AGENTS.md` (commands, conventions, rules) + `CLAUDE.md` shim; `docs/DECISIONS/0001…`.
@@ -58,7 +58,7 @@ Tests / acceptance
 - fast-check properties: parse∘print = id; evaluator agrees with an oracle; well-typed ⇒ no throw; determinism.
 - Coverage ≥ 85 % for `model`.
 
-### Phase 2 — Engine (≈ 3–4 sessions)
+### Phase 2 — Engine (≈ 4–5 sessions)
 
 Deliverables
 1. `sfc32` + `splitmix32` + stream derivation; deterministic math (`dlog`, `dexp`) + distributions.
@@ -68,6 +68,7 @@ Deliverables
 5. Sweeps (grid, LHS) with common random numbers; OAT sensitivity → tornado data.
 6. Exploit search (greedy + beam + restarts), static reward-loop detection on the flow graph, delta-debugged repro sequences.
 7. Invariant evaluation with counterexample evidence.
+8. **(end of phase, after 1–7 are green)** Level 2 combat model: optional `combat` block schema + validation, seeded wave-by-wave resolver, death-location output (wave / boss phase), revive value KPI; Swarm Rescue L5 boss gets a combat block (all `assumed`).
 
 Tests / acceptance
 - Determinism: same seed ⇒ identical output hash; different worker chunkings ⇒ identical hash; (browser-worker check added to CI with Playwright).
@@ -75,6 +76,7 @@ Tests / acceptance
 - Exploit search finds a planted infinite-reward loop (e.g. rewarded "double" that can be claimed repeatedly) and returns a ≤ 5-step repro.
 - Swarm Rescue: all interstitial invariants pass over the full sim; static check shows no interstitial eligibility in forbidden states.
 - Statistical sanity tests for distributions (mean/variance within tolerance for fixed seeds).
+- Combat: missions without `combat` give identical results to pure Level 1; increasing `laserDamage` monotonically raises win rate (property test); a planted L5 "wall" is detected for the non-payer persona.
 - Coverage ≥ 85 % for `engine`.
 
 ### Phase 3 — Spec Pack + CLI (≈ 2–3 sessions)
@@ -82,7 +84,7 @@ Tests / acceptance
 Deliverables
 1. Pure renderers for every file in master-prompt §9; `FileMap` with ownership classes.
 2. Golden-test generator (boundary values from rules/limits/cooldowns/eligibility + trace-sampled accepted paths).
-3. Reference runner (`gamespec/tests/runner/*.ts`, zero deps) emitted into the pack.
+3. Reference runner (`gamex/tests/runner/*.ts`, zero deps) emitted into the pack.
 4. `AGENTS.md` section manager (markers, preserve outside content), shims, `SKILL.md` files, task generator.
 5. OpenAPI 3.1 + SQL renderers; `FORMULAS.md` + `reference.ts`; `STATE_MACHINE.md` with Mermaid; `latest-sim.md`.
 6. Writer: plan / conflicts / atomic writes / lock file.
@@ -91,7 +93,7 @@ Deliverables
 Tests / acceptance
 - `sync` twice on the fixture repo ⇒ `git diff --exit-code` clean.
 - All generated JSON validates against the generated JSON Schema; `openapi.yaml` passes an OpenAPI validator.
-- `node gamespec/tests/runner/run-golden.ts` passes all golden cases in the generated pack (run in CI from a temp dir).
+- `node gamex/tests/runner/run-golden.ts` passes all golden cases in the generated pack (run in CI from a temp dir).
 - Mutating one rule in the model makes the corresponding golden cases fail against the old runner (proves tests have teeth).
 - Existing user content in `AGENTS.md` preserved byte-for-byte; editable regions preserved; hand-edits to generated files reported as conflicts.
 
@@ -100,20 +102,20 @@ Tests / acceptance
 Deliverables
 1. `SafeFileSystem` (gitignore, deny-list, content secret scan, allowlist, size cap, symlink policy).
 2. Discovery heuristics + `IngestPlan` confirmation; readers (md, txt, pdf, json, yaml, toml, Unity `.asset`, C#, GDScript, TS) → located chunks.
-3. `LlmProvider`, `AnthropicProvider`, `MockProvider`, `RecordingProvider`.
+3. `LlmProvider`, `AnthropicProvider`, `AgentHandoffProvider` (bring-your-own agent session), `MockProvider`, `RecordingProvider`; model selection `--model` → `GAMEX_MODEL` → `gamex/config.json` → `claude-opus-5-5`.
 4. Passes A–D with Zod validation + 2 retries; provenance verification of excerpts.
 5. Deterministic merge/dedupe, alias table, conflicts → `alternatives` + drift candidates; deterministic gap rules.
-6. Review ledger + `gamespec review` (interactive + `--decisions`); `ingest`, `extract`, `init` end to end.
+6. Review ledger + `gamex review` (interactive + `--decisions`); `ingest`, `extract`, `init` end to end.
 
 Tests / acceptance
 - Planted `.env`, `id_rsa`, `*.pem`, high-entropy token file: never read into a chunk, never in any provider request (asserted on the mock's captured requests).
 - With recorded fixtures: extraction recovers all Swarm Rescue placements (rewarded ×5, interstitial, banners, MREC) and the interstitial/revive rules with provenance pointing to the right GDD lines; the expected gaps (web build, COPPA, mediation, IAP, amounts/costs) are reported.
 - `init --yes --decisions accept-all.json` on the sample repo produces a valid model and a complete Spec Pack.
-- One opt-in live test (`GAMESPEC_LIVE=1`) against the real API.
+- One opt-in live test (`GAMEX_LIVE=1`) against the real API.
 
 ### Phase 5 — Studio (≈ 4–5 sessions)
 
-Deliverables: `gamespec studio` local server + views 1–10, Worker pool, light/dark mode, static-offline mode.
+Deliverables: `gamex studio` local server + views 1–10, Worker pool, light/dark mode, static-offline mode.
 
 Acceptance: Playwright E2E — upload GDD → review (approve all) → change a constant slider → run → compare
 A vs B → write Spec Pack — without touching the CLI; worker results hash-equal to CLI results; both themes
@@ -122,7 +124,7 @@ screenshot-tested; offline (network-blocked) except extraction.
 ### Phase 6 — Drift & CI template (≈ 2 sessions)
 
 Deliverables: binding map, deterministic scanners (JSON/YAML/TOML/.asset/C#/GDScript/TS constants), optional
-LLM fallback, classification, `reports/drift.md`, `gamespec drift` exit codes, `gamespec/ci/gamespec.yml`
+LLM fallback, classification, `reports/drift.md`, `gamex drift` exit codes, `gamex/ci/gamex.yml`
 GitHub Action template (validate + drift + quick sim + PR summary comment).
 
 Acceptance: sample repo with code allowing 3 revives ⇒ `value-mismatch`/`rule-violation` reported with
@@ -140,53 +142,9 @@ never force-push. Work happens on the assigned feature branch; each phase is rev
 
 ---
 
-## Clarifying questions
+## Decisions from planning questions
 
-Each has a recommended default. If you reply "defaults OK", I proceed with all of them.
+All ten questions are answered; see [`DECISIONS/0002-planning-answers.md`](./DECISIONS/0002-planning-answers.md).
 
-1. **Name, npm scope, license.** Keep "GameSpec", packages `@gamespec/*`, CLI binary `gamespec`; license?
-   **Default:** keep the names; `UNLICENSED` (private) until you decide — easy to switch to MIT/Apache-2.0 later.
-
-2. **Identifiers & expression syntax** *(schema).* Nodes have a kebab-case `id` (`revives-used-this-mission`)
-   and a derived camelCase `key` (`revivesUsedThisMission`) used inside expressions, balance JSON, golden tests and code.
-   Expressions are stored as strings (`revivesUsedThisMission < maxRevivesPerMission`) and parsed to an AST.
-   **Default:** yes to both (the master prompt's golden example already mixes `rule:` ids with camelCase vars).
-   Alternative: store JSON ASTs only (more verbose, less designer-friendly).
-
-3. **Numeric policy** *(schema + engine).* Resources/counters are integers; curves declare rounding; the engine
-   uses only exactly-specified float ops plus in-house `log/exp`, guaranteeing byte-identical results across
-   Node and every browser. **Default:** yes. Alternative: allow `Math.*` and guarantee determinism only per
-   runtime (simpler, but Node vs. Safari results could differ in the last digit).
-
-4. **Rejected items & work files** *(Spec Pack).* Add a `gamespec/review.json` ledger (committed) recording
-   approve/edit/reject decisions so re-extraction never resurrects rejected items; keep intermediates in
-   `gamespec/.work/` (gitignored by a generated `gamespec/.gitignore`). `game-model.json` contains only
-   promoted items. **Default:** yes.
-
-5. **Studio hosting.** `gamespec studio` runs a localhost server (serves UI, reads/writes the repo, proxies LLM
-   calls so the API key never reaches the browser), plus a static build that works with file import/zip export.
-   **Default:** yes. Alternative: browser-only with the File System Access API (Chromium-only, key in browser).
-
-6. **Golden-test reference runner** *(Spec Pack).* Ship it as zero-dependency TypeScript runnable with plain
-   `node` ≥ 22.18 (native type stripping). **Default:** yes. Alternative: emit `.mjs` (works on older Node,
-   loses types).
-
-7. **Swarm Rescue's 22 screen states.** Unless you have the canonical list, I'll use:
-   S00 Loading · S01 Consent/Privacy · S02 Home (hero select) · S03 HQ Rooftop · S04 Safe Zone · S05 Campaign Map ·
-   S06 Mission Briefing · S07 Laser Trial (rewarded) · S08 Gameplay · S09 Boss Fight · S10 Kill-cam ·
-   S11 Victory (star reveal) · S12 Claim 3x (rewarded) · S13 Interstitial (post-Victory → Continue) · S14 Defeat ·
-   S15 Revive Offer (rewarded) · S16 Armory/Upgrades · S17 Upgrade Reroll (rewarded) · S18 Daily Chest ·
-   S19 Settings · S20 Store/Remove Ads · S21 Pause. **Default:** this list, all marked `assumed`.
-
-8. **Gameplay abstraction in simulation** *(schema).* Missions are not simulated frame-by-frame; an action
-   (e.g. `play-mission`) has weighted `outcomes` (win/lose, stars, civilians saved, duration) whose weights are
-   expressions over persona skill and level-difficulty constants. **Default:** yes. Combo multiplier, near-miss
-   slow-mo, kill-cam are modelled only through their economy effects (e.g. score → stars → reward).
-
-9. **Revenue assumptions** *(schema).* eCPM per format and fill rate live in `monetization.assumptions` as
-   constants (`status: assumed`, US defaults: placeholders clearly labelled, not market data) and are sweepable.
-   **Default:** yes, with placeholder values the gap pass flags for you to replace.
-
-10. **LLM defaults & data policy.** `GAMESPEC_MODEL` defaults to `claude-opus-5-5`; extraction uses structured
-    outputs with Zod; only chunks from the confirmed `IngestPlan` are sent; no telemetry. OK to also add an
-    opt-in `--budget` cap (max input tokens per run)? **Default:** yes to all.
+**Still open:** real eCPM / fill-rate numbers for Swarm Rescue (rewarded, interstitial, banner, MREC; US).
+Until supplied, revenue assumptions stay optional placeholders flagged as gaps.
