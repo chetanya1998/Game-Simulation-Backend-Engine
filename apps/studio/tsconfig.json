@@ -9,7 +9,8 @@
     "allowImportingTsExtensions": true,
     "declaration": false,
     "declarationMap": false,
-    "types": ["node", "vite/client"]
+    "types": ["node", "vite/client"],
+    "customConditions": ["@gamex/source"]
   },
   "include": ["src", "test", "vite.config.ts", "vitest.config.ts"]
 }
