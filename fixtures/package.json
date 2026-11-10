@@ -1,0 +1,12 @@
+{
+  "name": "@gamex/fixtures",
+  "version": "0.0.0",
+  "private": true,
+  "description": "End-to-end test fixtures for GameX Engine (Swarm Rescue).",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  }
+}

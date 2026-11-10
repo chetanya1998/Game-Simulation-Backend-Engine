@@ -1,0 +1,27 @@
+{
+  "coins": {
+    "startingBalance": 0,
+    "victoryBase": 50,
+    "victoryPerLevel": 25,
+    "perCivilianSaved": 10
+  },
+  "rewarded": {
+    "claimMultiplier": 3,
+    "maxRevivesPerMission": 1,
+    "upgradeRerollsPerDay": 3
+  },
+  "interstitial": {
+    "minLevel": 3,
+    "maxPerMission": 1,
+    "minGapSeconds": 180
+  },
+  "upgrades": {
+    "maxTier": 10,
+    "costTier1": 100,
+    "costGrowth": 1.5,
+    "damagePerTier": 2
+  },
+  "dailyChest": {
+    "coins": 100
+  }
+}

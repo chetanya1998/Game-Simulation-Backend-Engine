@@ -1,0 +1,33 @@
+{
+  "name": "@gamex/cli",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The `gamex` command-line tool.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "gamex": "./dist/gamex.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@gamex/engine": "workspace:*",
+    "@gamex/model": "workspace:*",
+    "commander": "^15.1.0"
+  },
+  "devDependencies": {
+    "tsup": "^9.0.0"
+  }
+}

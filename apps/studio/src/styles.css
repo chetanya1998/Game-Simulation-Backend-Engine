@@ -1,0 +1,35 @@
+:root {
+  font-family: system-ui, sans-serif;
+}
+body {
+  margin: 0;
+}
+.app[data-theme='light'] {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --accent: #2f5bd3;
+}
+.app[data-theme='dark'] {
+  --bg: #121417;
+  --fg: #e8e8e8;
+  --accent: #7ea2ff;
+}
+.app {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  padding: 0 16px;
+}
+.app__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.app__header button {
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--fg);
+  border-radius: 6px;
+  padding: 6px 12px;
+}

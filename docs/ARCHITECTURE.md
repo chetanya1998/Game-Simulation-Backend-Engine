@@ -36,20 +36,20 @@ flowchart LR
 ```
 
 > **In plain words:** everything the tool knows about your game lives in one file,
-> `game-model.json`. The AI only *suggests* entries for that file; you approve them. All numbers —
+> `game-model.json`. The AI only _suggests_ entries for that file; you approve them. All numbers —
 > simulation results, test expectations — are computed by ordinary, tested code, so the same input
 > always gives the same answer.
 
 ### 1.1 Architectural invariants (enforced, not aspirational)
 
-| Principle | How it is enforced |
-|---|---|
-| One canonical model | Every consumer (`engine`, `specpack`, `drift`, `studio`) takes a `GameModel` value produced by `@gamex/model`'s `parseGameModel()`. There is no other input type. |
-| LLM proposes, code decides | `engine` and `specpack` have no dependency on `extract` or any LLM SDK (lint rule + dependency-cruiser check in CI). Golden-test expectations are produced by the engine's rule interpreter. |
-| Provenance on everything | Every node schema extends `NodeBase = { id, key, provenance, … }`; provenance is a required Zod field. |
-| Determinism | No `Math.random`, `Date.now`, `new Date()` or `Math.{exp,log,pow,sin,cos,…}` in `model`/`engine` (ESLint `no-restricted-properties/globals`). Seeded PRNG + in-house deterministic math (§4.2). Byte-identical output tested in CI. |
-| Repo safety | All file reads in a target repo go through `ingest`'s `SafeFileSystem`, which applies `.gitignore`, a deny-list (secrets) and an allowlist (extensions + size). Tested with planted `.env`, `*.pem`, `id_rsa`. |
-| Honest scope | Reports say "explored N states / M players / K seeds", never "all outcomes". |
+| Principle                  | How it is enforced                                                                                                                                                                                                                  |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| One canonical model        | Every consumer (`engine`, `specpack`, `drift`, `studio`) takes a `GameModel` value produced by `@gamex/model`'s `parseGameModel()`. There is no other input type.                                                                   |
+| LLM proposes, code decides | `engine` and `specpack` have no dependency on `extract` or any LLM SDK (lint rule + dependency-cruiser check in CI). Golden-test expectations are produced by the engine's rule interpreter.                                        |
+| Provenance on everything   | Every node schema extends `NodeBase = { id, key, provenance, … }`; provenance is a required Zod field.                                                                                                                              |
+| Determinism                | No `Math.random`, `Date.now`, `new Date()` or `Math.{exp,log,pow,sin,cos,…}` in `model`/`engine` (ESLint `no-restricted-properties/globals`). Seeded PRNG + in-house deterministic math (§4.2). Byte-identical output tested in CI. |
+| Repo safety                | All file reads in a target repo go through `ingest`'s `SafeFileSystem`, which applies `.gitignore`, a deny-list (secrets) and an allowlist (extensions + size). Tested with planted `.env`, `*.pem`, `id_rsa`.                      |
+| Honest scope               | Reports say "explored N states / M players / K seeds", never "all outcomes".                                                                                                                                                        |
 
 ---
 
@@ -68,7 +68,7 @@ flowchart LR
   cli/        @gamex/cli       `gamex` binary (commander), --json everywhere, `studio` server
 /apps/studio/                     Vite + React app (talks to engine in a Worker; to CLI server for I/O + LLM)
 /fixtures/swarm-rescue/           GDD.md, sample-repo/, swarm-rescue.game-model.json, expected outputs
-/tooling/                         shared tsconfig / eslint config / test helpers
+/tooling/                         shared Vitest config (tsconfig.base.json and eslint.config.js live at the root)
 /.github/workflows/ci.yml
 ```
 
@@ -95,8 +95,8 @@ Rules:
   unchanged in Node, Vitest, and a Web Worker.
 - `specpack` exposes two entry points: `@gamex/specpack` (pure: `renderSpecPack(model, results) → FileMap`,
   browser-safe, used by the studio preview) and `@gamex/specpack/node` (`writeFileMap(repoRoot, fileMap)`).
-- `ingest` has the only code allowed to touch a target repo's filesystem for *reading*; `specpack/node`
-  is the only code allowed to *write* to it.
+- `ingest` has the only code allowed to touch a target repo's filesystem for _reading_; `specpack/node`
+  is the only code allowed to _write_ to it.
 - No cycles (checked by `dependency-cruiser` in CI).
 - ESM-only, TypeScript `strict` + `noUncheckedIndexedAccess` + `exactOptionalPropertyTypes`.
 - Libraries build with `tsc -b` (project references, `.d.ts` emitted); the CLI is additionally bundled
@@ -223,6 +223,7 @@ How detailed a mission is depends on the GDD; the designer adds detail only wher
   **where the player died** (wave n or boss phase), which makes revive value measurable (revives happen at
   a specific wave). All combat parameters are ordinary constants, so sweeps and the sensitivity tornado
   cover them automatically. Missions without a `combat` block fall back to Level 1.
+
 - Reports state explicitly that outcomes come from a stylized model, not real gameplay. Every combat number
   starts as `assumed` and is flagged as a gap until the designer confirms it.
 - Golden tests never depend on combat sampling: they test rules/eligibility/economy at `step()` level with
@@ -295,7 +296,7 @@ When the model came from a file we keep a JSON source map so issues point to fil
 
 ### 3.9 Versioning
 
-- `schemaVersion` (semver of the *format*); migrations live in `model/migrations/` and run on load.
+- `schemaVersion` (semver of the _format_); migrations live in `model/migrations/` and run on load.
 - `modelVersion` = monotonically increasing integer bumped on every saved change, plus `contentHash`
   (SHA-256 of canonical JSON, excluding `meta.modelVersion/updatedAt`). Timestamps change only when
   the content hash changes — this is what makes `sync` idempotent.
@@ -328,7 +329,7 @@ and the reference runner shipped in the Spec Pack. That is how "golden tests pro
   specified by IEEE-754/ECMAScript). Distributions (normal, lognormal, Poisson, exponential) use
   in-house `dlog`/`dexp` implemented with fixed-iteration algorithms on those primitives, never the
   platform's `Math.log`/`Math.exp` (which are implementation-approximated and differ across engines).
- 
+
 - Integer resources: currencies/counters are integers; curves declare rounding; aggregate statistics
   are floats computed in a fixed order.
 - Output serialization through the canonical JSON writer; determinism test = hash of output for a fixed
@@ -552,11 +553,11 @@ explore, sync, drift, studio`. Conventions:
 
 ## 11. Risks & mitigations
 
-| Risk | Mitigation |
-|---|---|
-| Expression language grows into a programming language | Fixed function whitelist; new needs go through an ADR. |
-| Gameplay abstraction too coarse for useful results | Outcome distributions are model data, editable and sweepable; reports state assumptions explicitly. |
-| LLM extraction quality varies | Provenance verification, deterministic gap rules, mandatory review, recorded fixtures for regression. |
-| Drift in arbitrary code is hard | Binding map + deterministic scanners first; LLM only as a fallback, labelled low confidence. |
-| Cross-engine float differences | Deterministic math module; CI test comparing Node vs Chromium worker hashes. |
-| Spec Pack overwrites user edits | Ownership classes, editable regions, lock-file hashes, conflict reporting instead of overwrite. |
+| Risk                                                  | Mitigation                                                                                            |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Expression language grows into a programming language | Fixed function whitelist; new needs go through an ADR.                                                |
+| Gameplay abstraction too coarse for useful results    | Outcome distributions are model data, editable and sweepable; reports state assumptions explicitly.   |
+| LLM extraction quality varies                         | Provenance verification, deterministic gap rules, mandatory review, recorded fixtures for regression. |
+| Drift in arbitrary code is hard                       | Binding map + deterministic scanners first; LLM only as a fallback, labelled low confidence.          |
+| Cross-engine float differences                        | Deterministic math module; CI test comparing Node vs Chromium worker hashes.                          |
+| Spec Pack overwrites user edits                       | Ownership classes, editable regions, lock-file hashes, conflict reporting instead of overwrite.       |

@@ -1,0 +1,26 @@
+{
+  "name": "@gamex/drift",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Detects drift between a game repo's code/config and the Game Model.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@gamex/model": "workspace:*",
+    "@gamex/ingest": "workspace:*"
+  }
+}

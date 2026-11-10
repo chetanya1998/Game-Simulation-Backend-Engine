@@ -8,25 +8,27 @@
 
 The default stack in the master prompt holds up; I'm keeping it with these specifics (ADR 0001):
 
-| Area | Choice | Note |
-|---|---|---|
-| Runtime | Node 22 LTS (`engines: >=22.18`), pnpm 10 via Corepack | 22.18+ runs `.ts` natively (type stripping), which the Spec Pack runner relies on. |
-| Build | `tsc -b` project references for libs; `tsup` bundle for the CLI; Vite for studio | Keeps `.d.ts` emission simple, single-file CLI. |
-| Orchestration | Turborepo | `lint`, `typecheck`, `test`, `build` pipelines with caching. |
-| Schema | Zod 4 + `z.toJSONSchema()` | Zod 4 ships native JSON Schema export, so the `zod-to-json-schema` dependency is unnecessary. (Will fall back to it if a gap shows up.) |
-| CLI | `commander` | Mature, typed, subcommands. |
-| Charts | ECharts | Better than Recharts for box plots, histograms and tornado charts; canvas rendering handles large series. |
-| Graph layout | React Flow + ELK.js | Auto-layout of 22-state machine and economy graph. |
-| Worker RPC | Comlink | |
-| PDF | `unpdf` | Per-page text, small, works in Node. |
-| Arch checks | `dependency-cruiser` | Enforces "engine has no I/O / no extract import", no cycles. |
-| LLM | `@anthropic-ai/sdk`, structured outputs + Zod, user-selectable model (default `claude-opus-5-5`) | Behind `LlmProvider`; also an agent-handoff provider. |
+| Area          | Choice                                                                                           | Note                                                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Runtime       | Node 22 LTS (`engines: >=22.18`), pnpm 10 via Corepack                                           | 22.18+ runs `.ts` natively (type stripping), which the Spec Pack runner relies on.                                                      |
+| Build         | `tsc -b` project references for libs; `tsup` bundle for the CLI; Vite for studio                 | Keeps `.d.ts` emission simple, single-file CLI.                                                                                         |
+| Orchestration | Turborepo                                                                                        | `lint`, `typecheck`, `test`, `build` pipelines with caching.                                                                            |
+| TypeScript    | 6.0.x, pinned (ADR 0003)                                                                         | TS 7 is not yet supported by typescript-eslint, which the lint setup needs.                                                             |
+| Schema        | Zod 4 + `z.toJSONSchema()`                                                                       | Zod 4 ships native JSON Schema export, so the `zod-to-json-schema` dependency is unnecessary. (Will fall back to it if a gap shows up.) |
+| CLI           | `commander`                                                                                      | Mature, typed, subcommands.                                                                                                             |
+| Charts        | ECharts                                                                                          | Better than Recharts for box plots, histograms and tornado charts; canvas rendering handles large series.                               |
+| Graph layout  | React Flow + ELK.js                                                                              | Auto-layout of 22-state machine and economy graph.                                                                                      |
+| Worker RPC    | Comlink                                                                                          |                                                                                                                                         |
+| PDF           | `unpdf`                                                                                          | Per-page text, small, works in Node.                                                                                                    |
+| Arch checks   | `dependency-cruiser`                                                                             | Enforces "engine has no I/O / no extract import", no cycles.                                                                            |
+| LLM           | `@anthropic-ai/sdk`, structured outputs + Zod, user-selectable model (default `claude-opus-5-5`) | Behind `LlmProvider`; also an agent-handoff provider.                                                                                   |
 
 ## Phases
 
 ### Phase 0 — Foundation (≈ 1 session)
 
 Deliverables
+
 - pnpm workspace + Turborepo; `tooling/` shared `tsconfig.base.json` (strict, `noUncheckedIndexedAccess`,
   `exactOptionalPropertyTypes`, ESM), ESLint flat config (typescript-eslint, determinism bans for
   `model`/`engine`), Prettier, Vitest workspace with coverage.
@@ -43,6 +45,7 @@ Acceptance: `pnpm install && pnpm lint && pnpm test && pnpm build` pass on a cle
 ### Phase 1 — Game Model (≈ 2–3 sessions)
 
 Deliverables
+
 1. Zod schemas for every section (§3 of ARCHITECTURE), `NodeBase` + `Provenance`, typed refs.
 2. Expression language: lexer, Pratt parser with spans, printer, type checker, evaluator, located errors with "did you mean".
 3. Curves: `evalCurve` + tests (incl. exact integer geometric powering, rounding modes).
@@ -53,6 +56,7 @@ Deliverables
 8. Hand-written `fixtures/swarm-rescue/swarm-rescue.game-model.json` (22 states, all placements, rules, personas, invariants, gaps).
 
 Tests / acceptance
+
 - Fixture validates with zero errors.
 - A corpus of ≥ 25 deliberately broken models, each asserting the exact `code`, `path`, and line.
 - fast-check properties: parse∘print = id; evaluator agrees with an oracle; well-typed ⇒ no throw; determinism.
@@ -61,6 +65,7 @@ Tests / acceptance
 ### Phase 2 — Engine (≈ 4–5 sessions)
 
 Deliverables
+
 1. `sfc32` + `splitmix32` + stream derivation; deterministic math (`dlog`, `dexp`) + distributions.
 2. Rule interpreter `step()` (the single enforcement path).
 3. Reachability: graph analysis, SCC traps, interval-based never-true guards, bounded concrete exploration with witnesses.
@@ -71,6 +76,7 @@ Deliverables
 8. **(end of phase, after 1–7 are green)** Level 2 combat model: optional `combat` block schema + validation, seeded wave-by-wave resolver, death-location output (wave / boss phase), revive value KPI; Swarm Rescue L5 boss gets a combat block (all `assumed`).
 
 Tests / acceptance
+
 - Determinism: same seed ⇒ identical output hash; different worker chunkings ⇒ identical hash; (browser-worker check added to CI with Playwright).
 - Reachability finds each seeded defect in `engine/test/models/broken-flow.json` (unreachable, dead end, trap, never-true guard).
 - Exploit search finds a planted infinite-reward loop (e.g. rewarded "double" that can be claimed repeatedly) and returns a ≤ 5-step repro.
@@ -82,6 +88,7 @@ Tests / acceptance
 ### Phase 3 — Spec Pack + CLI (≈ 2–3 sessions)
 
 Deliverables
+
 1. Pure renderers for every file in master-prompt §9; `FileMap` with ownership classes.
 2. Golden-test generator (boundary values from rules/limits/cooldowns/eligibility + trace-sampled accepted paths).
 3. Reference runner (`gamex/tests/runner/*.ts`, zero deps) emitted into the pack.
@@ -91,6 +98,7 @@ Deliverables
 7. CLI: `validate`, `sim`, `explore`, `sync` (`--json` everywhere, exit codes).
 
 Tests / acceptance
+
 - `sync` twice on the fixture repo ⇒ `git diff --exit-code` clean.
 - All generated JSON validates against the generated JSON Schema; `openapi.yaml` passes an OpenAPI validator.
 - `node gamex/tests/runner/run-golden.ts` passes all golden cases in the generated pack (run in CI from a temp dir).
@@ -100,6 +108,7 @@ Tests / acceptance
 ### Phase 4 — Ingestion & extraction (≈ 3 sessions)
 
 Deliverables
+
 1. `SafeFileSystem` (gitignore, deny-list, content secret scan, allowlist, size cap, symlink policy).
 2. Discovery heuristics + `IngestPlan` confirmation; readers (md, txt, pdf, json, yaml, toml, Unity `.asset`, C#, GDScript, TS) → located chunks.
 3. `LlmProvider`, `AnthropicProvider`, `AgentHandoffProvider` (bring-your-own agent session), `MockProvider`, `RecordingProvider`; model selection `--model` → `GAMEX_MODEL` → `gamex/config.json` → `claude-opus-5-5`.
@@ -108,6 +117,7 @@ Deliverables
 6. Review ledger + `gamex review` (interactive + `--decisions`); `ingest`, `extract`, `init` end to end.
 
 Tests / acceptance
+
 - Planted `.env`, `id_rsa`, `*.pem`, high-entropy token file: never read into a chunk, never in any provider request (asserted on the mock's captured requests).
 - With recorded fixtures: extraction recovers all Swarm Rescue placements (rewarded ×5, interstitial, banners, MREC) and the interstitial/revive rules with provenance pointing to the right GDD lines; the expected gaps (web build, COPPA, mediation, IAP, amounts/costs) are reported.
 - `init --yes --decisions accept-all.json` on the sample repo produces a valid model and a complete Spec Pack.

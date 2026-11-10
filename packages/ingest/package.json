@@ -1,0 +1,23 @@
+{
+  "name": "@gamex/ingest",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Safe file discovery, readers and located chunking for GDDs and game repos.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --coverage"
+  },
+  "dependencies": {}
+}

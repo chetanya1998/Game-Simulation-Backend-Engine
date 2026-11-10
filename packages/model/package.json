@@ -1,0 +1,26 @@
+{
+  "name": "@gamex/model",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Canonical Game Model: schemas, types, expression language, validation.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --coverage"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "fast-check": "^4.10.2"
+  }
+}

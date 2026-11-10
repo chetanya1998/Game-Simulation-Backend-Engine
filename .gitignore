@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+.turbo/
+*.tsbuildinfo
+.DS_Store
+*.log
+.env
+.env.*
+# Planted canary files used by repo-safety tests (not real secrets).
+!fixtures/**/.env
