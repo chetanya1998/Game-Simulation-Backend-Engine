@@ -7,17 +7,18 @@ GameX Engine). Design: `docs/ARCHITECTURE.md`. Plan and phase status: `docs/PLAN
 
 ## Commands
 
-| Command                                         | What it does                                                                                 |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `pnpm install`                                  | Install (Node ≥ 22.18, pnpm 10 via Corepack).                                                |
-| `pnpm build`                                    | Build every package (`tsc -b`), the CLI bundle (`tsup`) and the studio (`vite build`).       |
-| `pnpm typecheck`                                | Type-check sources **and tests** of every package. Needs dependencies built (turbo does it). |
-| `pnpm test`                                     | Vitest in every package, with coverage (≥ 85 % enforced for `model` and `engine`).           |
-| `pnpm lint`                                     | ESLint (type-aware, zero warnings) + Prettier check. `pnpm format` fixes formatting.         |
-| `pnpm depcruise`                                | Architecture rules (no cycles, pure core, declared deps). Run after `pnpm build`.            |
-| `pnpm check`                                    | Everything above, in CI order.                                                               |
-| `pnpm --filter @gamex/<pkg> test`               | One package.                                                                                 |
-| `node packages/cli/dist/gamex.js doctor --json` | Run the built CLI.                                                                           |
+| Command                                         | What it does                                                                                                         |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install`                                  | Install (Node ≥ 22.18, pnpm 10 via Corepack).                                                                        |
+| `pnpm build`                                    | Build every package (`tsc -b`), the CLI bundle (`tsup`) and the studio (`vite build`).                               |
+| `pnpm typecheck`                                | Type-check sources **and tests** of every package. Needs dependencies built (turbo does it).                         |
+| `pnpm test`                                     | Vitest in every package, with coverage (≥ 85 % enforced for `model` and `engine`).                                   |
+| `pnpm lint`                                     | ESLint (type-aware, zero warnings) + Prettier check. `pnpm format` fixes formatting.                                 |
+| `pnpm depcruise`                                | Architecture rules (no cycles, pure core, declared deps). Run after `pnpm build`.                                    |
+| `pnpm check`                                    | Everything above, in CI order.                                                                                       |
+| `pnpm --filter @gamex/<pkg> test`               | One package.                                                                                                         |
+| `node packages/cli/dist/gamex.js doctor --json` | Run the built CLI.                                                                                                   |
+| `pnpm --filter @gamex/model gen:schema`         | Regenerate `packages/model/schema/game-model.schema.json` after changing the Zod schema (a test fails until you do). |
 
 **Definition of done:** `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm depcruise` pass
 from a clean checkout, and the change has tests that would fail without it.
@@ -63,6 +64,9 @@ tooling/           shared Vitest config
 - Every CLI command supports `--json` (one JSON document on stdout; human output on stderr). Exit codes:
   0 ok, 1 findings/validation failure, 2 usage error, 3 I/O or LLM error.
 - Ids are kebab-case; keys (used in expressions, balance files, golden tests) are derived camelCase (`idToKey`).
+- Game Model files are canonical JSON (`serializeGameModel`); never hand-format them. The Swarm Rescue model
+  (`fixtures/swarm-rescue/swarm-rescue.game-model.json`) must validate with zero errors and zero warnings.
+- New validation checks get a case in `packages/model/test/validate.test.ts` asserting code, JSON path and source line.
 
 ## Process
 

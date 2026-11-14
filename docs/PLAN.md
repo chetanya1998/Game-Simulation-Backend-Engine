@@ -25,7 +25,7 @@ The default stack in the master prompt holds up; I'm keeping it with these speci
 
 ## Phases
 
-### Phase 0 — Foundation (≈ 1 session)
+### Phase 0 — Foundation (≈ 1 session) — ✅ done
 
 Deliverables
 
@@ -42,7 +42,7 @@ Deliverables
 
 Acceptance: `pnpm install && pnpm lint && pnpm test && pnpm build` pass on a clean clone; CI green.
 
-### Phase 1 — Game Model (≈ 2–3 sessions)
+### Phase 1 — Game Model (≈ 2–3 sessions) — ✅ done (schema decisions: ADR 0004)
 
 Deliverables
 

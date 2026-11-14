@@ -116,7 +116,7 @@ GameModel = {
   constants:     Constant[],         // scalars and curves → balance files
   variables:     Variable[],         // mutable state, scoped
   actions:       Action[],           // player/system "methods"
-  rules:         Rule[],             // policies & invariants evaluated at action time
+  rules:         Rule[],             // guards checked before actions run / placements are shown
   stateMachine:  { initial: StateRef, states: State[], transitions: Transition[] },
   flows:         FlowNode[],         // source | sink | converter | gate | pool  + edges
   monetization:  { placements: Placement[], forbiddenStates: StateRef[], assumptions: RevenueAssumptions },
@@ -134,6 +134,7 @@ NodeBase = {
   id: string;          // stable kebab-case, unique within its section, e.g. "max-revives-per-mission"
   key: string;         // camelCase identifier derived from id, used in expressions/code/golden tests
   name?: string; description?: string; tags?: string[];
+  derivedFrom?: string; // set on nodes the normalizer generates (e.g. "action:revive")
   provenance: Provenance;
 }
 Provenance = {
@@ -164,8 +165,8 @@ Constant = NodeBase & {
 Curve =
   | { type: "linear",    params: { base, perStep, from?: 1 } }
   | { type: "geometric", params: { base, ratio, from?: 1 } }        // base * ratio^(n-from), exact integer powering
-  | { type: "table",     params: { values: number[], from?: 1, clamp: true } }
-  | { type: "piecewise", params: { segments: { untilInclusive: number, curve: Curve }[] } }
+  | { type: "table",     params: { values: number[], from?: 1 } }          // n is clamped to the first/last entry
+  | { type: "piecewise", params: { segments: { upTo?: number, curve: Curve }[] } } // last segment omits upTo
   & { rounding: "none" | "floor" | "ceil" | "round-half-even", min?: number, max?: number }
 ```
 
@@ -176,21 +177,21 @@ share one definition.
 ### 3.3 Variables, actions, rules
 
 ```ts
-Variable  = NodeBase & { scope: "player"|"session"|"mission"|"global", type: "int"|"number"|"bool"|"enum"|"timestamp",
-                         initial: Expr | literal, enumValues?: string[], resetOn?: StateRef[] }
+Variable  = NodeBase & { scope: "player"|"session"|"mission"|"day"|"global", type: "int"|"number"|"bool"|"enum"|"timestamp",
+                         initial: number | boolean | string, enumValues?: string[], min?: number, max?: number }
 Action    = NodeBase & {
   actor: "player" | "system" | "ad-sdk" | "store",
   preconditions: Expr[],                  // all must be true
   costs:   { resource: ResRef, amount: Expr }[],
-  effects: Effect[],                      // { set|add|sub|grant|consume, target, value: Expr } — applied atomically
-  cooldown?: { seconds: Expr, scope },    // implemented via an implicit last-used timestamp variable
-  limits?:   { max: Expr, per: "mission"|"session"|"day"|"lifetime" }[],
-  outcomes?: { id, weight: Expr, effects: Effect[], next?: StateRef }[],   // Level 1 mission model (always present for missions)
+  effects: Effect[],                      // { op: set|add|sub, target: var:/res: ref, value: Expr } — applied atomically
+  cooldown?: { seconds: Expr, errorCode? },  // desugared into an implicit last-used timestamp variable + rule
+  limits?:   { max: Expr, per: "mission"|"session"|"day"|"lifetime", errorCode? }[],
+  outcomes?: { id, weight: Expr, effects: Effect[] }[],   // Level 1 mission model; transitions pick the next state per outcome
   combat?:   CombatModel,                 // optional Level 2 model; when present it DERIVES outcome weights (§3.3.1)
   duration?: Expr,                        // simulated seconds the action takes
   errorCode: string,                      // e.g. REVIVE_LIMIT_REACHED, used by golden tests + openapi
 }
-Rule      = NodeBase & { appliesTo: ActionRef[] | StateRef[] | "always", expr: Expr,
+Rule      = NodeBase & { appliesTo: { actions?: ActionRef[], placements?: PlacementRef[] }, expr: Expr,
                          severity: "blocking" | "warning", errorCode: string }
 ```
 
@@ -231,8 +232,10 @@ How detailed a mission is depends on the GDD; the designer adds detail only wher
 
 ### 3.4 State machine
 
-`State = NodeBase & { kind: "loading"|"menu"|"meta"|"gameplay"|"result"|"overlay"|"ad"|"exit", tags }`.
-`Transition = NodeBase & { from, to, trigger: ActionRef | "auto", guard?: Expr, effects?: Effect[] }`.
+`State = NodeBase & { kind: "loading"|"menu"|"meta"|"gameplay"|"result"|"overlay"|"ad"|"exit", code?: "S07", duration?: Expr }`.
+`Transition = NodeBase & { from: StateRef, to: StateRef | "return", trigger: "ui" | "auto" | ActionRef, outcome?: id, guard?: Expr, effects?: Effect[], beginsMission?, endsMission? }`.
+`ui` transitions are player navigation chosen by the persona policy; `auto` fire as soon as their guard holds; an
+action trigger with `outcome` follows that outcome of the action. `beginsMission` resets mission-scoped variables.
 `overlay` states (Pause) are modelled as a push/pop stack so "resume returns to where you were" is
 expressible without duplicating transitions. `gameplay`-kind states are what the "no UI ads during
 live gameplay" rule refers to.
@@ -240,7 +243,8 @@ live gameplay" rule refers to.
 ### 3.5 Monetization
 
 `Placement = NodeBase & { format, trigger: { action } | { state }, eligibility: Expr[], caps: [...], cooldownSeconds?: Expr,
-reward?: Effect[], forbiddenIn?: StateRef[], inWorld?: boolean }`. Interstitial pacing
+reward?: Effect[], onShow?: Effect[], forbiddenIn?: StateRef[], inWorld?: boolean }`. Transition guards can ask
+`eligible("placement-id")`, which evaluates the placement's eligibility, rules, caps and cooldown. Interstitial pacing
 ("≥180 s apart, max 1/mission, from Level 3, never after defeat") is expressed as ordinary
 eligibility expressions + caps over model variables — no special-cased ad logic in the engine.
 `RevenueAssumptions` is **optional**: eCPM per format per market and fill rate, as sweepable constants.
@@ -254,7 +258,8 @@ user is asked for real numbers (or estimates from their mediation dashboard).
   rewarded placement, purchase probability, churn sensitivity, and an optional action-preference policy.
 - `Kpi` = a built-in metric id (progression speed, inflation, faucet/sink ratio, …) or a custom
   aggregate expression over the trace.
-- `Invariant` = `{ expr over results, quantifier: "all-runs" | { atLeast: ratio }, scope: persona? }`.
+- `Invariant` = `trace` (checked at every step, or only `at` a placement/action/state, over model keys) or
+  `aggregate` (checked on results; identifiers are KPI keys and constants), each with a severity.
 - `Gap` = `{ id, kind: "missing"|"ambiguous"|"contradiction"|"assumption", question, relatedRefs[], blocking }`.
 
 ### 3.7 Expression language
@@ -265,14 +270,16 @@ also serializable.
 
 ```
 revivesUsedThisMission < maxRevivesPerMission
-level >= 3 && lastState != "s14-defeat" && now - lastInterstitialAt >= interstitialMinGapSeconds
-min(coins + reward * multiplier, coinsCap)
-curve(upgradeCost, tier)
+missionLevel >= interstitialMinLevel && lastMissionResult == "victory"
+now - interstitialAfterVictoryLastAt >= interstitialMinGapSeconds
+curve(upgradeCost, damageTier + 1)
+eligible("interstitial-after-victory")
 ```
 
 - Grammar: literals (number, bool, string), identifiers (`key`s of variables/constants/resources and a
   few built-ins: `now`, `state`, `prevState`, `persona.*`), unary `! -`, binary `* / % + - < <= > >= == != && ||`,
-  ternary `?:`, function calls from a fixed whitelist: `min max clamp abs floor ceil round curve count has`.
+  ternary `?:`, function calls from a fixed whitelist: `min max clamp abs floor ceil round curve eligible`
+  (`round` rounds halves to even). Full reference for designers: [`GAME_MODEL.md`](./GAME_MODEL.md).
 - Pratt parser → AST with source spans (for located errors: `rules[3].expr: col 14: unknown identifier "revivesUsed"; did you mean "revivesUsedThisMission"?`).
 - Static type checker (number / bool / string-enum) resolving identifiers against the model.
 - Evaluator is a pure function `(ast, env) → value`; no `eval`/`Function`; division by zero and
