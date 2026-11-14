@@ -73,7 +73,11 @@ importers:
         specifier: ^8.3.7
         version: 8.3.7(@types/node@22.20.5)(esbuild@0.28.2)
 
-  fixtures: {}
+  fixtures:
+    dependencies:
+      '@gamex/model':
+        specifier: workspace:*
+        version: link:../packages/model
 
   packages/cli:
     dependencies:
@@ -118,6 +122,10 @@ importers:
   packages/ingest: {}
 
   packages/model:
+    dependencies:
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
       fast-check:
         specifier: ^4.10.2
@@ -1642,6 +1650,9 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
+  zod@4.6.7:
+    resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
+
 snapshots:
 
   '@babel/helper-string-parser@7.29.13': {}
@@ -2901,3 +2912,5 @@ snapshots:
   word-wrap@1.2.5: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@4.6.7: {}

@@ -10,17 +10,22 @@
       "@gamex/source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./schema/game-model.schema.json": "./schema/game-model.schema.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "schema"
   ],
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run --coverage"
+    "test": "vitest run --coverage",
+    "gen:schema": "tsc -b tsconfig.build.json && node scripts/generate-json-schema.mjs"
   },
-  "dependencies": {},
+  "dependencies": {
+    "zod": "^4.6.7"
+  },
   "devDependencies": {
     "fast-check": "^4.10.2"
   }

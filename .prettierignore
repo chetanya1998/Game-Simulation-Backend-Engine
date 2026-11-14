@@ -5,3 +5,5 @@ coverage
 pnpm-lock.yaml
 docs/MASTER_PROMPT.md
 LICENSE
+packages/model/schema/
+fixtures/swarm-rescue/*.json

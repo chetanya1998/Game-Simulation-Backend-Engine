@@ -1,4 +1,26 @@
-/** Version of the Game Model file format (semver). Bumped with a migration on breaking changes. */
-export const SCHEMA_VERSION = '0.1.0';
-
 export { MAX_ID_LENGTH, idToKey, isValidId } from './ids.js';
+export * from './expr/index.js';
+export { applyRounding, evalCurve, integerPower } from './curves.js';
+export type { Curve, Rounding } from './curves.js';
+export { canonicalStringify, compareKeys, TOP_LEVEL_ORDER } from './json/canonical.js';
+export { parseJsonWithSourceMap } from './json/parse.js';
+export type { JsonParseResult, Position, SourceMap } from './json/parse.js';
+export { escapePointerSegment, parentPointer, toPointer } from './json/pointer.js';
+export { sha256Hex, utf8Encode } from './hash.js';
+export { formatIssue } from './issues.js';
+export type { Issue, IssueSeverity } from './issues.js';
+export { MIGRATIONS, SCHEMA_VERSION, checkSchemaVersion, migrateModel } from './migrations.js';
+export type { Migration } from './migrations.js';
+export { NEVER, normalizeGameModel, planImplicit } from './normalize.js';
+export type { ImplicitPlan } from './normalize.js';
+export { computeContentHash, serializeGameModel } from './model-io.js';
+export { JSON_SCHEMA_ID, gameModelJsonSchema } from './json-schema.js';
+export { ANY_REF_PATTERN, REF_PREFIXES } from './schema/common.js';
+export type { RefKind, RefPrefix } from './schema/common.js';
+export * from './schema/game-model.js';
+export { validateGameModel } from './validate/index.js';
+export type { ValidateOptions, ValidationResult } from './validate/index.js';
+export { BUILTIN_NAMES } from './validate/env.js';
+export { collectExpressions } from './validate/expressions.js';
+export type { ExprSite } from './validate/expressions.js';
+export { collectRefs } from './validate/references.js';

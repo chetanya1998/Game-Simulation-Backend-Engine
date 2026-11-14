@@ -1,0 +1,15 @@
+export type { BinaryOp, Expr, Span, UnaryOp } from './ast.js';
+export { BINARY_PRECEDENCE, identifiersOf, walkExpr } from './ast.js';
+export type { ExprError, ExprErrorCode, Result } from './errors.js';
+export { evaluateExpr } from './evaluate.js';
+export type { EvalEnv } from './evaluate.js';
+export { FUNCTION_NAMES, NUMERIC_FUNCTIONS, clamp, roundHalfEven } from './functions.js';
+export { tokenize } from './lexer.js';
+export type { Token } from './lexer.js';
+export { parseExpr } from './parser.js';
+export { printExpr } from './printer.js';
+export { closestMatch, didYouMean, editDistance } from './suggest.js';
+export { typecheckExpr } from './typecheck.js';
+export type { SymbolInfo, TypeEnv, TypecheckResult } from './typecheck.js';
+export type { ExprType, ExprValue } from './types.js';
+export { typeOfValue } from './types.js';
