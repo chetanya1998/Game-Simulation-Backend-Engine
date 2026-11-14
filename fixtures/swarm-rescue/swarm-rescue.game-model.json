@@ -1,0 +1,3544 @@
+{
+  "meta": {
+    "name": "Swarm Rescue",
+    "genre": "mobile action",
+    "modelVersion": 1,
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "schemaVersion": "0.1.0",
+    "targetMarkets": [
+      "US"
+    ]
+  },
+  "entities": [
+    {
+      "id": "relickeeper",
+      "name": "Relickeeper",
+      "kind": "hero",
+      "attributes": {
+        "damagePerTier": "const:damage-per-tier",
+        "damageTier": "var:damage-tier",
+        "fireRate": "const:fire-rate",
+        "laserDamage": "const:laser-damage",
+        "maxHp": "const:hero-max-hp"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Relickeeper | Rescue operative | Wrist laser gauntlet | Same as Vanguard    |",
+        "location": "§2 / line 34",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "vanguard",
+      "name": "Vanguard",
+      "kind": "hero",
+      "attributes": {
+        "damagePerTier": "const:damage-per-tier",
+        "damageTier": "var:damage-tier",
+        "fireRate": "const:fire-rate",
+        "laserDamage": "const:laser-damage",
+        "maxHp": "const:hero-max-hp"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Vanguard    | Rescue operative | Wrist laser gauntlet | Same as Relickeeper |",
+        "location": "§2 / line 35",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "swarm-drone",
+      "name": "Swarm drone",
+      "kind": "enemy",
+      "attributes": {
+        "contactDamage": "const:drone-contact-damage",
+        "hp": "const:drone-hp",
+        "wavesPerLevel": "const:waves-per-level"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Swarm drone** — basic flying enemy, arrives in waves. 20 HP **[ASSUMED]**, deals 5 damage on contact **[ASSUMED]**.",
+        "location": "§3 / line 41",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "swarm-command-unit",
+      "name": "Swarm command unit",
+      "kind": "boss",
+      "attributes": {
+        "phases": "const:boss-phases",
+        "totalHp": "const:boss-total-hp"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Swarm command unit (boss)** — appears only in Level 5. Three phases **[ASSUMED]**, 1500 HP total **[ASSUMED]**.",
+        "location": "§3 / line 42",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "civilians",
+      "name": "Trapped civilians",
+      "kind": "npc",
+      "attributes": {
+        "coinsEach": "const:coins-per-civilian",
+        "perMission": "const:civilians-per-mission"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "number of drones; clearing all waves (and the boss on L5) wins the mission. Civilians trapped in the",
+        "location": "§6.1 / line 110",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "combo-multiplier",
+      "name": "Combo multiplier",
+      "kind": "mechanic",
+      "attributes": {
+        "max": "const:combo-max",
+        "step": "const:combo-step"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Combo multiplier** — consecutive kills without taking damage raise a score multiplier",
+        "location": "§6.2 / line 115",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "near-miss-slow-mo",
+      "name": "Near-miss slow-mo",
+      "kind": "mechanic",
+      "attributes": {
+        "seconds": "const:near-miss-slowmo-seconds"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Near-miss slow-mo** — dodging a drone at the last moment triggers 1.5 s of slow motion **[ASSUMED]**.",
+        "location": "§6.2 / line 117",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "final-blow-kill-cam",
+      "name": "Final-blow kill-cam",
+      "kind": "mechanic",
+      "attributes": {
+        "seconds": "const:kill-cam-seconds"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Final-blow kill-cam** — the last kill of a mission plays a short kill-cam (S10).",
+        "location": "§6.2 / line 118",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "victory-star-reveal",
+      "name": "Victory star reveal",
+      "kind": "mechanic",
+      "attributes": {},
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Victory star reveal** — 1 to 3 stars based on HP remaining and civilians saved.",
+        "location": "§6.2 / line 119",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "daily-chest",
+      "name": "Daily chest",
+      "kind": "mechanic",
+      "attributes": {
+        "coins": "const:daily-chest-coins"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Daily chest** — once per day in the Safe Zone (see §8.3).",
+        "location": "§6.2 / line 120",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "remove-ads",
+      "name": "Remove Ads",
+      "kind": "item",
+      "attributes": {
+        "priceUsd": "const:remove-ads-price-usd",
+        "purchased": "var:remove-ads-purchased"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in).",
+        "location": "§7.6 / line 170",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    }
+  ],
+  "resources": [
+    {
+      "id": "coins",
+      "name": "Coins",
+      "kind": "soft",
+      "starting": 0,
+      "unit": "coins",
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "- **Coins** (soft currency) — earned from missions and chests, spent on upgrades. Starting balance",
+        "location": "§8.1 / line 177",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    }
+  ],
+  "constants": [
+    {
+      "id": "coins-victory-base",
+      "balanceFile": "economy",
+      "integer": true,
+      "max": 500,
+      "min": 0,
+      "step": 10,
+      "unit": "coins",
+      "value": 50,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Coins per victory **[ASSUMED]**: 50 + 25 × level, plus 10 per civilian saved **[ASSUMED]**.",
+        "location": "§8.2 / line 183",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "coins-victory-per-level",
+      "balanceFile": "economy",
+      "integer": true,
+      "max": 200,
+      "min": 0,
+      "step": 5,
+      "unit": "coins",
+      "value": 25,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Coins per victory **[ASSUMED]**: 50 + 25 × level, plus 10 per civilian saved **[ASSUMED]**.",
+        "location": "§8.2 / line 183",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "coins-per-civilian",
+      "balanceFile": "economy",
+      "integer": true,
+      "max": 50,
+      "min": 0,
+      "step": 1,
+      "unit": "coins",
+      "value": 10,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Coins per victory **[ASSUMED]**: 50 + 25 × level, plus 10 per civilian saved **[ASSUMED]**.",
+        "location": "§8.2 / line 183",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "civilians-per-mission",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 10,
+      "min": 0,
+      "step": 1,
+      "unit": "count",
+      "value": 3,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Average civilians saved per mission (not in the GDD).",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "claim-multiplier",
+      "balanceFile": "ads",
+      "integer": true,
+      "max": 5,
+      "min": 1,
+      "step": 1,
+      "unit": "x",
+      "value": 3,
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Victory Claim 3x           | S11→S12 | Triples the mission's coin reward        | Once per victory             |",
+        "location": "§7.1 / line 135",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "daily-chest-coins",
+      "balanceFile": "economy",
+      "integer": true,
+      "max": 500,
+      "min": 0,
+      "step": 10,
+      "unit": "coins",
+      "value": 100,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Once per calendar day (player's local midnight reset). Contents **[ASSUMED]**: 100 coins, or one free",
+        "location": "§8.3 / line 188",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "upgrade-cost",
+      "name": "Upgrade cost per tier",
+      "balanceFile": "economy",
+      "unit": "coins",
+      "value": {
+        "type": "geometric",
+        "params": {
+          "base": 100,
+          "from": 1,
+          "ratio": 1.5
+        },
+        "rounding": "round-half-even"
+      },
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "decided: **[ASSUMED]** geometric, 100 coins at tier 1, ×1.5 per tier. Each damage tier adds +2 damage",
+        "location": "§6.3 / line 125",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "upgrade-max-tier",
+      "balanceFile": "economy",
+      "integer": true,
+      "max": 20,
+      "min": 1,
+      "step": 1,
+      "unit": "tier",
+      "value": 10,
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "The Armory sells laser upgrades (damage, fire rate) in tiers 1–10. Upgrade cost per tier is not yet",
+        "location": "§6.3 / line 124",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "damage-per-tier",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 10,
+      "min": 0,
+      "step": 1,
+      "unit": "damage",
+      "value": 2,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "decided: **[ASSUMED]** geometric, 100 coins at tier 1, ×1.5 per tier. Each damage tier adds +2 damage",
+        "location": "§6.3 / line 125",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "reroll-discount",
+      "balanceFile": "economy",
+      "max": 0.9,
+      "min": 0,
+      "step": 0.05,
+      "unit": "ratio",
+      "value": 0.25,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "GDD says \"at a discount\" without an amount.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "upgrade-rerolls-per-day",
+      "balanceFile": "ads",
+      "integer": true,
+      "max": 10,
+      "min": 0,
+      "step": 1,
+      "unit": "count",
+      "value": 3,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "| Upgrade reroll             | S16→S17 | Reroll the discounted upgrade offer      | 3 per day **[ASSUMED]**      |",
+        "location": "§7.1 / line 138",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "remove-ads-price-usd",
+      "balanceFile": "store",
+      "max": 9.99,
+      "min": 0.99,
+      "step": 1,
+      "unit": "usd",
+      "value": 3.99,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Price **[ASSUMED]** $3.99.",
+        "location": "§7.6 / line 171",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "interstitial-min-level",
+      "balanceFile": "ads",
+      "integer": true,
+      "max": 5,
+      "min": 1,
+      "step": 1,
+      "unit": "level",
+      "value": 3,
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "2. Only **from Level 3 onward** (the mission just won is L3 or later).",
+        "location": "§7.2 / line 148",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "interstitial-max-per-mission",
+      "balanceFile": "ads",
+      "integer": true,
+      "max": 3,
+      "min": 0,
+      "step": 1,
+      "unit": "count",
+      "value": 1,
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "3. **Max 1 per mission.**",
+        "location": "§7.2 / line 149",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "interstitial-min-gap-seconds",
+      "balanceFile": "ads",
+      "integer": true,
+      "max": 600,
+      "min": 0,
+      "step": 30,
+      "unit": "seconds",
+      "value": 180,
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "4. **At least 180 seconds apart.**",
+        "location": "§7.2 / line 150",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "max-revives-per-mission",
+      "balanceFile": "ads",
+      "integer": true,
+      "max": 3,
+      "min": 0,
+      "step": 1,
+      "unit": "count",
+      "value": 1,
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Defeat revive              | S14→S15 | Revive at the current wave with full HP  | **Max 1 revive per mission** |",
+        "location": "§7.1 / line 136",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "banner-home-min-level",
+      "balanceFile": "ads",
+      "integer": true,
+      "max": 5,
+      "min": 1,
+      "step": 1,
+      "unit": "level",
+      "value": 3,
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "Shown on Home (only once the player has reached Level 3), Campaign Map, Armory, and Settings.",
+        "location": "§7.3 / line 157",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "rewarded-ad-seconds",
+      "balanceFile": "ads",
+      "integer": true,
+      "max": 60,
+      "min": 15,
+      "step": 5,
+      "unit": "seconds",
+      "value": 30,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Typical rewarded video length.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "interstitial-ad-seconds",
+      "balanceFile": "ads",
+      "integer": true,
+      "max": 30,
+      "min": 5,
+      "step": 5,
+      "unit": "seconds",
+      "value": 15,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Typical interstitial length.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "level-count",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 10,
+      "min": 1,
+      "step": 1,
+      "unit": "levels",
+      "value": 5,
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| L5    | Grand Central Intersection  | Boss level                              |",
+        "location": "§4.1 / line 54",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "boss-level",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 10,
+      "min": 1,
+      "step": 1,
+      "unit": "level",
+      "value": 5,
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| L5    | Grand Central Intersection  | Boss level                              |",
+        "location": "§4.1 / line 54",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "hero-max-hp",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 300,
+      "min": 50,
+      "step": 10,
+      "unit": "hp",
+      "value": 100,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Base hero stats **[ASSUMED]**: 100 HP, laser damage 10 per shot, fire rate 4 shots per second.",
+        "location": "§2 / line 37",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "laser-damage",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 50,
+      "min": 1,
+      "step": 1,
+      "unit": "damage",
+      "value": 10,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Base hero stats **[ASSUMED]**: 100 HP, laser damage 10 per shot, fire rate 4 shots per second.",
+        "location": "§2 / line 37",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "fire-rate",
+      "balanceFile": "gameplay",
+      "max": 10,
+      "min": 1,
+      "step": 1,
+      "unit": "shots/second",
+      "value": 4,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Base hero stats **[ASSUMED]**: 100 HP, laser damage 10 per shot, fire rate 4 shots per second.",
+        "location": "§2 / line 37",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "drone-hp",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 100,
+      "min": 5,
+      "step": 5,
+      "unit": "hp",
+      "value": 20,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "- **Swarm drone** — basic flying enemy, arrives in waves. 20 HP **[ASSUMED]**, deals 5 damage on contact **[ASSUMED]**.",
+        "location": "§3 / line 41",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "drone-contact-damage",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 30,
+      "min": 1,
+      "step": 1,
+      "unit": "damage",
+      "value": 5,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "- **Swarm drone** — basic flying enemy, arrives in waves. 20 HP **[ASSUMED]**, deals 5 damage on contact **[ASSUMED]**.",
+        "location": "§3 / line 41",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "boss-phases",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 5,
+      "min": 1,
+      "step": 1,
+      "unit": "phases",
+      "value": 3,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "- **Swarm command unit (boss)** — appears only in Level 5. Three phases **[ASSUMED]**, 1500 HP total **[ASSUMED]**.",
+        "location": "§3 / line 42",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "boss-total-hp",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 5000,
+      "min": 500,
+      "step": 100,
+      "unit": "hp",
+      "value": 1500,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "- **Swarm command unit (boss)** — appears only in Level 5. Three phases **[ASSUMED]**, 1500 HP total **[ASSUMED]**.",
+        "location": "§3 / line 42",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "combo-step",
+      "balanceFile": "gameplay",
+      "max": 0.5,
+      "min": 0,
+      "step": 0.05,
+      "unit": "x per kill",
+      "value": 0.1,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "(+0.1x per kill, capped at 3x **[ASSUMED]**).",
+        "location": "§6.2 / line 116",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "combo-max",
+      "balanceFile": "gameplay",
+      "max": 5,
+      "min": 1,
+      "step": 0.5,
+      "unit": "x",
+      "value": 3,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "(+0.1x per kill, capped at 3x **[ASSUMED]**).",
+        "location": "§6.2 / line 116",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "near-miss-slowmo-seconds",
+      "balanceFile": "gameplay",
+      "max": 3,
+      "min": 0,
+      "step": 0.5,
+      "unit": "seconds",
+      "value": 1.5,
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "- **Near-miss slow-mo** — dodging a drone at the last moment triggers 1.5 s of slow motion **[ASSUMED]**.",
+        "location": "§6.2 / line 117",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "kill-cam-seconds",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 6,
+      "min": 1,
+      "step": 1,
+      "unit": "seconds",
+      "value": 3,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Length of the final-blow kill-cam.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "waves-per-level",
+      "balanceFile": "gameplay",
+      "unit": "waves",
+      "value": {
+        "type": "table",
+        "params": {
+          "from": 1,
+          "values": [
+            3,
+            4,
+            5,
+            6,
+            6
+          ]
+        }
+      },
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Waves per level **[ASSUMED]**: L1 3, L2 4, L3 5, L4 6, L5 6 plus the boss.",
+        "location": "§4.1 / line 56",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "mission-seconds",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 360,
+      "min": 60,
+      "step": 30,
+      "unit": "seconds",
+      "value": 150,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Fits the 3–6 minute session target.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "boss-fight-seconds",
+      "balanceFile": "gameplay",
+      "integer": true,
+      "max": 300,
+      "min": 60,
+      "step": 30,
+      "unit": "seconds",
+      "value": 120,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Boss fight length.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "base-win-chance",
+      "balanceFile": "gameplay",
+      "max": 1,
+      "min": 0,
+      "step": 0.05,
+      "unit": "probability",
+      "value": 0.75,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Level 1 mission model.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "skill-win-weight",
+      "balanceFile": "gameplay",
+      "max": 1,
+      "min": 0,
+      "step": 0.05,
+      "unit": "probability",
+      "value": 0.2,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Level 1 mission model.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "upgrade-win-weight",
+      "balanceFile": "gameplay",
+      "max": 0.1,
+      "min": 0,
+      "step": 0.01,
+      "unit": "probability per tier",
+      "value": 0.02,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Level 1 mission model.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "difficulty-step",
+      "balanceFile": "gameplay",
+      "max": 0.3,
+      "min": 0,
+      "step": 0.05,
+      "unit": "probability per level",
+      "value": 0.1,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Level 1 mission model.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "laser-trial-win-bonus",
+      "balanceFile": "gameplay",
+      "max": 0.5,
+      "min": 0,
+      "step": 0.05,
+      "unit": "probability",
+      "value": 0.1,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Level 1 mission model.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "boss-base-win-chance",
+      "balanceFile": "gameplay",
+      "max": 1,
+      "min": 0,
+      "step": 0.05,
+      "unit": "probability",
+      "value": 0.5,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Level 1 mission model.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "consent-given",
+      "type": "bool",
+      "initial": false,
+      "scope": "player",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| S01 | Consent / Privacy     | menu     | First launch only.                                       |",
+        "location": "§5 / line 69",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "selected-hero",
+      "type": "enum",
+      "enumValues": [
+        "relickeeper",
+        "vanguard"
+      ],
+      "initial": "relickeeper",
+      "scope": "player",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "Two launch heroes are selectable on the Home screen. They have **identical controls and identical",
+        "location": "§2 / line 29",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "highest-level-unlocked",
+      "type": "int",
+      "initial": 1,
+      "max": 5,
+      "min": 1,
+      "scope": "player",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "Continue → (S13 Interstitial when eligible) → S05 Campaign Map with the next district unlocked.",
+        "location": "§5.1 / line 97",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "mission-level",
+      "type": "int",
+      "description": "Level being played (the frontier level).",
+      "initial": 1,
+      "max": 5,
+      "min": 1,
+      "scope": "player",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay.",
+        "location": "§5.1 / line 94",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "last-mission-result",
+      "type": "enum",
+      "enumValues": [
+        "none",
+        "victory",
+        "defeat"
+      ],
+      "initial": "none",
+      "scope": "mission",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "5. **Never after a defeat.**",
+        "location": "§7.2 / line 151",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "mission-coins",
+      "type": "int",
+      "initial": 0,
+      "min": 0,
+      "scope": "mission",
+      "provenance": {
+        "confidence": "medium",
+        "excerpt": "Coins per victory **[ASSUMED]**: 50 + 25 × level, plus 10 per civilian saved **[ASSUMED]**.",
+        "location": "§8.2 / line 183",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "died-in-boss",
+      "type": "bool",
+      "initial": false,
+      "scope": "mission",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same",
+        "location": "§5.1 / line 98",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "damage-tier",
+      "type": "int",
+      "initial": 0,
+      "max": 10,
+      "min": 0,
+      "scope": "player",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "The Armory sells laser upgrades (damage, fire rate) in tiers 1–10. Upgrade cost per tier is not yet",
+        "location": "§6.3 / line 124",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "upgrade-discount-active",
+      "type": "bool",
+      "initial": false,
+      "scope": "player",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "is offered at a discount.",
+        "location": "§6.3 / line 127",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "laser-trial-active",
+      "type": "bool",
+      "initial": false,
+      "scope": "player",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Briefing laser trial       | S06→S07 | Stronger laser for the next mission only | Once per briefing            |",
+        "location": "§7.1 / line 137",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "remove-ads-purchased",
+      "type": "bool",
+      "initial": false,
+      "scope": "player",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in).",
+        "location": "§7.6 / line 170",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "id": "play-mission",
+      "name": "Play the waves of a mission",
+      "actor": "system",
+      "costs": [],
+      "duration": "missionSeconds",
+      "effects": [],
+      "errorCode": "MISSION_UNAVAILABLE",
+      "outcomes": [
+        {
+          "id": "win",
+          "effects": [
+            {
+              "op": "set",
+              "target": "var:last-mission-result",
+              "value": "\"victory\""
+            },
+            {
+              "op": "set",
+              "target": "var:mission-coins",
+              "value": "coinsVictoryBase + coinsVictoryPerLevel * missionLevel + coinsPerCivilian * civiliansPerMission"
+            },
+            {
+              "op": "add",
+              "target": "res:coins",
+              "value": "coinsVictoryBase + coinsVictoryPerLevel * missionLevel + coinsPerCivilian * civiliansPerMission"
+            },
+            {
+              "op": "set",
+              "target": "var:highest-level-unlocked",
+              "value": "min(max(highestLevelUnlocked, missionLevel + 1), levelCount)"
+            },
+            {
+              "op": "set",
+              "target": "var:laser-trial-active",
+              "value": "false"
+            }
+          ],
+          "weight": "missionLevel == bossLevel ? 0 : clamp(baseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier - difficultyStep * (missionLevel - 1) + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95)"
+        },
+        {
+          "id": "waves-cleared",
+          "effects": [],
+          "weight": "missionLevel == bossLevel ? clamp(baseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier - difficultyStep * (missionLevel - 1) + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95) : 0"
+        },
+        {
+          "id": "lose",
+          "effects": [
+            {
+              "op": "set",
+              "target": "var:last-mission-result",
+              "value": "\"defeat\""
+            },
+            {
+              "op": "set",
+              "target": "var:died-in-boss",
+              "value": "false"
+            },
+            {
+              "op": "set",
+              "target": "var:laser-trial-active",
+              "value": "false"
+            }
+          ],
+          "weight": "1 - clamp(baseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier - difficultyStep * (missionLevel - 1) + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95)"
+        }
+      ],
+      "preconditions": [],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "number of drones; clearing all waves (and the boss on L5) wins the mission. Civilians trapped in the",
+        "location": "§6.1 / line 110",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "fight-boss",
+      "name": "Fight the boss",
+      "actor": "system",
+      "costs": [],
+      "duration": "bossFightSeconds",
+      "effects": [],
+      "errorCode": "BOSS_UNAVAILABLE",
+      "outcomes": [
+        {
+          "id": "win",
+          "effects": [
+            {
+              "op": "set",
+              "target": "var:last-mission-result",
+              "value": "\"victory\""
+            },
+            {
+              "op": "set",
+              "target": "var:mission-coins",
+              "value": "coinsVictoryBase + coinsVictoryPerLevel * missionLevel + coinsPerCivilian * civiliansPerMission"
+            },
+            {
+              "op": "add",
+              "target": "res:coins",
+              "value": "coinsVictoryBase + coinsVictoryPerLevel * missionLevel + coinsPerCivilian * civiliansPerMission"
+            },
+            {
+              "op": "set",
+              "target": "var:highest-level-unlocked",
+              "value": "min(max(highestLevelUnlocked, missionLevel + 1), levelCount)"
+            },
+            {
+              "op": "set",
+              "target": "var:laser-trial-active",
+              "value": "false"
+            }
+          ],
+          "weight": "clamp(bossBaseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95)"
+        },
+        {
+          "id": "lose",
+          "effects": [
+            {
+              "op": "set",
+              "target": "var:last-mission-result",
+              "value": "\"defeat\""
+            },
+            {
+              "op": "set",
+              "target": "var:died-in-boss",
+              "value": "true"
+            },
+            {
+              "op": "set",
+              "target": "var:laser-trial-active",
+              "value": "false"
+            }
+          ],
+          "weight": "1 - clamp(bossBaseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95)"
+        }
+      ],
+      "preconditions": [],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Swarm command unit (boss)** — appears only in Level 5. Three phases **[ASSUMED]**, 1500 HP total **[ASSUMED]**.",
+        "location": "§3 / line 42",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "claim-triple",
+      "actor": "ad-sdk",
+      "costs": [],
+      "duration": "rewardedAdSeconds",
+      "effects": [
+        {
+          "op": "add",
+          "target": "res:coins",
+          "value": "(claimMultiplier - 1) * missionCoins"
+        }
+      ],
+      "errorCode": "CLAIM_NOT_AVAILABLE",
+      "limits": [
+        {
+          "max": "1",
+          "per": "mission"
+        }
+      ],
+      "preconditions": [
+        "lastMissionResult == \"victory\""
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Victory Claim 3x           | S11→S12 | Triples the mission's coin reward        | Once per victory             |",
+        "location": "§7.1 / line 135",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "revive",
+      "actor": "ad-sdk",
+      "costs": [],
+      "duration": "rewardedAdSeconds",
+      "effects": [
+        {
+          "op": "set",
+          "target": "var:last-mission-result",
+          "value": "\"none\""
+        }
+      ],
+      "errorCode": "REVIVE_NOT_AVAILABLE",
+      "limits": [
+        {
+          "errorCode": "REVIVE_LIMIT_REACHED",
+          "max": "maxRevivesPerMission",
+          "per": "mission"
+        }
+      ],
+      "preconditions": [
+        "lastMissionResult == \"defeat\""
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Defeat revive              | S14→S15 | Revive at the current wave with full HP  | **Max 1 revive per mission** |",
+        "location": "§7.1 / line 136",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "accept-laser-trial",
+      "actor": "ad-sdk",
+      "costs": [],
+      "duration": "rewardedAdSeconds",
+      "effects": [
+        {
+          "op": "set",
+          "target": "var:laser-trial-active",
+          "value": "true"
+        }
+      ],
+      "errorCode": "LASER_TRIAL_NOT_AVAILABLE",
+      "limits": [
+        {
+          "max": "1",
+          "per": "mission"
+        }
+      ],
+      "preconditions": [
+        "!laserTrialActive"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Briefing laser trial       | S06→S07 | Stronger laser for the next mission only | Once per briefing            |",
+        "location": "§7.1 / line 137",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "buy-damage-upgrade",
+      "actor": "player",
+      "costs": [
+        {
+          "amount": "upgradeDiscountActive ? floor(curve(upgradeCost, damageTier + 1) * (1 - rerollDiscount)) : curve(upgradeCost, damageTier + 1)",
+          "resource": "res:coins"
+        }
+      ],
+      "effects": [
+        {
+          "op": "add",
+          "target": "var:damage-tier",
+          "value": "1"
+        },
+        {
+          "op": "set",
+          "target": "var:upgrade-discount-active",
+          "value": "false"
+        }
+      ],
+      "errorCode": "UPGRADE_MAX_TIER",
+      "preconditions": [
+        "damageTier < upgradeMaxTier"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "The Armory sells laser upgrades (damage, fire rate) in tiers 1–10. Upgrade cost per tier is not yet",
+        "location": "§6.3 / line 124",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "reroll-upgrade-offer",
+      "actor": "ad-sdk",
+      "costs": [],
+      "duration": "rewardedAdSeconds",
+      "effects": [
+        {
+          "op": "set",
+          "target": "var:upgrade-discount-active",
+          "value": "true"
+        }
+      ],
+      "errorCode": "REROLL_NOT_AVAILABLE",
+      "limits": [
+        {
+          "max": "upgradeRerollsPerDay",
+          "per": "day"
+        }
+      ],
+      "preconditions": [
+        "!upgradeDiscountActive && damageTier < upgradeMaxTier"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Upgrade reroll             | S16→S17 | Reroll the discounted upgrade offer      | 3 per day **[ASSUMED]**      |",
+        "location": "§7.1 / line 138",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "open-daily-chest",
+      "actor": "player",
+      "costs": [],
+      "effects": [
+        {
+          "op": "add",
+          "target": "res:coins",
+          "value": "dailyChestCoins"
+        }
+      ],
+      "errorCode": "DAILY_CHEST_ALREADY_OPENED",
+      "limits": [
+        {
+          "max": "1",
+          "per": "day"
+        }
+      ],
+      "preconditions": [
+        "claimDailyFreeUpgradeCountDay == 0"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Daily chest** — once per day in the Safe Zone (see §8.3).",
+        "location": "§6.2 / line 120",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "claim-daily-free-upgrade",
+      "actor": "ad-sdk",
+      "costs": [],
+      "duration": "rewardedAdSeconds",
+      "effects": [
+        {
+          "op": "add",
+          "target": "var:damage-tier",
+          "value": "1"
+        }
+      ],
+      "errorCode": "DAILY_CHEST_ALREADY_OPENED",
+      "limits": [
+        {
+          "max": "1",
+          "per": "day"
+        }
+      ],
+      "preconditions": [
+        "openDailyChestCountDay == 0",
+        "damageTier < upgradeMaxTier"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Daily chest / free upgrade | S18     | One free upgrade tier                    | Once per day                 |",
+        "location": "§7.1 / line 139",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "purchase-remove-ads",
+      "actor": "store",
+      "costs": [],
+      "effects": [
+        {
+          "op": "set",
+          "target": "var:remove-ads-purchased",
+          "value": "true"
+        }
+      ],
+      "errorCode": "ALREADY_PURCHASED",
+      "preconditions": [
+        "!removeAdsPurchased"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in).",
+        "location": "§7.6 / line 170",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "victory-continue",
+      "actor": "player",
+      "costs": [],
+      "effects": [],
+      "errorCode": "NOT_AFTER_VICTORY",
+      "preconditions": [
+        "lastMissionResult == \"victory\""
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "1. Shown **only after Victory → Continue** (S11 → S13).",
+        "location": "§7.2 / line 147",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    }
+  ],
+  "rules": [
+    {
+      "id": "no-interstitial-after-defeat",
+      "appliesTo": {
+        "placements": [
+          "placement:interstitial-after-victory"
+        ]
+      },
+      "errorCode": "INTERSTITIAL_AFTER_DEFEAT",
+      "expr": "lastMissionResult == \"victory\"",
+      "severity": "blocking",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "5. **Never after a defeat.**",
+        "location": "§7.2 / line 151",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "remove-ads-blocks-ads",
+      "appliesTo": {
+        "placements": [
+          "placement:interstitial-after-victory",
+          "placement:banner-home",
+          "placement:banner-campaign-map",
+          "placement:banner-armory",
+          "placement:banner-settings",
+          "placement:mrec-pause",
+          "placement:mrec-victory",
+          "placement:mrec-defeat"
+        ]
+      },
+      "errorCode": "ADS_REMOVED",
+      "expr": "!removeAdsPurchased",
+      "severity": "blocking",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in).",
+        "location": "§7.6 / line 170",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    }
+  ],
+  "stateMachine": {
+    "initial": "state:s00-loading",
+    "states": [
+      {
+        "id": "s00-loading",
+        "name": "Loading",
+        "kind": "loading",
+        "code": "S00",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S00 | Loading               | loading  | App start. No ads.                                       |",
+          "location": "§5 / line 68",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s01-consent",
+        "name": "Consent / Privacy",
+        "kind": "menu",
+        "code": "S01",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S01 | Consent / Privacy     | menu     | First launch only.                                       |",
+          "location": "§5 / line 69",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s02-home",
+        "name": "Home (hero select)",
+        "kind": "menu",
+        "code": "S02",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S02 | Home (hero select)    | menu     | Banner from Level 3+.                                    |",
+          "location": "§5 / line 70",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s03-hq-rooftop",
+        "name": "HQ Rooftop",
+        "kind": "menu",
+        "code": "S03",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S03 | HQ Rooftop            | menu     |                                                          |",
+          "location": "§5 / line 71",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s04-safe-zone",
+        "name": "Safe Zone",
+        "kind": "menu",
+        "code": "S04",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S04 | Safe Zone             | menu     |                                                          |",
+          "location": "§5 / line 72",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s05-campaign-map",
+        "name": "Campaign Map",
+        "kind": "menu",
+        "code": "S05",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S05 | Campaign Map          | menu     | Banner.                                                  |",
+          "location": "§5 / line 73",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s06-briefing",
+        "name": "Mission Briefing",
+        "kind": "menu",
+        "code": "S06",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S06 | Mission Briefing      | menu     | Offers the laser trial (rewarded).                       |",
+          "location": "§5 / line 74",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s07-laser-trial",
+        "name": "Laser Trial",
+        "kind": "ad",
+        "code": "S07",
+        "duration": "rewardedAdSeconds",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S07 | Laser Trial           | ad       | Rewarded video; grants a stronger laser for one mission. |",
+          "location": "§5 / line 75",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s08-gameplay",
+        "name": "Gameplay",
+        "kind": "gameplay",
+        "code": "S08",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S08 | Gameplay              | gameplay | Live play. No UI ads.                                    |",
+          "location": "§5 / line 76",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s09-boss-fight",
+        "name": "Boss Fight",
+        "kind": "gameplay",
+        "code": "S09",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S09 | Boss Fight            | gameplay | L5 only. Live play. No UI ads.                           |",
+          "location": "§5 / line 77",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s10-kill-cam",
+        "name": "Kill-cam",
+        "kind": "gameplay",
+        "code": "S10",
+        "duration": "killCamSeconds",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S10 | Kill-cam              | gameplay | Final-blow kill-cam on the last drone / boss.            |",
+          "location": "§5 / line 78",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s11-victory",
+        "name": "Victory (star reveal)",
+        "kind": "result",
+        "code": "S11",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S11 | Victory (star reveal) | result   | MREC. Offers Claim 3x.                                   |",
+          "location": "§5 / line 79",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s12-claim-triple",
+        "name": "Claim 3x",
+        "kind": "ad",
+        "code": "S12",
+        "duration": "rewardedAdSeconds",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S12 | Claim 3x              | ad       | Rewarded video; triples mission coins.                   |",
+          "location": "§5 / line 80",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s13-interstitial",
+        "name": "Interstitial",
+        "kind": "ad",
+        "code": "S13",
+        "duration": "interstitialAdSeconds",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S13 | Interstitial          | ad       | Only after Victory → Continue (see §7.2).                |",
+          "location": "§5 / line 81",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s14-defeat",
+        "name": "Defeat",
+        "kind": "result",
+        "code": "S14",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S14 | Defeat                | result   | MREC. Offers revive.                                     |",
+          "location": "§5 / line 82",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s15-revive-offer",
+        "name": "Revive Offer",
+        "kind": "ad",
+        "code": "S15",
+        "duration": "rewardedAdSeconds",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S15 | Revive Offer          | ad       | Rewarded video; revive once per mission.                 |",
+          "location": "§5 / line 83",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s16-armory",
+        "name": "Armory / Upgrades",
+        "kind": "meta",
+        "code": "S16",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S16 | Armory / Upgrades     | meta     | Banner. Spend coins on upgrades.                         |",
+          "location": "§5 / line 84",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s17-upgrade-reroll",
+        "name": "Upgrade Reroll",
+        "kind": "ad",
+        "code": "S17",
+        "duration": "rewardedAdSeconds",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S17 | Upgrade Reroll        | ad       | Rewarded video; reroll the offered upgrade.              |",
+          "location": "§5 / line 85",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s18-daily-chest",
+        "name": "Daily Chest",
+        "kind": "meta",
+        "code": "S18",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S18 | Daily Chest           | meta     | Free once a day; rewarded video for a free upgrade.      |",
+          "location": "§5 / line 86",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s19-settings",
+        "name": "Settings",
+        "kind": "menu",
+        "code": "S19",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S19 | Settings              | menu     | Banner.                                                  |",
+          "location": "§5 / line 87",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s20-store",
+        "name": "Store / Remove Ads",
+        "kind": "meta",
+        "code": "S20",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S20 | Store / Remove Ads    | meta     | IAP: Remove Ads.                                         |",
+          "location": "§5 / line 88",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "s21-pause",
+        "name": "Pause",
+        "kind": "overlay",
+        "code": "S21",
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| S21 | Pause                 | overlay  | MREC / outstream video. Returns to the paused screen.    |",
+          "location": "§5 / line 89",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      }
+    ],
+    "transitions": [
+      {
+        "id": "t-loading-to-consent",
+        "from": "state:s00-loading",
+        "guard": "!consentGiven",
+        "to": "state:s01-consent",
+        "trigger": "auto",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Start:** S00 Loading → S01 Consent (first launch) → S02 Home. Later launches skip S01.",
+          "location": "§5.1 / line 93",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-loading-to-home",
+        "from": "state:s00-loading",
+        "guard": "consentGiven",
+        "to": "state:s02-home",
+        "trigger": "auto",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Start:** S00 Loading → S01 Consent (first launch) → S02 Home. Later launches skip S01.",
+          "location": "§5.1 / line 93",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-consent-accept",
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:consent-given",
+            "value": "true"
+          }
+        ],
+        "from": "state:s01-consent",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Start:** S00 Loading → S01 Consent (first launch) → S02 Home. Later launches skip S01.",
+          "location": "§5.1 / line 93",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-home-select-relickeeper",
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:selected-hero",
+            "value": "\"relickeeper\""
+          }
+        ],
+        "from": "state:s02-home",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "Two launch heroes are selectable on the Home screen. They have **identical controls and identical",
+          "location": "§2 / line 29",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-home-select-vanguard",
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:selected-hero",
+            "value": "\"vanguard\""
+          }
+        ],
+        "from": "state:s02-home",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "Two launch heroes are selectable on the Home screen. They have **identical controls and identical",
+          "location": "§2 / line 29",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-home-to-hq",
+        "from": "state:s02-home",
+        "to": "state:s03-hq-rooftop",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-hq-to-home",
+        "from": "state:s03-hq-rooftop",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-home-to-safe-zone",
+        "from": "state:s02-home",
+        "to": "state:s04-safe-zone",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-safe-zone-to-home",
+        "from": "state:s04-safe-zone",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-home-to-map",
+        "from": "state:s02-home",
+        "to": "state:s05-campaign-map",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay.",
+          "location": "§5.1 / line 94",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-map-to-home",
+        "from": "state:s05-campaign-map",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay.",
+          "location": "§5.1 / line 94",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-home-to-settings",
+        "from": "state:s02-home",
+        "to": "state:s19-settings",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-settings-to-home",
+        "from": "state:s19-settings",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-home-to-store",
+        "from": "state:s02-home",
+        "to": "state:s20-store",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-store-to-home",
+        "from": "state:s20-store",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-hq-to-armory",
+        "from": "state:s03-hq-rooftop",
+        "to": "state:s16-armory",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-armory-to-hq",
+        "from": "state:s16-armory",
+        "to": "state:s03-hq-rooftop",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-safe-zone-to-chest",
+        "from": "state:s04-safe-zone",
+        "to": "state:s18-daily-chest",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-chest-to-safe-zone",
+        "from": "state:s18-daily-chest",
+        "to": "state:s04-safe-zone",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-store-buy-remove-ads",
+        "from": "state:s20-store",
+        "to": "state:s20-store",
+        "trigger": "action:purchase-remove-ads",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in).",
+          "location": "§7.6 / line 170",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-armory-buy-upgrade",
+        "from": "state:s16-armory",
+        "to": "state:s16-armory",
+        "trigger": "action:buy-damage-upgrade",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "The Armory sells laser upgrades (damage, fire rate) in tiers 1–10. Upgrade cost per tier is not yet",
+          "location": "§6.3 / line 124",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-armory-to-reroll",
+        "from": "state:s16-armory",
+        "to": "state:s17-upgrade-reroll",
+        "trigger": "action:reroll-upgrade-offer",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-reroll-to-armory",
+        "from": "state:s17-upgrade-reroll",
+        "to": "state:s16-armory",
+        "trigger": "auto",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;",
+          "location": "§5.1 / line 101",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-chest-open",
+        "from": "state:s18-daily-chest",
+        "to": "state:s18-daily-chest",
+        "trigger": "action:open-daily-chest",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "Once per calendar day (player's local midnight reset). Contents **[ASSUMED]**: 100 coins, or one free",
+          "location": "§8.3 / line 188",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-chest-free-upgrade",
+        "from": "state:s18-daily-chest",
+        "to": "state:s18-daily-chest",
+        "trigger": "action:claim-daily-free-upgrade",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "Once per calendar day (player's local midnight reset). Contents **[ASSUMED]**: 100 coins, or one free",
+          "location": "§8.3 / line 188",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-map-to-briefing",
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:mission-level",
+            "value": "highestLevelUnlocked"
+          }
+        ],
+        "from": "state:s05-campaign-map",
+        "to": "state:s06-briefing",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay.",
+          "location": "§5.1 / line 94",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-briefing-to-map",
+        "from": "state:s06-briefing",
+        "to": "state:s05-campaign-map",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay.",
+          "location": "§5.1 / line 94",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-briefing-to-laser-trial",
+        "from": "state:s06-briefing",
+        "to": "state:s07-laser-trial",
+        "trigger": "action:accept-laser-trial",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay.",
+          "location": "§5.1 / line 94",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-laser-trial-to-briefing",
+        "from": "state:s07-laser-trial",
+        "to": "state:s06-briefing",
+        "trigger": "auto",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay.",
+          "location": "§5.1 / line 94",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-briefing-start-mission",
+        "beginsMission": true,
+        "from": "state:s06-briefing",
+        "to": "state:s08-gameplay",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay.",
+          "location": "§5.1 / line 94",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-gameplay-win",
+        "from": "state:s08-gameplay",
+        "outcome": "win",
+        "to": "state:s10-kill-cam",
+        "trigger": "action:play-mission",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →",
+          "location": "§5.1 / line 96",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-gameplay-to-boss",
+        "from": "state:s08-gameplay",
+        "outcome": "waves-cleared",
+        "to": "state:s09-boss-fight",
+        "trigger": "action:play-mission",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "On L5, S08 Gameplay → S09 Boss Fight after the last wave.",
+          "location": "§5.1 / line 95",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-gameplay-lose",
+        "from": "state:s08-gameplay",
+        "outcome": "lose",
+        "to": "state:s14-defeat",
+        "trigger": "action:play-mission",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same",
+          "location": "§5.1 / line 98",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-boss-win",
+        "from": "state:s09-boss-fight",
+        "outcome": "win",
+        "to": "state:s10-kill-cam",
+        "trigger": "action:fight-boss",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →",
+          "location": "§5.1 / line 96",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-boss-lose",
+        "from": "state:s09-boss-fight",
+        "outcome": "lose",
+        "to": "state:s14-defeat",
+        "trigger": "action:fight-boss",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same",
+          "location": "§5.1 / line 98",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-gameplay-pause",
+        "from": "state:s08-gameplay",
+        "to": "state:s21-pause",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Pause:** from S08 or S09 → S21 Pause → Resume (back to the same screen) or Quit → S05 Campaign Map.",
+          "location": "§5.1 / line 100",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-boss-pause",
+        "from": "state:s09-boss-fight",
+        "to": "state:s21-pause",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Pause:** from S08 or S09 → S21 Pause → Resume (back to the same screen) or Quit → S05 Campaign Map.",
+          "location": "§5.1 / line 100",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-pause-resume",
+        "from": "state:s21-pause",
+        "to": "return",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Pause:** from S08 or S09 → S21 Pause → Resume (back to the same screen) or Quit → S05 Campaign Map.",
+          "location": "§5.1 / line 100",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-pause-quit",
+        "endsMission": true,
+        "from": "state:s21-pause",
+        "to": "state:s05-campaign-map",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Pause:** from S08 or S09 → S21 Pause → Resume (back to the same screen) or Quit → S05 Campaign Map.",
+          "location": "§5.1 / line 100",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-kill-cam-to-victory",
+        "from": "state:s10-kill-cam",
+        "to": "state:s11-victory",
+        "trigger": "auto",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →",
+          "location": "§5.1 / line 96",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-victory-claim-triple",
+        "from": "state:s11-victory",
+        "to": "state:s12-claim-triple",
+        "trigger": "action:claim-triple",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →",
+          "location": "§5.1 / line 96",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-claim-triple-to-victory",
+        "from": "state:s12-claim-triple",
+        "to": "state:s11-victory",
+        "trigger": "auto",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →",
+          "location": "§5.1 / line 96",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-victory-continue-interstitial",
+        "from": "state:s11-victory",
+        "guard": "eligible(\"interstitial-after-victory\")",
+        "to": "state:s13-interstitial",
+        "trigger": "action:victory-continue",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "Continue → (S13 Interstitial when eligible) → S05 Campaign Map with the next district unlocked.",
+          "location": "§5.1 / line 97",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-victory-continue-map",
+        "endsMission": true,
+        "from": "state:s11-victory",
+        "guard": "!eligible(\"interstitial-after-victory\")",
+        "to": "state:s05-campaign-map",
+        "trigger": "action:victory-continue",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "Continue → (S13 Interstitial when eligible) → S05 Campaign Map with the next district unlocked.",
+          "location": "§5.1 / line 97",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-interstitial-to-map",
+        "endsMission": true,
+        "from": "state:s13-interstitial",
+        "to": "state:s05-campaign-map",
+        "trigger": "auto",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "Continue → (S13 Interstitial when eligible) → S05 Campaign Map with the next district unlocked.",
+          "location": "§5.1 / line 97",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-defeat-revive",
+        "from": "state:s14-defeat",
+        "to": "state:s15-revive-offer",
+        "trigger": "action:revive",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same",
+          "location": "§5.1 / line 98",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-revive-to-gameplay",
+        "from": "state:s15-revive-offer",
+        "guard": "!diedInBoss",
+        "to": "state:s08-gameplay",
+        "trigger": "auto",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same",
+          "location": "§5.1 / line 98",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-revive-to-boss",
+        "from": "state:s15-revive-offer",
+        "guard": "diedInBoss",
+        "to": "state:s09-boss-fight",
+        "trigger": "auto",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same",
+          "location": "§5.1 / line 98",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-defeat-retry",
+        "endsMission": true,
+        "from": "state:s14-defeat",
+        "to": "state:s06-briefing",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "wave) → Retry → S06 Briefing, or Exit → S05 Campaign Map.",
+          "location": "§5.1 / line 99",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      },
+      {
+        "id": "t-defeat-exit",
+        "endsMission": true,
+        "from": "state:s14-defeat",
+        "to": "state:s05-campaign-map",
+        "trigger": "ui",
+        "provenance": {
+          "confidence": "medium",
+          "excerpt": "wave) → Retry → S06 Briefing, or Exit → S05 Campaign Map.",
+          "location": "§5.1 / line 99",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "assumed"
+        }
+      }
+    ]
+  },
+  "flows": [
+    {
+      "actions": [
+        "action:play-mission",
+        "action:fight-boss"
+      ],
+      "id": "mission-rewards",
+      "kind": "source",
+      "resource": "res:coins",
+      "to": [
+        "flow:wallet"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "Coins per victory **[ASSUMED]**: 50 + 25 × level, plus 10 per civilian saved **[ASSUMED]**.",
+        "location": "§8.2 / line 183",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "actions": [
+        "action:claim-triple"
+      ],
+      "id": "claim-triple-bonus",
+      "kind": "source",
+      "resource": "res:coins",
+      "to": [
+        "flow:wallet"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Victory Claim 3x           | S11→S12 | Triples the mission's coin reward        | Once per victory             |",
+        "location": "§7.1 / line 135",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "actions": [
+        "action:open-daily-chest"
+      ],
+      "id": "daily-chest-coins",
+      "kind": "source",
+      "resource": "res:coins",
+      "to": [
+        "flow:wallet"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "Once per calendar day (player's local midnight reset). Contents **[ASSUMED]**: 100 coins, or one free",
+        "location": "§8.3 / line 188",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "actions": [],
+      "id": "wallet",
+      "kind": "pool",
+      "resource": "res:coins",
+      "to": [
+        "flow:upgrade-spend"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- **Coins** (soft currency) — earned from missions and chests, spent on upgrades. Starting balance",
+        "location": "§8.1 / line 177",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "actions": [
+        "action:buy-damage-upgrade"
+      ],
+      "id": "upgrade-spend",
+      "kind": "sink",
+      "resource": "res:coins",
+      "to": [],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "The Armory sells laser upgrades (damage, fire rate) in tiers 1–10. Upgrade cost per tier is not yet",
+        "location": "§6.3 / line 124",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    }
+  ],
+  "monetization": {
+    "forbiddenStates": [
+      "state:s00-loading",
+      "state:s01-consent",
+      "state:s08-gameplay",
+      "state:s09-boss-fight",
+      "state:s10-kill-cam"
+    ],
+    "placements": [
+      {
+        "id": "rewarded-claim-triple",
+        "name": "Victory Claim 3x",
+        "eligibility": [],
+        "format": "rewarded",
+        "trigger": {
+          "action": "action:claim-triple"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| Victory Claim 3x           | S11→S12 | Triples the mission's coin reward        | Once per victory             |",
+          "location": "§7.1 / line 135",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "rewarded-revive",
+        "name": "Defeat revive",
+        "eligibility": [],
+        "format": "rewarded",
+        "trigger": {
+          "action": "action:revive"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| Defeat revive              | S14→S15 | Revive at the current wave with full HP  | **Max 1 revive per mission** |",
+          "location": "§7.1 / line 136",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "rewarded-laser-trial",
+        "name": "Briefing laser trial",
+        "eligibility": [],
+        "format": "rewarded",
+        "trigger": {
+          "action": "action:accept-laser-trial"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| Briefing laser trial       | S06→S07 | Stronger laser for the next mission only | Once per briefing            |",
+          "location": "§7.1 / line 137",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "rewarded-upgrade-reroll",
+        "name": "Upgrade reroll",
+        "eligibility": [],
+        "format": "rewarded",
+        "trigger": {
+          "action": "action:reroll-upgrade-offer"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| Upgrade reroll             | S16→S17 | Reroll the discounted upgrade offer      | 3 per day **[ASSUMED]**      |",
+          "location": "§7.1 / line 138",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "rewarded-daily-free-upgrade",
+        "name": "Daily chest / free upgrade",
+        "eligibility": [],
+        "format": "rewarded",
+        "trigger": {
+          "action": "action:claim-daily-free-upgrade"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "| Daily chest / free upgrade | S18     | One free upgrade tier                    | Once per day                 |",
+          "location": "§7.1 / line 139",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "interstitial-after-victory",
+        "name": "Interstitial after Victory → Continue",
+        "caps": [
+          {
+            "max": "interstitialMaxPerMission",
+            "per": "mission"
+          }
+        ],
+        "cooldownSeconds": "interstitialMinGapSeconds",
+        "eligibility": [
+          "lastMissionResult == \"victory\"",
+          "missionLevel >= interstitialMinLevel"
+        ],
+        "format": "interstitial",
+        "trigger": {
+          "state": "state:s13-interstitial"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "1. Shown **only after Victory → Continue** (S11 → S13).",
+          "location": "§7.2 / line 147",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "banner-home",
+        "eligibility": [
+          "highestLevelUnlocked >= bannerHomeMinLevel"
+        ],
+        "format": "banner",
+        "trigger": {
+          "state": "state:s02-home"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "Shown on Home (only once the player has reached Level 3), Campaign Map, Armory, and Settings.",
+          "location": "§7.3 / line 157",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "banner-campaign-map",
+        "eligibility": [],
+        "format": "banner",
+        "trigger": {
+          "state": "state:s05-campaign-map"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "Shown on Home (only once the player has reached Level 3), Campaign Map, Armory, and Settings.",
+          "location": "§7.3 / line 157",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "banner-armory",
+        "eligibility": [],
+        "format": "banner",
+        "trigger": {
+          "state": "state:s16-armory"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "Shown on Home (only once the player has reached Level 3), Campaign Map, Armory, and Settings.",
+          "location": "§7.3 / line 157",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "banner-settings",
+        "eligibility": [],
+        "format": "banner",
+        "trigger": {
+          "state": "state:s19-settings"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "Shown on Home (only once the player has reached Level 3), Campaign Map, Armory, and Settings.",
+          "location": "§7.3 / line 157",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "mrec-pause",
+        "eligibility": [],
+        "format": "mrec",
+        "trigger": {
+          "state": "state:s21-pause"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "Shown on Pause, Victory, and Defeat.",
+          "location": "§7.4 / line 162",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "mrec-victory",
+        "eligibility": [],
+        "format": "mrec",
+        "trigger": {
+          "state": "state:s11-victory"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "Shown on Pause, Victory, and Defeat.",
+          "location": "§7.4 / line 162",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "mrec-defeat",
+        "eligibility": [],
+        "format": "mrec",
+        "trigger": {
+          "state": "state:s14-defeat"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "Shown on Pause, Victory, and Defeat.",
+          "location": "§7.4 / line 162",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "billboard-in-world",
+        "name": "In-world billboards",
+        "eligibility": [],
+        "format": "banner",
+        "inWorld": true,
+        "trigger": {
+          "state": "state:s08-gameplay"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "Billboards on city buildings inside levels may show ads. They are the only ads allowed during gameplay.",
+          "location": "§7.5 / line 166",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      },
+      {
+        "id": "iap-remove-ads",
+        "name": "Remove Ads",
+        "eligibility": [],
+        "format": "iap",
+        "trigger": {
+          "action": "action:purchase-remove-ads"
+        },
+        "provenance": {
+          "confidence": "high",
+          "excerpt": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in).",
+          "location": "§7.6 / line 170",
+          "source": "fixtures/swarm-rescue/GDD.md",
+          "status": "confirmed"
+        }
+      }
+    ]
+  },
+  "personas": [
+    {
+      "id": "casual-non-payer",
+      "name": "Casual non-payer",
+      "adOptIn": {
+        "byPlacement": {
+          "placement:rewarded-revive": 0.5
+        },
+        "default": 0.35
+      },
+      "churnSensitivity": 0.5,
+      "purchaseProbabilityPerSession": 0,
+      "sessionLengthSeconds": {
+        "type": "normal",
+        "max": 600,
+        "mean": 240,
+        "min": 60,
+        "sd": 60
+      },
+      "sessionsPerDay": {
+        "type": "poisson",
+        "mean": 2
+      },
+      "share": 0.6,
+      "skill": {
+        "type": "normal",
+        "max": 1,
+        "mean": 0.4,
+        "min": 0,
+        "sd": 0.15
+      },
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Persona assumptions for simulation.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "engaged-ad-watcher",
+      "name": "Engaged ad watcher",
+      "adOptIn": {
+        "default": 0.75
+      },
+      "churnSensitivity": 0.3,
+      "purchaseProbabilityPerSession": 0.002,
+      "sessionLengthSeconds": {
+        "type": "normal",
+        "max": 900,
+        "mean": 360,
+        "min": 60,
+        "sd": 90
+      },
+      "sessionsPerDay": {
+        "type": "poisson",
+        "mean": 3.5
+      },
+      "share": 0.3,
+      "skill": {
+        "type": "normal",
+        "max": 1,
+        "mean": 0.55,
+        "min": 0,
+        "sd": 0.15
+      },
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Persona assumptions for simulation.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "payer",
+      "name": "Payer",
+      "adOptIn": {
+        "default": 0.4
+      },
+      "churnSensitivity": 0.2,
+      "purchaseProbabilityPerSession": 0.02,
+      "sessionLengthSeconds": {
+        "type": "normal",
+        "max": 1200,
+        "mean": 420,
+        "min": 60,
+        "sd": 120
+      },
+      "sessionsPerDay": {
+        "type": "poisson",
+        "mean": 4
+      },
+      "share": 0.1,
+      "skill": {
+        "type": "normal",
+        "max": 1,
+        "mean": 0.6,
+        "min": 0,
+        "sd": 0.15
+      },
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Persona assumptions for simulation.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    }
+  ],
+  "kpis": [
+    {
+      "id": "progression-speed",
+      "metric": "progression-speed",
+      "params": {
+        "variable": "var:highest-level-unlocked"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "reach-level-5-by-day-7",
+      "metric": "reach-rate",
+      "params": {
+        "day": 7,
+        "value": 5,
+        "variable": "var:highest-level-unlocked"
+      },
+      "persona": "persona:casual-non-payer",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "coins-balance",
+      "metric": "currency-balance",
+      "params": {
+        "resource": "res:coins"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "coins-inflation",
+      "metric": "inflation-rate",
+      "params": {
+        "resource": "res:coins"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "coins-faucet-sink",
+      "metric": "faucet-sink-ratio",
+      "params": {
+        "resource": "res:coins"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "progression-walls",
+      "metric": "progression-walls",
+      "params": {
+        "variable": "var:highest-level-unlocked"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "churn-risk",
+      "metric": "churn-risk",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "interstitials-per-dau",
+      "metric": "ad-impressions-per-dau",
+      "params": {
+        "format": "interstitial"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "rewarded-per-dau",
+      "metric": "ad-impressions-per-dau",
+      "params": {
+        "format": "rewarded"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "rewarded-opt-in",
+      "metric": "rewarded-opt-in-rate",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "remove-ads-conversion",
+      "metric": "iap-conversion",
+      "params": {
+        "placement": "placement:iap-remove-ads"
+      },
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "",
+        "location": "",
+        "source": "gamex:default-kpis",
+        "status": "confirmed"
+      }
+    }
+  ],
+  "invariants": [
+    {
+      "id": "interstitial-min-gap",
+      "kind": "trace",
+      "at": {
+        "placement": "placement:interstitial-after-victory"
+      },
+      "expr": "now - interstitialAfterVictoryLastAt >= interstitialMinGapSeconds",
+      "severity": "blocking",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "4. **At least 180 seconds apart.**",
+        "location": "§7.2 / line 150",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "interstitial-once-per-mission",
+      "kind": "trace",
+      "at": {
+        "placement": "placement:interstitial-after-victory"
+      },
+      "expr": "interstitialAfterVictoryCountMission < interstitialMaxPerMission",
+      "severity": "blocking",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "3. **Max 1 per mission.**",
+        "location": "§7.2 / line 149",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "interstitial-never-after-defeat",
+      "kind": "trace",
+      "at": {
+        "placement": "placement:interstitial-after-victory"
+      },
+      "expr": "lastMissionResult == \"victory\"",
+      "severity": "blocking",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "5. **Never after a defeat.**",
+        "location": "§7.2 / line 151",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "interstitial-from-level-3",
+      "kind": "trace",
+      "at": {
+        "placement": "placement:interstitial-after-victory"
+      },
+      "expr": "missionLevel >= interstitialMinLevel",
+      "severity": "blocking",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "2. Only **from Level 3 onward** (the mission just won is L3 or later).",
+        "location": "§7.2 / line 148",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "interstitial-only-after-victory-continue",
+      "kind": "trace",
+      "description": "Also proves \"never on app open or exit\" and \"never during live gameplay\".",
+      "at": {
+        "placement": "placement:interstitial-after-victory"
+      },
+      "expr": "state == \"s13-interstitial\" && prevState == \"s11-victory\"",
+      "severity": "blocking",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "1. Shown **only after Victory → Continue** (S11 → S13).",
+        "location": "§7.2 / line 147",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "revive-max-once-per-mission",
+      "kind": "trace",
+      "at": {
+        "action": "action:revive"
+      },
+      "expr": "reviveCountMission < maxRevivesPerMission",
+      "severity": "blocking",
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "| Defeat revive              | S14→S15 | Revive at the current wave with full HP  | **Max 1 revive per mission** |",
+        "location": "§7.1 / line 136",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "non-payers-reach-level-5",
+      "kind": "aggregate",
+      "description": "≥60% of non-payers reach Level 5 by day 7.",
+      "expr": "reachLevel5ByDay7 >= 0.6",
+      "persona": "persona:casual-non-payer",
+      "severity": "warning",
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Example progression target from the GameX brief.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    }
+  ],
+  "gaps": [
+    {
+      "id": "gap-web-build",
+      "kind": "missing",
+      "blocking": false,
+      "question": "Will there be a web build (e.g. for playable ads or a browser version)?",
+      "related": [],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- Will there be a **web build** (e.g. for playable ads or a browser version)?",
+        "location": "§9 / line 193",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-age-rating-coppa",
+      "kind": "missing",
+      "blocking": true,
+      "question": "What is the age rating, and does COPPA apply? This decides which ad formats and data collection are allowed.",
+      "related": [
+        "placement:interstitial-after-victory",
+        "placement:rewarded-revive",
+        "placement:banner-home"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- What is the **age rating**? Does **COPPA** apply (is the game directed at children under 13)?",
+        "location": "§9 / line 194",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-mediation-stack",
+      "kind": "missing",
+      "blocking": false,
+      "question": "Which ad mediation platform and networks will be used?",
+      "related": [],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- Which **ad mediation stack** will we use (e.g. which mediation platform and networks)?",
+        "location": "§9 / line 195",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-iap-beyond-remove-ads",
+      "kind": "missing",
+      "blocking": false,
+      "question": "Will there be IAP beyond Remove Ads (coin packs, hero skins, a season pass)?",
+      "related": [
+        "placement:iap-remove-ads"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- Will there be **IAP beyond Remove Ads** (coin packs, hero skins, a season pass)?",
+        "location": "§9 / line 196",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-currency-and-upgrade-costs",
+      "kind": "assumption",
+      "blocking": false,
+      "question": "Confirm coin rewards, chest contents, upgrade costs and the Remove Ads price.",
+      "related": [
+        "const:coins-victory-base",
+        "const:coins-victory-per-level",
+        "const:coins-per-civilian",
+        "const:daily-chest-coins",
+        "const:upgrade-cost",
+        "const:remove-ads-price-usd",
+        "res:coins"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "- What are the final **currency amounts and upgrade costs**?",
+        "location": "§9 / line 197",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-reroll-discount",
+      "kind": "ambiguous",
+      "blocking": false,
+      "question": "How large is the discount after an upgrade reroll, and how many rerolls per day?",
+      "related": [
+        "const:reroll-discount",
+        "const:upgrade-rerolls-per-day"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "is offered at a discount.",
+        "location": "§6.3 / line 127",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-screen-list",
+      "kind": "assumption",
+      "blocking": false,
+      "question": "Confirm the 22 screens and the transitions between them.",
+      "related": [
+        "state:s00-loading",
+        "state:s01-consent",
+        "state:s02-home",
+        "state:s03-hq-rooftop",
+        "state:s04-safe-zone",
+        "state:s05-campaign-map",
+        "state:s06-briefing",
+        "state:s07-laser-trial",
+        "state:s08-gameplay",
+        "state:s09-boss-fight",
+        "state:s10-kill-cam",
+        "state:s11-victory",
+        "state:s12-claim-triple",
+        "state:s13-interstitial",
+        "state:s14-defeat",
+        "state:s15-revive-offer",
+        "state:s16-armory",
+        "state:s17-upgrade-reroll",
+        "state:s18-daily-chest",
+        "state:s19-settings",
+        "state:s20-store",
+        "state:s21-pause",
+        "transition:t-loading-to-consent",
+        "transition:t-loading-to-home",
+        "transition:t-consent-accept",
+        "transition:t-home-select-relickeeper",
+        "transition:t-home-select-vanguard",
+        "transition:t-home-to-hq",
+        "transition:t-hq-to-home",
+        "transition:t-home-to-safe-zone",
+        "transition:t-safe-zone-to-home",
+        "transition:t-home-to-map",
+        "transition:t-map-to-home",
+        "transition:t-home-to-settings",
+        "transition:t-settings-to-home",
+        "transition:t-home-to-store",
+        "transition:t-store-to-home",
+        "transition:t-hq-to-armory",
+        "transition:t-armory-to-hq",
+        "transition:t-safe-zone-to-chest",
+        "transition:t-chest-to-safe-zone",
+        "transition:t-store-buy-remove-ads",
+        "transition:t-armory-buy-upgrade",
+        "transition:t-armory-to-reroll",
+        "transition:t-reroll-to-armory",
+        "transition:t-chest-open",
+        "transition:t-chest-free-upgrade",
+        "transition:t-map-to-briefing",
+        "transition:t-briefing-to-map",
+        "transition:t-briefing-to-laser-trial",
+        "transition:t-laser-trial-to-briefing",
+        "transition:t-briefing-start-mission",
+        "transition:t-gameplay-win",
+        "transition:t-gameplay-to-boss",
+        "transition:t-gameplay-lose",
+        "transition:t-boss-win",
+        "transition:t-boss-lose",
+        "transition:t-gameplay-pause",
+        "transition:t-boss-pause",
+        "transition:t-pause-resume",
+        "transition:t-pause-quit",
+        "transition:t-kill-cam-to-victory",
+        "transition:t-victory-claim-triple",
+        "transition:t-claim-triple-to-victory",
+        "transition:t-victory-continue-interstitial",
+        "transition:t-victory-continue-map",
+        "transition:t-interstitial-to-map",
+        "transition:t-defeat-revive",
+        "transition:t-revive-to-gameplay",
+        "transition:t-revive-to-boss",
+        "transition:t-defeat-retry",
+        "transition:t-defeat-exit"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "## 5. Screen flow (22 states)",
+        "location": "§5 / line 64",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-mission-win-model",
+      "kind": "assumption",
+      "blocking": false,
+      "question": "Confirm the mission win-probability model, mission lengths and civilians per mission (or add a combat model).",
+      "related": [
+        "const:civilians-per-mission",
+        "const:mission-seconds",
+        "const:boss-fight-seconds",
+        "const:base-win-chance",
+        "const:skill-win-weight",
+        "const:upgrade-win-weight",
+        "const:difficulty-step",
+        "const:laser-trial-win-bonus",
+        "const:boss-base-win-chance"
+      ],
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Not specified in the GDD.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-combat-stats",
+      "kind": "assumption",
+      "blocking": false,
+      "question": "Confirm hero, drone and boss stats, waves per level, combo and slow-mo numbers.",
+      "related": [
+        "const:damage-per-tier",
+        "const:hero-max-hp",
+        "const:laser-damage",
+        "const:fire-rate",
+        "const:drone-hp",
+        "const:drone-contact-damage",
+        "const:boss-phases",
+        "const:boss-total-hp",
+        "const:combo-step",
+        "const:combo-max",
+        "const:near-miss-slowmo-seconds",
+        "const:waves-per-level"
+      ],
+      "provenance": {
+        "confidence": "high",
+        "excerpt": "Base hero stats **[ASSUMED]**: 100 HP, laser damage 10 per shot, fire rate 4 shots per second.",
+        "location": "§2 / line 37",
+        "source": "fixtures/swarm-rescue/GDD.md",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-ad-durations",
+      "kind": "assumption",
+      "blocking": false,
+      "question": "Confirm ad and kill-cam lengths used for simulated time.",
+      "related": [
+        "const:rewarded-ad-seconds",
+        "const:interstitial-ad-seconds",
+        "const:kill-cam-seconds"
+      ],
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Not specified in the GDD.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-personas",
+      "kind": "assumption",
+      "blocking": false,
+      "question": "Confirm the simulated player personas (share, sessions, skill, ad opt-in, purchase rate).",
+      "related": [
+        "persona:casual-non-payer",
+        "persona:engaged-ad-watcher",
+        "persona:payer"
+      ],
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Not specified in the GDD.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-progression-targets",
+      "kind": "assumption",
+      "blocking": false,
+      "question": "What share of non-paying players should reach Level 5 by day 7?",
+      "related": [
+        "inv:non-payers-reach-level-5"
+      ],
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Not specified in the GDD.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "detected"
+      }
+    },
+    {
+      "id": "gap-ad-revenue-assumptions",
+      "kind": "missing",
+      "blocking": false,
+      "question": "What are eCPM and fill rate per ad format for the US (or estimates from the mediation dashboard)? Revenue KPIs are skipped until then.",
+      "related": [],
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Not specified in the GDD.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "detected"
+      }
+    }
+  ]
+}
