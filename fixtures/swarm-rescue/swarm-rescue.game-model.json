@@ -3045,6 +3045,7 @@
       "id": "progression-walls",
       "metric": "progression-walls",
       "params": {
+        "attemptVariable": "var:mission-level",
         "variable": "var:highest-level-unlocked"
       },
       "provenance": {
