@@ -52,6 +52,15 @@ export function collectExpressions(model: GameModel): ExprSite[] {
       effects(o.effects, ['actions', i, 'outcomes', j, 'effects'], ref);
     });
     if (a.duration !== undefined) site(['actions', i, 'duration'], a.duration, 'number', ref);
+    if (a.combat !== undefined) {
+      for (const [name, source] of Object.entries(a.combat)) {
+        if (typeof source === 'string') site(['actions', i, 'combat', name], source, 'number', ref);
+      }
+      const boss = a.combat.boss;
+      if (boss !== undefined)
+        for (const [name, source] of Object.entries(boss))
+          site(['actions', i, 'combat', 'boss', name], source, 'number', ref);
+    }
   });
   model.rules.forEach((r, i) => {
     site(['rules', i, 'expr'], r.expr, 'bool', `rule:${r.id}`);

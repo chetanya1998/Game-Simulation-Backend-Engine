@@ -163,6 +163,28 @@ export function checkReferences(
     }
   }
 
+  model.actions.forEach((a, i) => {
+    if (a.combat === undefined) return;
+    const ids = a.outcomes?.map((o) => o.id) ?? [];
+    for (const which of ['win', 'lose'] as const) {
+      const id = a.combat.outcomes[which];
+      if (!ids.includes(id)) {
+        issues.error(
+          'COMBAT_UNKNOWN_OUTCOME',
+          ['actions', i, 'combat', 'outcomes', which],
+          `Combat "${which}" outcome "${id}" is not an outcome of action "${a.id}"`,
+          {
+            hint:
+              ids.length === 0
+                ? 'A combat action needs outcomes (with effects) for winning and losing.'
+                : (didYouMean(id, ids) ?? `Outcomes: ${ids.join(', ')}.`),
+            nodeRef: `action:${a.id}`,
+          },
+        );
+      }
+    }
+  });
+
   const outcomesOf = new Map(
     model.actions.map((a) => [`action:${a.id}`, a.outcomes?.map((o) => o.id)]),
   );

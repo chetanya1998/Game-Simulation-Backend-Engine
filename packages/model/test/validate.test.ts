@@ -17,6 +17,12 @@ function lineOf(text: string, line: number | undefined): string {
 }
 
 describe('validateGameModel on valid input', () => {
+  it('accepts a valid combat block', () => {
+    const m = minimalModel() as Mutable;
+    m.actions[0].combat = COMBAT;
+    expect(validateGameModel(m).issues).toEqual([]);
+  });
+
   it('accepts the minimal model with no issues', () => {
     const r = validateGameModel(canonicalStringify(minimalModel()));
     expect(r.issues).toEqual([]);
@@ -48,6 +54,19 @@ interface Case {
   readonly hint?: RegExp;
   readonly severity?: 'error' | 'warning';
 }
+
+const COMBAT = {
+  outcomes: { win: 'win', lose: 'lose' },
+  heroHp: 'heroHp',
+  heroDamage: '10 + tier',
+  fireRate: '3',
+  accuracy: 'persona.skill',
+  dodge: '0.3',
+  waves: '2',
+  enemiesPerWave: '3',
+  enemyHp: '20',
+  enemyDamage: '4',
+};
 
 const CASES: Case[] = [
   {
@@ -341,6 +360,29 @@ const CASES: Case[] = [
     code: 'PLACEMENT_IN_FORBIDDEN_STATE',
     path: '/stateMachine/transitions/3/trigger',
     line: '"trigger": "action:revive"',
+  },
+  {
+    name: 'combat outcome that the action does not have',
+    mutate: (m) => (m.actions[0].combat = { ...COMBAT, outcomes: { win: 'win', lose: 'defeat' } }),
+    code: 'COMBAT_UNKNOWN_OUTCOME',
+    path: '/actions/0/combat/outcomes/lose',
+    line: '"lose": "defeat"',
+    hint: /Outcomes: win, lose/,
+  },
+  {
+    name: 'combat field that is not a number',
+    mutate: (m) => (m.actions[0].combat = { ...COMBAT, heroHp: 'tier > 1' }),
+    code: 'EXPR_TYPE_MISMATCH',
+    path: '/actions/0/combat/heroHp',
+    line: '"heroHp": "tier > 1"',
+  },
+  {
+    name: 'unknown name in a boss field',
+    mutate: (m) =>
+      (m.actions[0].combat = { ...COMBAT, boss: { phases: '3', hp: 'bossHp', damage: '2' } }),
+    code: 'EXPR_UNKNOWN_IDENTIFIER',
+    path: '/actions/0/combat/boss/hp',
+    line: '"hp": "bossHp"',
   },
   {
     name: 'JSON syntax error',

@@ -865,6 +865,111 @@
               "store"
             ]
           },
+          "combat": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "accuracy": {
+                "type": "string",
+                "minLength": 1
+              },
+              "boss": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "damage": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "hp": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "phases": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "phases",
+                  "hp",
+                  "damage"
+                ]
+              },
+              "damageMultiplier": {
+                "type": "string",
+                "minLength": 1
+              },
+              "dodge": {
+                "type": "string",
+                "minLength": 1
+              },
+              "enemiesPerWave": {
+                "type": "string",
+                "minLength": 1
+              },
+              "enemyDamage": {
+                "type": "string",
+                "minLength": 1
+              },
+              "enemyHp": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fireRate": {
+                "type": "string",
+                "minLength": 1
+              },
+              "heroDamage": {
+                "type": "string",
+                "minLength": 1
+              },
+              "heroHp": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxSecondsPerStage": {
+                "type": "string",
+                "minLength": 1
+              },
+              "outcomes": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "lose": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+                  },
+                  "win": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+                  }
+                },
+                "required": [
+                  "win",
+                  "lose"
+                ]
+              },
+              "waves": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "outcomes",
+              "heroHp",
+              "heroDamage",
+              "fireRate",
+              "accuracy",
+              "dodge",
+              "waves",
+              "enemiesPerWave",
+              "enemyHp",
+              "enemyDamage"
+            ]
+          },
           "cooldown": {
             "type": "object",
             "additionalProperties": false,

@@ -72,6 +72,34 @@ export const OutcomeSchema = z.strictObject({
   effects: z.array(EffectSchema),
 });
 
+/**
+ * Level 2 mission model (ADR 0005): a stylized combat simulation from which the engine derives the
+ * outcome of a mission action, instead of the outcome weights. Every field is a number expression.
+ */
+export const CombatSchema = z.strictObject({
+  /** Which of the action's outcome ids mean "won" and "lost". */
+  outcomes: z.strictObject({ win: IdSchema, lose: IdSchema }),
+  heroHp: ExprSchema,
+  /** Damage per hit. */
+  heroDamage: ExprSchema,
+  /** Shots per second. */
+  fireRate: ExprSchema,
+  /** Chance that a shot hits (0…1). */
+  accuracy: ExprSchema,
+  /** Chance to avoid each enemy attack (0…1). */
+  dodge: ExprSchema,
+  /** Multiplies hero damage, e.g. a combo multiplier (default 1). */
+  damageMultiplier: ExprSchema.optional(),
+  waves: ExprSchema,
+  enemiesPerWave: ExprSchema,
+  enemyHp: ExprSchema,
+  /** Damage of each enemy attack (one attempt per enemy per second). */
+  enemyDamage: ExprSchema,
+  boss: z.strictObject({ phases: ExprSchema, hp: ExprSchema, damage: ExprSchema }).optional(),
+  /** A wave or boss phase not finished within this many seconds is lost (default 120). */
+  maxSecondsPerStage: ExprSchema.optional(),
+});
+
 export const ActionSchema = z.strictObject({
   ...nodeBase,
   actor: z.enum(['player', 'system', 'ad-sdk', 'store']),
@@ -84,6 +112,8 @@ export const ActionSchema = z.strictObject({
   limits: z.array(LimitSchema).optional(),
   /** Level 1 mission model: weighted outcomes, chosen at random by the engine. */
   outcomes: z.array(OutcomeSchema).optional(),
+  /** Level 2 mission model: when present, the engine resolves the outcome by simulating combat. */
+  combat: CombatSchema.optional(),
   duration: ExprSchema.optional(),
   /** Returned when a precondition fails. */
   errorCode: ErrorCodeSchema,
@@ -323,6 +353,7 @@ export type Constant = z.infer<typeof ConstantSchema>;
 export type Variable = z.infer<typeof VariableSchema>;
 export type Action = z.infer<typeof ActionSchema>;
 export type Outcome = z.infer<typeof OutcomeSchema>;
+export type Combat = z.infer<typeof CombatSchema>;
 export type Rule = z.infer<typeof RuleSchema>;
 export type State = z.infer<typeof StateSchema>;
 export type Transition = z.infer<typeof TransitionSchema>;
