@@ -1,6 +1,7 @@
 import type { ExprValue } from '@gamex/model';
 import type { CAction, CEffect, CompiledModel, CTransition } from './compile.js';
 import { EngineRuntimeError } from './errors.js';
+import { resolveCombat, type CombatOutcome } from './combat.js';
 import type { Rng } from './random.js';
 import {
   envOf,
@@ -48,6 +49,10 @@ export type EngineEvent =
       readonly min?: number;
       readonly max?: number;
     }
+  | ({ readonly type: 'combat'; readonly now: number; readonly actionId: string } & Omit<
+      CombatOutcome,
+      'resumeAt'
+    >)
   | { readonly type: 'mission-begin'; readonly now: number }
   | { readonly type: 'mission-end'; readonly now: number };
 
@@ -347,7 +352,50 @@ export function applyAction(
     if (!r.blocking && !evalBool(c, w, r.expr))
       events.push({ type: 'rule-warning', now: w.now, ruleId: r.id });
 
-  const outcome = chooseOutcome(c, w, a, options);
+  let combat: CombatOutcome | undefined;
+  if (a.combat !== undefined && options.outcome === undefined) {
+    if (options.rng === undefined)
+      throw new EngineRuntimeError(
+        'an rng or an explicit outcome is needed for a combat action',
+        'NO_RNG',
+        a.ref,
+      );
+    const f = a.combat.fields;
+    const n = (e: Parameters<typeof evalNum>[2]): number => evalNum(c, w, e);
+    combat = resolveCombat(
+      {
+        heroHp: n(f.heroHp),
+        heroDamage: n(f.heroDamage),
+        fireRate: n(f.fireRate),
+        accuracy: n(f.accuracy),
+        dodge: n(f.dodge),
+        damageMultiplier:
+          a.combat.damageMultiplier === undefined ? 1 : n(a.combat.damageMultiplier),
+        waves: n(f.waves),
+        enemiesPerWave: n(f.enemiesPerWave),
+        enemyHp: n(f.enemyHp),
+        enemyDamage: n(f.enemyDamage),
+        boss:
+          a.combat.boss === undefined
+            ? undefined
+            : {
+                phases: n(a.combat.boss.phases),
+                hp: n(a.combat.boss.hp),
+                damage: n(a.combat.boss.damage),
+              },
+        maxSecondsPerStage:
+          a.combat.maxSecondsPerStage === undefined ? 120 : n(a.combat.maxSecondsPerStage),
+      },
+      options.rng,
+      w.combatResume?.[a.id],
+    );
+  }
+  const outcome =
+    combat === undefined
+      ? chooseOutcome(c, w, a, options)
+      : combat.won
+        ? a.combat?.win
+        : a.combat?.lose;
   const effects: CEffect[] = [...a.effects];
   if (outcome !== undefined)
     effects.push(...(a.outcomes?.find((o) => o.id === outcome)?.effects ?? []));
@@ -367,11 +415,38 @@ export function applyAction(
       ? { type: 'action', now: w.now, actionId }
       : { type: 'action', now: w.now, actionId, outcome },
   );
+  if (combat !== undefined) {
+    events.push({
+      type: 'combat',
+      now: w.now,
+      actionId,
+      won: combat.won,
+      seconds: combat.seconds,
+      wavesCleared: combat.wavesCleared,
+      bossPhasesCleared: combat.bossPhasesCleared,
+      diedAt: combat.diedAt,
+      timedOut: combat.timedOut,
+      hpLeft: combat.hpLeft,
+      stars: combat.stars,
+    });
+  }
   for (const p of a.placements)
     events.push({ type: 'impression', now: w.now, placementId: p.id, format: p.format });
   applyComputed(c, values, computed, w.now, events);
-  const duration = a.duration === undefined ? 0 : evalNum(c, w, a.duration);
-  const next: WorldState = { ...w, values, now: w.now + duration };
+  const duration =
+    combat !== undefined
+      ? combat.seconds
+      : a.duration === undefined
+        ? 0
+        : evalNum(c, w, a.duration);
+  let next: WorldState = { ...w, values, now: w.now + duration };
+  if (combat !== undefined) {
+    const others = Object.entries(w.combatResume ?? {}).filter(([id]) => id !== actionId);
+    const resume = Object.fromEntries(
+      combat.resumeAt === undefined ? others : [...others, [actionId, combat.resumeAt]],
+    );
+    next = { ...next, combatResume: resume };
+  }
   return {
     result: 'ok',
     ...(outcome === undefined ? {} : { outcome }),
@@ -450,8 +525,10 @@ function enter(
   }
   const computed = computeEffects(c, pre, t.effects);
   let inMission = pre.inMission;
+  let combatResume = pre.combatResume;
   if (t.beginsMission) {
     resetScope(c, values, 'mission');
+    combatResume = {};
     inMission = true;
     events.push({ type: 'mission-begin', now });
   }
@@ -469,6 +546,7 @@ function enter(
     values,
     now,
     inMission,
+    ...(combatResume === undefined ? {} : { combatResume }),
   };
   if (checking) violations.push(...checkInvariantsAt(c, w, 'state', target, counter));
 

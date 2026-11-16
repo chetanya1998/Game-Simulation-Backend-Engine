@@ -5,9 +5,7 @@ import { EngineModelError } from './errors.js';
 import { createPolicyContext, chooseOption, type Intent, type PolicyContext } from './policy.js';
 import { deriveSeed, Rng } from './random.js';
 import {
-  applyAction,
   availableOptions,
-  checkAction,
   perform,
   settle,
   type EngineEvent,
@@ -97,6 +95,8 @@ export interface PlayerSummary {
   readonly attempts: Readonly<
     Record<string, { readonly attempts: number; readonly failures: number }>
   >;
+  /** Combat deaths keyed by "actionId@stage" (e.g. "fight-boss@boss-phase-2"). */
+  readonly deaths: Readonly<Record<string, number>>;
   readonly invariantChecks: Readonly<Record<string, number>>;
   readonly violations: readonly Evidence[];
   readonly violationCounts: Readonly<Record<string, number>>;
@@ -195,6 +195,7 @@ export function simulatePlayer(
   const accepts: Record<string, number> = {};
   const purchases: Record<string, number> = {};
   const attempts: Record<string, { attempts: number; failures: number }> = {};
+  const deaths: Record<string, number> = {};
   const invariantChecks = new Map<string, number>();
   const violations: Evidence[] = [];
   const violationCounts: Record<string, number> = {};
@@ -249,6 +250,9 @@ export function simulatePlayer(
         case 'mission-begin':
           missions++;
           break;
+        case 'combat':
+          if (e.diedAt !== null) inc(deaths, `${e.actionId}@${e.diedAt}`);
+          break;
         case 'range-violation':
           rangeViolations++;
           break;
@@ -285,19 +289,12 @@ export function simulatePlayer(
     w = { ...w, values, now: start, state: c.initialState, prevState: c.initialState, stack: [] };
     sessions++;
 
-    if (rng.chance(persona.purchaseProbabilityPerSession)) {
-      for (const a of c.actions.values()) {
-        if (a.actor !== 'store' || !checkAction(c, w, a.id).ok) continue;
-        const res = applyAction(c, w, a.id, stepOptions);
-        record(res.events, res.violations, w, res.next);
-        w = res.next;
-        break;
-      }
-    }
-
     const budget = Math.max(0, sample(persona.sessionLengthSeconds, rng));
     const end = start + budget;
     const intent: Intent = {
+      purchase:
+        rng.chance(persona.purchaseProbabilityPerSession) &&
+        Number.isFinite(r.policy.toStore.get(c.initialState) ?? Number.POSITIVE_INFINITY),
       meta:
         rng.chance(r.metaP) &&
         Number.isFinite(r.policy.toMeta.get(c.initialState) ?? Number.POSITIVE_INFINITY),
@@ -316,12 +313,19 @@ export function simulatePlayer(
         visitState = w.state;
         decided.clear();
       }
-      // Purchases happen only through the persona's purchase probability, never by wandering into the store.
+      // Purchases happen only when the persona decided to buy this session, never by wandering into the store.
       const options = availableOptions(c, w).filter(
         (o) =>
           o.kind !== 'auto' &&
-          !(o.kind === 'action' && c.actions.get(o.actionId)?.actor === 'store'),
+          (intent.purchase || !(o.kind === 'action' && r.policy.storeActions.has(o.actionId))),
       );
+      if (
+        intent.purchase &&
+        (r.policy.toStore.get(w.state) ?? 1) === 0 &&
+        !options.some((o) => o.kind === 'action' && r.policy.storeActions.has(o.actionId))
+      ) {
+        intent.purchase = false; // at the store, but nothing left to buy
+      }
       if (options.length === 0) {
         stuck++;
         break;
@@ -369,6 +373,8 @@ export function simulatePlayer(
         break;
       }
       const result = perform(c, w, choice, stepOptions);
+      if (choice.kind === 'action' && r.policy.storeActions.has(choice.actionId))
+        intent.purchase = false;
       record(result.events, result.violations, w, result.next);
       w =
         choice.kind === 'ui' ? { ...result.next, now: result.next.now + r.uiSeconds } : result.next;
@@ -431,6 +437,7 @@ export function simulatePlayer(
     accepts,
     purchases,
     attempts,
+    deaths,
     invariantChecks: Object.fromEntries([...invariantChecks].sort(([a], [b]) => (a < b ? -1 : 1))),
     violations,
     violationCounts,

@@ -9,5 +9,6 @@
     "test": {
       "outputs": ["coverage/**"]
     }
-  }
+  },
+  "globalPassThroughEnv": ["CI", "PLAYWRIGHT_BROWSERS_PATH"]
 }

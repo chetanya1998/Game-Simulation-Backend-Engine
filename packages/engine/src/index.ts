@@ -95,3 +95,5 @@ export { gridSweep, latinHypercubeSweep, sensitivity, snap } from './sweep.js';
 export type { SensitivityEntry, SensitivityResult, SweepResult, SweepRow } from './sweep.js';
 export { checkPlacementSafety, explore } from './explore.js';
 export type { ExploreReport, PlacementSafety } from './explore.js';
+export { resolveCombat } from './combat.js';
+export type { CombatOutcome, CombatPosition, CombatSpec } from './combat.js';

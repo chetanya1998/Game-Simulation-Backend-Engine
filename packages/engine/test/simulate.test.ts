@@ -121,6 +121,14 @@ describe('Swarm Rescue simulation', () => {
     expect(r.traces[0]?.events.length).toBeGreaterThan(10);
   });
 
+  it('payers buy Remove Ads by going to the Store', () => {
+    const payer = r.personas.find((p) => p.id === 'payer');
+    expect(payer?.placements.find((p) => p.id === 'iap-remove-ads')?.impressions).toBeGreaterThan(
+      0,
+    );
+    expect(r.kpis.find((k) => k.id === 'remove-ads-conversion')?.value).toBeGreaterThan(0);
+  });
+
   it('never buys Remove Ads for a persona that never purchases', () => {
     expect(
       r.personas

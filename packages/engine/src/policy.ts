@@ -10,6 +10,7 @@ import type { WorldState } from './world.js';
  * - with `metaVisitProbability` per session they first visit a meta screen (shop, chest) and use what is
  *   available there;
  * - rewarded videos are watched with the persona's opt-in probability, decided once per visit to a screen;
+ * - with the persona's purchase probability per session, the player goes to the store first and buys;
  * - everything else is chosen at random with low weight, so all screens get visited.
  */
 export interface PolicyWeights {
@@ -38,6 +39,9 @@ export interface PolicyContext {
   readonly toGameplay: ReadonlyMap<string, number>;
   /** Distance to screens offering in-place actions (shop, chest, store). */
   readonly toMeta: ReadonlyMap<string, number>;
+  /** Distance to screens offering store purchases (IAP). */
+  readonly toStore: ReadonlyMap<string, number>;
+  readonly storeActions: ReadonlySet<string>;
   readonly rewardedActions: ReadonlySet<string>;
   readonly weights: PolicyWeights;
 }
@@ -49,10 +53,16 @@ export function createPolicyContext(
   const missionStart = new Set<string>();
   const gameplay = new Set<string>();
   const meta = new Set<string>();
+  const store = new Set<string>();
+  const storeActions = new Set<string>();
   for (const t of c.transitions) {
     if (t.beginsMission) missionStart.add(t.from);
     if (t.trigger.kind === 'action') {
       const a = c.actions.get(t.trigger.actionId);
+      if (a?.actor === 'store') {
+        store.add(t.from);
+        storeActions.add(a.id);
+      }
       if (a?.outcomes !== undefined) gameplay.add(t.from);
       else if (isSelfLoop(t) && a?.actor !== 'store') meta.add(t.from);
     }
@@ -65,6 +75,8 @@ export function createPolicyContext(
     toMissionStart: distancesTo(c, missionStart),
     toGameplay: distancesTo(c, gameplay),
     toMeta: distancesTo(c, meta),
+    toStore: distancesTo(c, store),
+    storeActions,
     rewardedActions,
     weights,
   };
@@ -73,6 +85,8 @@ export function createPolicyContext(
 export interface Intent {
   /** Heading for a meta screen this session. */
   meta: boolean;
+  /** Decided to buy something this session (persona purchase probability): heading for the store. */
+  purchase: boolean;
 }
 
 function targetOf(t: CTransition, w: WorldState): string {
@@ -89,10 +103,17 @@ export function chooseOption(
   rng: Rng,
 ): StepOption | undefined {
   const { weights } = ctx;
-  const dist = intent.meta ? ctx.toMeta : w.inMission ? ctx.toGameplay : ctx.toMissionStart;
+  const dist = intent.purchase
+    ? ctx.toStore
+    : intent.meta
+      ? ctx.toMeta
+      : w.inMission
+        ? ctx.toGameplay
+        : ctx.toMissionStart;
   const here = dist.get(w.state) ?? Number.POSITIVE_INFINITY;
   const scores = options.map((o) => {
     if (o.kind === 'action') {
+      if (ctx.storeActions.has(o.actionId)) return intent.purchase ? weights.mission : 0;
       if (ctx.rewardedActions.has(o.actionId))
         return declined.has(o.actionId) ? 0 : weights.rewardedAccepted;
       const action = ctx.c.actions.get(o.actionId);

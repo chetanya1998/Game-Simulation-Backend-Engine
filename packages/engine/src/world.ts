@@ -20,6 +20,10 @@ export interface WorldState {
   readonly values: Readonly<Record<string, ExprValue>>;
   readonly persona: PersonaTraits;
   readonly inMission: boolean;
+  /** Where a lost combat continues after a revive, by action id (cleared when a mission begins). */
+  readonly combatResume?: Readonly<
+    Record<string, { readonly wave: number; readonly phase: number }>
+  >;
 }
 
 export interface CreateWorldOptions {
@@ -156,7 +160,10 @@ export function evalBool(c: CompiledModel, w: WorldState, e: CExpr): boolean {
 
 /** Key identifying the "control" state (screen + variables), ignoring resources and timestamps. */
 export function controlKey(c: CompiledModel, w: WorldState): string {
-  const parts = [w.state, w.stack.join('>'), w.inMission ? 'M' : '-'];
+  const resume = Object.entries(w.combatResume ?? {})
+    .map(([a, p]) => `${a}:${String(p.wave)}.${String(p.phase)}`)
+    .join(',');
+  const parts = [w.state, w.stack.join('>'), w.inMission ? 'M' : '-', resume];
   for (const v of c.variables.values())
     if (v.type !== 'timestamp') parts.push(`${v.key}=${String(w.values[v.key])}`);
   return parts.join('|');

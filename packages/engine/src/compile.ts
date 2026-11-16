@@ -3,6 +3,7 @@ import {
   normalizeGameModel,
   parseExpr,
   validateGameModel,
+  type Combat,
   type Curve,
   type Effect,
   type Expr,
@@ -42,6 +43,28 @@ export interface COutcome {
   readonly effects: readonly CEffect[];
 }
 
+export interface CCombat {
+  readonly win: string;
+  readonly lose: string;
+  readonly fields: Readonly<
+    Record<
+      | 'heroHp'
+      | 'heroDamage'
+      | 'fireRate'
+      | 'accuracy'
+      | 'dodge'
+      | 'waves'
+      | 'enemiesPerWave'
+      | 'enemyHp'
+      | 'enemyDamage',
+      CExpr
+    >
+  >;
+  readonly damageMultiplier: CExpr | undefined;
+  readonly maxSecondsPerStage: CExpr | undefined;
+  readonly boss: { readonly phases: CExpr; readonly hp: CExpr; readonly damage: CExpr } | undefined;
+}
+
 export interface CAction {
   readonly id: string;
   readonly ref: string;
@@ -54,6 +77,7 @@ export interface CAction {
   }[];
   readonly effects: readonly CEffect[];
   readonly outcomes: readonly COutcome[] | undefined;
+  readonly combat: CCombat | undefined;
   readonly duration: CExpr | undefined;
   readonly errorCode: string;
   readonly rules: readonly CRule[];
@@ -154,6 +178,34 @@ function compileExpr(source: string, nodeRef: string): CExpr {
   if (!parsed.ok)
     throw new EngineModelError(`${nodeRef}: cannot parse "${source}": ${parsed.error.message}`);
   return { ast: parsed.value, source, nodeRef };
+}
+
+function compileCombat(combat: Combat | undefined, ref: string): CCombat | undefined {
+  if (combat === undefined) return undefined;
+  const x = (source: string): CExpr => compileExpr(source, ref);
+  return {
+    win: combat.outcomes.win,
+    lose: combat.outcomes.lose,
+    fields: {
+      heroHp: x(combat.heroHp),
+      heroDamage: x(combat.heroDamage),
+      fireRate: x(combat.fireRate),
+      accuracy: x(combat.accuracy),
+      dodge: x(combat.dodge),
+      waves: x(combat.waves),
+      enemiesPerWave: x(combat.enemiesPerWave),
+      enemyHp: x(combat.enemyHp),
+      enemyDamage: x(combat.enemyDamage),
+    },
+    damageMultiplier:
+      combat.damageMultiplier === undefined ? undefined : x(combat.damageMultiplier),
+    maxSecondsPerStage:
+      combat.maxSecondsPerStage === undefined ? undefined : x(combat.maxSecondsPerStage),
+    boss:
+      combat.boss === undefined
+        ? undefined
+        : { phases: x(combat.boss.phases), hp: x(combat.boss.hp), damage: x(combat.boss.damage) },
+  };
 }
 
 /**
@@ -272,6 +324,7 @@ export function compileModel(input: GameModel, options: CompileOptions = {}): Co
         weight: compileExpr(o.weight, ref),
         effects: effects(o.effects, ref),
       })),
+      combat: compileCombat(a.combat, ref),
       duration: a.duration === undefined ? undefined : compileExpr(a.duration, ref),
       errorCode: a.errorCode,
       rules: rulesFor('actions', ref),

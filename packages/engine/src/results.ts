@@ -50,6 +50,8 @@ export interface PersonaResult {
     readonly failures: number;
     readonly failureRate: number;
   }[];
+  /** Where combat missions were lost: "actionId@stage" → count. */
+  readonly deaths: Readonly<Record<string, number>>;
 }
 
 export interface KpiResult {
@@ -428,6 +430,12 @@ function aggregatePersona(
         failureRate: round6(v.failures / v.attempts),
       };
     });
+  const deaths: Record<string, number> = {};
+  for (const p of players)
+    for (const [k, v] of Object.entries(p.deaths)) deaths[k] = (deaths[k] ?? 0) + v;
+  const sortedDeaths = Object.fromEntries(
+    Object.entries(deaths).sort(([a], [b]) => (a < b ? -1 : 1)),
+  );
   return {
     id,
     players: players.length,
@@ -435,6 +443,7 @@ function aggregatePersona(
     daily,
     placements,
     attempts,
+    deaths: sortedDeaths,
   };
 }
 

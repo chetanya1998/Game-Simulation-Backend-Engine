@@ -24,6 +24,8 @@
     "@gamex/model": "workspace:*"
   },
   "devDependencies": {
-    "fast-check": "^4.10.2"
+    "esbuild": "0.28.2",
+    "fast-check": "^4.10.2",
+    "playwright": "1.63.0"
   }
 }
