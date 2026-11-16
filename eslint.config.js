@@ -99,6 +99,8 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
+      // Conflicts with no-non-null-assertion from the strict preset; we prefer explicit `as T` casts.
+      '@typescript-eslint/non-nullable-type-assertion-style': 'off',
       'no-eval': 'error',
       'no-new-func': 'error',
     },
