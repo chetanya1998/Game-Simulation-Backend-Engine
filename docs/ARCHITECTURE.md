@@ -313,6 +313,14 @@ When the model came from a file we keep a JSON source map so issues point to fil
 
 ## 4. The engine (`@gamex/engine`)
 
+> **As built (Phase 2):** exact step semantics, sessions, the default persona policy and churn are recorded in
+> [ADR 0006](./DECISIONS/0006-engine-semantics.md); the combat model in [ADR 0005](./DECISIONS/0005-combat-model.md).
+> Public API: `compileModel`, `createWorld`, `checkAction`/`applyAction`/`perform`/`settle` (the interpreter),
+> `runSimulation` (+ `simulatePlayers`/`aggregateResults` for workers), `analyzeReachability`, `searchExploits`,
+> `checkPlacementSafety`, `explore`, `gridSweep`, `latinHypercubeSweep`, `sensitivity`, `resolveCombat`.
+> Reward loops, invariant violations and range violations come from exploit search; unbounded resource growth,
+> cap hits and stuck sessions come from simulation findings.
+
 ### 4.1 Core: the rule interpreter
 
 One function underlies everything:

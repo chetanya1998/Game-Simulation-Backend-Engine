@@ -67,6 +67,10 @@ tooling/           shared Vitest config
 - Game Model files are canonical JSON (`serializeGameModel`); never hand-format them. The Swarm Rescue model
   (`fixtures/swarm-rescue/swarm-rescue.game-model.json`) must validate with zero errors and zero warnings.
 - New validation checks get a case in `packages/model/test/validate.test.ts` asserting code, JSON path and source line.
+- Engine semantics (step order, sessions, policy, churn) are in `docs/DECISIONS/0006-engine-semantics.md`; change
+  them only with an ADR update. Rules are enforced only in `packages/engine/src/step.ts`.
+- Engine output must stay deterministic: `packages/engine/test/browser-determinism.test.ts` compares Node and a
+  Chromium Web Worker (needs `PLAYWRIGHT_BROWSERS_PATH` or `pnpm --filter @gamex/engine exec playwright install chromium`).
 
 ## Process
 

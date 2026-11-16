@@ -62,7 +62,7 @@ Tests / acceptance
 - fast-check properties: parse∘print = id; evaluator agrees with an oracle; well-typed ⇒ no throw; determinism.
 - Coverage ≥ 85 % for `model`.
 
-### Phase 2 — Engine (≈ 4–5 sessions)
+### Phase 2 — Engine (≈ 4–5 sessions) — ✅ done (ADR 0005, 0006)
 
 Deliverables
 

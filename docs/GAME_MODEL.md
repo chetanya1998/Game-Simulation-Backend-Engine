@@ -105,9 +105,25 @@ and go back where the player was). Its `trigger` is:
 
 Every mission resolves through **weighted outcomes** on an action (Level 1). Swarm Rescue's
 `play-mission` has outcomes `win`, `waves-cleared` (on the boss level) and `lose`, each with a weight
-formula based on the persona's skill, upgrade tier and level difficulty. An optional per-mission combat
-model (Level 2: waves, boss, hero power) arrives with the engine in Phase 2; it will derive these weights
-instead of you writing them.
+formula based on the persona's skill, upgrade tier and level difficulty.
+
+A mission action can also carry a **combat block** (Level 2). The engine then simulates the fight second by
+second instead of using the weights: the hero fires, enemies attack, the player may dodge.
+
+| Field                                               | Meaning                                                                         |
+| --------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `outcomes`                                          | which outcome ids mean won / lost, e.g. `{ "win": "win", "lose": "lose" }`      |
+| `heroHp`, `heroDamage`, `fireRate`                  | health, damage per hit, shots per second                                        |
+| `accuracy`, `dodge`                                 | chance to hit, chance to avoid each attack (0–1) — usually from `persona.skill` |
+| `damageMultiplier`                                  | e.g. a combo multiplier (default 1)                                             |
+| `waves`, `enemiesPerWave`, `enemyHp`, `enemyDamage` | the waves before the boss                                                       |
+| `boss`                                              | `{ phases, hp, damage }`                                                        |
+| `maxSecondsPerStage`                                | a wave or boss phase not finished in time is lost (default 120)                 |
+
+Every field is a formula, so it can use constants, upgrade tiers and persona skill — and sweeps and the
+sensitivity ranking cover them automatically. The simulation reports where players died
+(`boss-phase-2`, `wave-3`), and a revive continues from that stage. In Swarm Rescue only the L5 boss fight
+has a combat block. Results come from a stylized model, not real gameplay.
 
 ### Limits and cooldowns
 
