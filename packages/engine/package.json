@@ -22,5 +22,8 @@
   },
   "dependencies": {
     "@gamex/model": "workspace:*"
+  },
+  "devDependencies": {
+    "fast-check": "^4.10.2"
   }
 }

@@ -109,6 +109,10 @@ importers:
       '@gamex/model':
         specifier: workspace:*
         version: link:../model
+    devDependencies:
+      fast-check:
+        specifier: ^4.10.2
+        version: 4.10.2
 
   packages/extract:
     dependencies:
