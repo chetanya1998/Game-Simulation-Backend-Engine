@@ -905,6 +905,125 @@
         "source": "gamex:assumed",
         "status": "assumed"
       }
+    },
+    {
+      "id": "boss-damage",
+      "description": "Damage of each boss attack (one attempt per second).",
+      "balanceFile": "gameplay",
+      "max": 30,
+      "min": 1,
+      "step": 1,
+      "unit": "hp per hit",
+      "value": 6,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Damage of each boss attack (one attempt per second).",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "base-accuracy",
+      "description": "Hit chance of a novice player.",
+      "balanceFile": "gameplay",
+      "max": 1,
+      "min": 0,
+      "step": 0.05,
+      "unit": "probability",
+      "value": 0.45,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Hit chance of a novice player.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "skill-accuracy",
+      "description": "Extra hit chance at skill 1.",
+      "balanceFile": "gameplay",
+      "max": 1,
+      "min": 0,
+      "step": 0.05,
+      "unit": "probability",
+      "value": 0.4,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Extra hit chance at skill 1.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "base-dodge",
+      "description": "Dodge chance of a novice player.",
+      "balanceFile": "gameplay",
+      "max": 0.9,
+      "min": 0,
+      "step": 0.05,
+      "unit": "probability",
+      "value": 0.25,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Dodge chance of a novice player.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "skill-dodge",
+      "description": "Extra dodge chance at skill 1.",
+      "balanceFile": "gameplay",
+      "max": 0.9,
+      "min": 0,
+      "step": 0.05,
+      "unit": "probability",
+      "value": 0.3,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Extra dodge chance at skill 1.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "laser-trial-damage-bonus",
+      "description": "Extra laser damage from the briefing laser trial.",
+      "balanceFile": "gameplay",
+      "max": 20,
+      "min": 0,
+      "step": 1,
+      "unit": "damage",
+      "value": 4,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "Extra laser damage from the briefing laser trial.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
+    },
+    {
+      "id": "boss-stage-seconds",
+      "description": "A boss phase not finished in time is lost.",
+      "balanceFile": "gameplay",
+      "max": 300,
+      "min": 30,
+      "step": 30,
+      "unit": "seconds",
+      "value": 90,
+      "provenance": {
+        "confidence": "low",
+        "excerpt": "A boss phase not finished in time is lost.",
+        "location": "",
+        "source": "gamex:assumed",
+        "status": "assumed"
+      }
     }
   ],
   "variables": [
@@ -1150,6 +1269,28 @@
       "id": "fight-boss",
       "name": "Fight the boss",
       "actor": "system",
+      "combat": {
+        "accuracy": "clamp(baseAccuracy + skillAccuracy * persona.skill, 0, 1)",
+        "boss": {
+          "damage": "bossDamage",
+          "hp": "bossTotalHp",
+          "phases": "bossPhases"
+        },
+        "damageMultiplier": "min(comboMax, 1 + comboStep * 5)",
+        "dodge": "clamp(baseDodge + skillDodge * persona.skill + nearMissSlowmoSeconds * 0.05, 0, 0.9)",
+        "enemiesPerWave": "0",
+        "enemyDamage": "droneContactDamage",
+        "enemyHp": "droneHp",
+        "fireRate": "fireRate",
+        "heroDamage": "laserDamage + damagePerTier * damageTier + (laserTrialActive ? laserTrialDamageBonus : 0)",
+        "heroHp": "heroMaxHp",
+        "maxSecondsPerStage": "bossStageSeconds",
+        "outcomes": {
+          "lose": "lose",
+          "win": "win"
+        },
+        "waves": "0"
+      },
       "costs": [],
       "duration": "bossFightSeconds",
       "effects": [],
@@ -3452,7 +3593,7 @@
       "id": "gap-combat-stats",
       "kind": "assumption",
       "blocking": false,
-      "question": "Confirm hero, drone and boss stats, waves per level, combo and slow-mo numbers.",
+      "question": "Confirm hero, drone and boss stats, waves per level, combo and slow-mo numbers, and the boss-fight combat model (accuracy, dodge, boss damage).",
       "related": [
         "const:damage-per-tier",
         "const:hero-max-hp",
@@ -3465,7 +3606,14 @@
         "const:combo-step",
         "const:combo-max",
         "const:near-miss-slowmo-seconds",
-        "const:waves-per-level"
+        "const:waves-per-level",
+        "const:boss-damage",
+        "const:base-accuracy",
+        "const:skill-accuracy",
+        "const:base-dodge",
+        "const:skill-dodge",
+        "const:laser-trial-damage-bonus",
+        "const:boss-stage-seconds"
       ],
       "provenance": {
         "confidence": "high",
