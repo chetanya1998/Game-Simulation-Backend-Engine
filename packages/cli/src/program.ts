@@ -1,24 +1,15 @@
 import { Command } from 'commander';
 import { ENGINE_VERSION } from '@gamex/engine';
 import { SCHEMA_VERSION } from '@gamex/model';
+import { registerCommands } from './commands.js';
+import type { Io, JsonResult } from './types.js';
+
+export type { Io, JsonResult } from './types.js';
 
 export const CLI_VERSION = '0.0.0';
 
 /** Minimum Node version: the Spec Pack's golden-test runner relies on native TypeScript type stripping. */
 export const MIN_NODE_VERSION = '22.18.0';
-
-export interface Io {
-  stdout: (text: string) => void;
-  stderr: (text: string) => void;
-}
-
-/** Envelope printed by every command with `--json` (ARCHITECTURE §8). */
-export interface JsonResult<T> {
-  ok: boolean;
-  command: string;
-  data: T;
-  issues: { severity: 'error' | 'warning'; code: string; message: string; hint?: string }[];
-}
 
 export function compareVersions(a: string, b: string): number {
   const pa = a.replace(/^v/, '').split('.').map(Number);
@@ -80,6 +71,8 @@ export function createProgram(io: Io, nodeVersion: string = process.versions.nod
       }
       if (!nodeOk) process.exitCode = 1;
     });
+
+  registerCommands(program, io);
 
   return program;
 }
