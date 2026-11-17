@@ -82,6 +82,9 @@ describe('content hash and serialization', () => {
     b.meta.modelVersion = 7;
     b.meta.updatedAt = '2026-11-14T00:00:00Z';
     expect(computeContentHash(b)).toBe(computeContentHash(a));
+    expect(computeContentHash({ ...b, $schema: './schema/game-model.schema.json' })).toBe(
+      computeContentHash(a),
+    );
     b.constants[0] = { ...b.constants[0]!, value: 110 }; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     expect(computeContentHash(b)).not.toBe(computeContentHash(a));
     expect(computeContentHash(a)).toMatch(/^[0-9a-f]{64}$/);
