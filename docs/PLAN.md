@@ -85,7 +85,7 @@ Tests / acceptance
 - Combat: missions without `combat` give identical results to pure Level 1; increasing `laserDamage` monotonically raises win rate (property test); a planted L5 "wall" is detected for the non-payer persona.
 - Coverage ≥ 85 % for `engine`.
 
-### Phase 3 — Spec Pack + CLI (≈ 2–3 sessions)
+### Phase 3 — Spec Pack + CLI (≈ 2–3 sessions) — ✅ done (ADR 0007)
 
 Deliverables
 

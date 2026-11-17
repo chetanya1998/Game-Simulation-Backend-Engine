@@ -7,18 +7,20 @@ GameX Engine). Design: `docs/ARCHITECTURE.md`. Plan and phase status: `docs/PLAN
 
 ## Commands
 
-| Command                                         | What it does                                                                                                         |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install`                                  | Install (Node ≥ 22.18, pnpm 10 via Corepack).                                                                        |
-| `pnpm build`                                    | Build every package (`tsc -b`), the CLI bundle (`tsup`) and the studio (`vite build`).                               |
-| `pnpm typecheck`                                | Type-check sources **and tests** of every package. Needs dependencies built (turbo does it).                         |
-| `pnpm test`                                     | Vitest in every package, with coverage (≥ 85 % enforced for `model` and `engine`).                                   |
-| `pnpm lint`                                     | ESLint (type-aware, zero warnings) + Prettier check. `pnpm format` fixes formatting.                                 |
-| `pnpm depcruise`                                | Architecture rules (no cycles, pure core, declared deps). Run after `pnpm build`.                                    |
-| `pnpm check`                                    | Everything above, in CI order.                                                                                       |
-| `pnpm --filter @gamex/<pkg> test`               | One package.                                                                                                         |
-| `node packages/cli/dist/gamex.js doctor --json` | Run the built CLI.                                                                                                   |
-| `pnpm --filter @gamex/model gen:schema`         | Regenerate `packages/model/schema/game-model.schema.json` after changing the Zod schema (a test fails until you do). |
+| Command                                              | What it does                                                                                                         |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install`                                       | Install (Node ≥ 22.18, pnpm 10 via Corepack).                                                                        |
+| `pnpm build`                                         | Build every package (`tsc -b`), the CLI bundle (`tsup`) and the studio (`vite build`).                               |
+| `pnpm typecheck`                                     | Type-check sources **and tests** of every package. Needs dependencies built (turbo does it).                         |
+| `pnpm test`                                          | Vitest in every package, with coverage (≥ 85 % enforced for `model` and `engine`).                                   |
+| `pnpm lint`                                          | ESLint (type-aware, zero warnings) + Prettier check. `pnpm format` fixes formatting.                                 |
+| `pnpm depcruise`                                     | Architecture rules (no cycles, pure core, declared deps). Run after `pnpm build`.                                    |
+| `pnpm check`                                         | Everything above, in CI order.                                                                                       |
+| `pnpm --filter @gamex/<pkg> test`                    | One package.                                                                                                         |
+| `node packages/cli/dist/gamex.js doctor --json`      | Run the built CLI.                                                                                                   |
+| `pnpm --filter @gamex/model gen:schema`              | Regenerate `packages/model/schema/game-model.schema.json` after changing the Zod schema (a test fails until you do). |
+| `pnpm --filter @gamex/specpack gen:templates`        | Re-embed `packages/specpack/templates/runner/*.ts` after editing the reference runner (a test fails until you do).   |
+| `node packages/cli/dist/gamex.js <cmd> --cwd <repo>` | `validate`, `sim`, `explore`, `sync` against a game repo (`gamex/game-model.json`).                                  |
 
 **Definition of done:** `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm depcruise` pass
 from a clean checkout, and the change has tests that would fail without it.
@@ -67,6 +69,8 @@ tooling/           shared Vitest config
 - Game Model files are canonical JSON (`serializeGameModel`); never hand-format them. The Swarm Rescue model
   (`fixtures/swarm-rescue/swarm-rescue.game-model.json`) must validate with zero errors and zero warnings.
 - New validation checks get a case in `packages/model/test/validate.test.ts` asserting code, JSON path and source line.
+- The Spec Pack format is ADR 0007. Expected results in golden tests come only from the engine; the reference runner
+  (`packages/specpack/templates/runner/`) is an independent re-implementation and must agree on every case.
 - Engine semantics (step order, sessions, policy, churn) are in `docs/DECISIONS/0006-engine-semantics.md`; change
   them only with an ADR update. Rules are enforced only in `packages/engine/src/step.ts`.
 - Engine output must stay deterministic: `packages/engine/test/browser-determinism.test.ts` compares Node and a

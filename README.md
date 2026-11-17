@@ -8,7 +8,7 @@ GameX Engine reads a game design document (and, optionally, your game repo), tur
 into your repo — `AGENTS.md`, balance files, formulas, backend contracts, golden tests and build tasks — so
 coding agents can build the backend straight from it.
 
-> Status: early development (Phase 0 — foundation). See [`docs/PLAN.md`](docs/PLAN.md).
+> Status: Phases 0–3 done (model, engine, Spec Pack + CLI). See [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Quick start (development)
 
@@ -26,6 +26,12 @@ pnpm check
 
 ```bash
 node packages/cli/dist/gamex.js doctor
+```
+
+Write a Spec Pack into a game repo that has `gamex/game-model.json`:
+
+```bash
+node packages/cli/dist/gamex.js sync --cwd path/to/game-repo
 ```
 
 Requires Node ≥ 22.18.

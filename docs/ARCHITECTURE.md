@@ -474,6 +474,10 @@ agents and CI. Only `confirmed | edited | assumed` items are promoted to `game-m
 
 ## 6. Spec Pack (`@gamex/specpack`)
 
+> **As built (Phase 3):** the exact format is [ADR 0007](./DECISIONS/0007-spec-pack-format.md). `renderSpecPack(model)`
+> (pure) → `writeSpecPack(root, pack)` from `@gamex/specpack/node`. The reference runner lives in
+> `packages/specpack/templates/runner/` and is embedded at build time.
+
 - **Pure render**: `renderSpecPack(model, latestRun?) → FileMap` (`Map<path, { content, ownership }>`), where
   `ownership ∈ "generated" | "section" | "create-if-missing" | "editable-seeded"`.
 - **Writer** (`specpack/node`): computes a plan (create / update / unchanged / skip-editable /

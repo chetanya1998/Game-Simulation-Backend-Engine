@@ -33,3 +33,18 @@ jobs:
       - run: pnpm depcruise
       - name: CLI smoke test
         run: node packages/cli/dist/gamex.js doctor --json
+      - name: Spec Pack end to end (sample repo, temp dir)
+        run: |
+          repo="$(mktemp -d)"
+          cp -r fixtures/swarm-rescue/sample-repo/. "$repo"
+          mkdir -p "$repo/gamex"
+          cp fixtures/swarm-rescue/swarm-rescue.game-model.json "$repo/gamex/game-model.json"
+          git -C "$repo" init -q && git -C "$repo" add -A && git -C "$repo" -c user.email=ci@example.com -c user.name=ci commit -qm base
+          node packages/cli/dist/gamex.js validate --cwd "$repo"
+          node packages/cli/dist/gamex.js explore --cwd "$repo"
+          node packages/cli/dist/gamex.js sync --cwd "$repo"
+          git -C "$repo" add -A && git -C "$repo" -c user.email=ci@example.com -c user.name=ci commit -qm sync
+          node packages/cli/dist/gamex.js sync --cwd "$repo"
+          git -C "$repo" diff --exit-code
+          test -z "$(git -C "$repo" status --porcelain)"
+          (cd "$repo" && node gamex/tests/runner/run-golden.ts)
