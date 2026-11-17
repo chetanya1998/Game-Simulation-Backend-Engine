@@ -15,6 +15,10 @@ export type {
   CRule,
   CState,
   CTransition,
+  CCombat,
+  CResource,
+  CVariable,
+  CTraceInvariant,
   CompileOptions,
   CompiledModel,
 } from './compile.js';
