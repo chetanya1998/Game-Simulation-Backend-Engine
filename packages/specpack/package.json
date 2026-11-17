@@ -10,6 +10,11 @@
       "@gamex/source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./node": {
+      "@gamex/source": "./src/node/index.ts",
+      "types": "./dist/node/index.d.ts",
+      "default": "./dist/node/index.js"
     }
   },
   "files": [
@@ -17,14 +22,20 @@
   ],
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run --coverage"
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p templates/tsconfig.json",
+    "test": "vitest run --coverage",
+    "gen:templates": "node scripts/embed-templates.mjs"
   },
   "dependencies": {
+    "@gamex/engine": "workspace:*",
     "@gamex/model": "workspace:*",
-    "@gamex/engine": "workspace:*"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "fast-check": "^4.10.2"
+    "@electric-sql/pglite": "^0.5.16",
+    "@seriousme/openapi-schema-validator": "^2.12.0",
+    "ajv": "^8.20.0",
+    "fast-check": "^4.10.2",
+    "yaml": "^2.9.1"
   }
 }
