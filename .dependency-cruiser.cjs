@@ -51,11 +51,25 @@ module.exports = {
       to: { path: ['^packages/(extract|cli)/', 'node_modules/@anthropic-ai/'] },
     },
     {
+      name: 'specpack-renderer-browser-safe',
+      comment:
+        'The Spec Pack renderer runs in the studio too; only src/node/ (the writer) may use Node built-ins.',
+      severity: 'error',
+      from: { path: '^packages/specpack/src/(?!node/)' },
+      to: { dependencyTypes: ['core'] },
+    },
+    {
       name: 'studio-browser-safe',
       comment: 'The studio talks to I/O and LLMs only through the local `gamex studio` server.',
       severity: 'error',
       from: { path: '^apps/studio/src' },
-      to: { path: ['^packages/(ingest|extract|drift|cli)/', 'node_modules/@anthropic-ai/'] },
+      to: {
+        path: [
+          '^packages/(ingest|extract|drift|cli)/',
+          '^packages/specpack/(src|dist)/node/',
+          'node_modules/@anthropic-ai/',
+        ],
+      },
     },
     {
       name: 'no-cli-imports',

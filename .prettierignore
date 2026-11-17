@@ -7,3 +7,4 @@ docs/MASTER_PROMPT.md
 LICENSE
 packages/model/schema/
 fixtures/swarm-rescue/*.json
+packages/specpack/src/templates.generated.ts
