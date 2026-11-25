@@ -13,6 +13,10 @@ function screenRows(): { id: string; name: string; kind: string }[] {
 }
 
 describe('Swarm Rescue GDD fixture', () => {
+  it('is shipped unchanged inside the sample repo (docs/GDD.md)', () => {
+    expect(readFileSync(new URL('../sample-repo/docs/GDD.md', import.meta.url), 'utf8')).toBe(gdd);
+  });
+
   it('defines exactly 22 screen states S00 … S21 in order', () => {
     const ids = screenRows().map((r) => r.id);
     expect(ids).toEqual(Array.from({ length: 22 }, (_, i) => `S${String(i).padStart(2, '0')}`));

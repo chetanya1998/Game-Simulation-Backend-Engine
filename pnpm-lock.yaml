@@ -75,6 +75,12 @@ importers:
 
   fixtures:
     dependencies:
+      '@gamex/extract':
+        specifier: workspace:*
+        version: link:../packages/extract
+      '@gamex/ingest':
+        specifier: workspace:*
+        version: link:../packages/ingest
       '@gamex/model':
         specifier: workspace:*
         version: link:../packages/model

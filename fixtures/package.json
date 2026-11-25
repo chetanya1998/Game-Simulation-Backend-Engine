@@ -7,9 +7,12 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "record": "node scripts/record.ts"
   },
   "dependencies": {
+    "@gamex/extract": "workspace:*",
+    "@gamex/ingest": "workspace:*",
     "@gamex/model": "workspace:*"
   }
 }

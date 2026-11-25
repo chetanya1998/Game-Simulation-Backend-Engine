@@ -27,8 +27,7 @@ export const CANARIES = [
 export function plantedRepo(): string {
   const dir = mkdtempSync(join(tmpdir(), 'gamex-ingest-'));
   cpSync(SAMPLE, dir, { recursive: true });
-  mkdirSync(join(dir, 'docs'));
-  cpSync(GDD, join(dir, 'docs', 'GDD.md'));
+  // The sample repo ships docs/GDD.md (a copy of the fixture GDD).
   mkdirSync(join(dir, 'keys'));
   writeFileSync(
     join(dir, 'keys', 'id_rsa'),

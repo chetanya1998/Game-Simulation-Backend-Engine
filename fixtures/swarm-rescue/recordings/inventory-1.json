@@ -1,0 +1,1792 @@
+{
+  "id": "inventory#1",
+  "requestHash": "313cc1d49e0144a84c31764809d36fa2b1a5c7a9692bff53ea2a6c7940b2c974",
+  "origin": "authored",
+  "response": {
+    "meta": {
+      "name": "Swarm Rescue",
+      "genre": "mobile action",
+      "platforms": [
+        "ios",
+        "android"
+      ],
+      "targetMarkets": [
+        "US"
+      ]
+    },
+    "entities": [
+      {
+        "id": "relickeeper",
+        "name": "Relickeeper",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L27-38",
+            "quote": "| Relickeeper | Rescue operative | Wrist laser gauntlet | Same as Vanguard    |"
+          }
+        ],
+        "kind": "hero",
+        "attributes": [
+          {
+            "name": "damagePerTier",
+            "ref": "const:damage-per-tier"
+          },
+          {
+            "name": "damageTier",
+            "ref": "var:damage-tier"
+          },
+          {
+            "name": "fireRate",
+            "ref": "const:fire-rate"
+          },
+          {
+            "name": "laserDamage",
+            "ref": "const:laser-damage"
+          },
+          {
+            "name": "maxHp",
+            "ref": "const:hero-max-hp"
+          }
+        ]
+      },
+      {
+        "id": "vanguard",
+        "name": "Vanguard",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L27-38",
+            "quote": "| Vanguard    | Rescue operative | Wrist laser gauntlet | Same as Relickeeper |"
+          }
+        ],
+        "kind": "hero",
+        "attributes": [
+          {
+            "name": "damagePerTier",
+            "ref": "const:damage-per-tier"
+          },
+          {
+            "name": "damageTier",
+            "ref": "var:damage-tier"
+          },
+          {
+            "name": "fireRate",
+            "ref": "const:fire-rate"
+          },
+          {
+            "name": "laserDamage",
+            "ref": "const:laser-damage"
+          },
+          {
+            "name": "maxHp",
+            "ref": "const:hero-max-hp"
+          }
+        ]
+      },
+      {
+        "id": "swarm-drone",
+        "name": "Swarm drone",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L39-43",
+            "quote": "- **Swarm drone** — basic flying enemy, arrives in waves. 20 HP **[ASSUMED]**, deals 5 damage on contact **[ASSUMED]**."
+          }
+        ],
+        "kind": "enemy",
+        "attributes": [
+          {
+            "name": "contactDamage",
+            "ref": "const:drone-contact-damage"
+          },
+          {
+            "name": "hp",
+            "ref": "const:drone-hp"
+          },
+          {
+            "name": "wavesPerLevel",
+            "ref": "const:waves-per-level"
+          }
+        ]
+      },
+      {
+        "id": "swarm-command-unit",
+        "name": "Swarm command unit",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L39-43",
+            "quote": "- **Swarm command unit (boss)** — appears only in Level 5. Three phases **[ASSUMED]**, 1500 HP total **[ASSUMED]**."
+          }
+        ],
+        "kind": "boss",
+        "attributes": [
+          {
+            "name": "phases",
+            "ref": "const:boss-phases"
+          },
+          {
+            "name": "totalHp",
+            "ref": "const:boss-total-hp"
+          }
+        ]
+      },
+      {
+        "id": "civilians",
+        "name": "Trapped civilians",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "number of drones; clearing all waves (and the boss on L5) wins the mission. Civilians trapped in the"
+          }
+        ],
+        "kind": "npc",
+        "attributes": [
+          {
+            "name": "coinsEach",
+            "ref": "const:coins-per-civilian"
+          },
+          {
+            "name": "perMission",
+            "ref": "const:civilians-per-mission"
+          }
+        ]
+      },
+      {
+        "id": "combo-multiplier",
+        "name": "Combo multiplier",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "- **Combo multiplier** — consecutive kills without taking damage raise a score multiplier"
+          }
+        ],
+        "kind": "mechanic",
+        "attributes": [
+          {
+            "name": "max",
+            "ref": "const:combo-max"
+          },
+          {
+            "name": "step",
+            "ref": "const:combo-step"
+          }
+        ]
+      },
+      {
+        "id": "near-miss-slow-mo",
+        "name": "Near-miss slow-mo",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "- **Near-miss slow-mo** — dodging a drone at the last moment triggers 1.5 s of slow motion **[ASSUMED]**."
+          }
+        ],
+        "kind": "mechanic",
+        "attributes": [
+          {
+            "name": "seconds",
+            "ref": "const:near-miss-slowmo-seconds"
+          }
+        ]
+      },
+      {
+        "id": "final-blow-kill-cam",
+        "name": "Final-blow kill-cam",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "- **Final-blow kill-cam** — the last kill of a mission plays a short kill-cam (S10)."
+          }
+        ],
+        "kind": "mechanic",
+        "attributes": [
+          {
+            "name": "seconds",
+            "ref": "const:kill-cam-seconds"
+          }
+        ]
+      },
+      {
+        "id": "victory-star-reveal",
+        "name": "Victory star reveal",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "- **Victory star reveal** — 1 to 3 stars based on HP remaining and civilians saved."
+          }
+        ],
+        "kind": "mechanic",
+        "attributes": []
+      },
+      {
+        "id": "daily-chest",
+        "name": "Daily chest",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "- **Daily chest** — once per day in the Safe Zone (see §8.3)."
+          }
+        ],
+        "kind": "mechanic",
+        "attributes": [
+          {
+            "name": "coins",
+            "ref": "const:daily-chest-coins"
+          }
+        ]
+      },
+      {
+        "id": "remove-ads",
+        "name": "Remove Ads",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in)."
+          }
+        ],
+        "kind": "item",
+        "attributes": [
+          {
+            "name": "priceUsd",
+            "ref": "const:remove-ads-price-usd"
+          },
+          {
+            "name": "purchased",
+            "ref": "var:remove-ads-purchased"
+          }
+        ]
+      }
+    ],
+    "resources": [
+      {
+        "id": "coins",
+        "name": "Coins",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L173-190",
+            "quote": "- **Coins** (soft currency) — earned from missions and chests, spent on upgrades. Starting balance"
+          }
+        ],
+        "kind": "soft",
+        "starting": 0,
+        "cap": null,
+        "unit": "coins"
+      }
+    ],
+    "constants": [
+      {
+        "id": "coins-victory-base",
+        "name": "coins-victory-base",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L173-190",
+            "quote": "Coins per victory **[ASSUMED]**: 50 + 25 × level, plus 10 per civilian saved **[ASSUMED]**."
+          }
+        ],
+        "unit": "coins",
+        "value": 50,
+        "curve": null,
+        "min": 0,
+        "max": 500,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "coins-victory-base",
+        "name": "coins-victory-base",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"victoryBase\": 50,"
+          }
+        ],
+        "unit": "coins",
+        "value": 50,
+        "curve": null,
+        "min": 0,
+        "max": 500,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "coins-victory-per-level",
+        "name": "coins-victory-per-level",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L173-190",
+            "quote": "Coins per victory **[ASSUMED]**: 50 + 25 × level, plus 10 per civilian saved **[ASSUMED]**."
+          }
+        ],
+        "unit": "coins",
+        "value": 25,
+        "curve": null,
+        "min": 0,
+        "max": 200,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "coins-victory-per-level",
+        "name": "coins-victory-per-level",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"victoryPerLevel\": 25,"
+          }
+        ],
+        "unit": "coins",
+        "value": 25,
+        "curve": null,
+        "min": 0,
+        "max": 200,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "coins-per-civilian",
+        "name": "coins-per-civilian",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L173-190",
+            "quote": "Coins per victory **[ASSUMED]**: 50 + 25 × level, plus 10 per civilian saved **[ASSUMED]**."
+          }
+        ],
+        "unit": "coins",
+        "value": 10,
+        "curve": null,
+        "min": 0,
+        "max": 50,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "coins-per-civilian",
+        "name": "coins-per-civilian",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"perCivilianSaved\": 10"
+          }
+        ],
+        "unit": "coins",
+        "value": 10,
+        "curve": null,
+        "min": 0,
+        "max": 50,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "civilians-per-mission",
+        "name": "civilians-per-mission",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "count",
+        "value": 3,
+        "curve": null,
+        "min": 0,
+        "max": 10,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "claim-multiplier",
+        "name": "claim-multiplier",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "| Victory Claim 3x           | S11→S12 | Triples the mission's coin reward        | Once per victory             |"
+          }
+        ],
+        "unit": "x",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 5,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "claim-multiplier",
+        "name": "claim-multiplier",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"claimMultiplier\": 3,"
+          }
+        ],
+        "unit": "x",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 5,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "daily-chest-coins",
+        "name": "daily-chest-coins",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L173-190",
+            "quote": "Once per calendar day (player's local midnight reset). Contents **[ASSUMED]**: 100 coins, or one free"
+          }
+        ],
+        "unit": "coins",
+        "value": 100,
+        "curve": null,
+        "min": 0,
+        "max": 500,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "daily-chest-coins",
+        "name": "daily-chest-coins",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"coins\": 100"
+          }
+        ],
+        "unit": "coins",
+        "value": 100,
+        "curve": null,
+        "min": 0,
+        "max": 500,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "upgrade-cost",
+        "name": "Upgrade cost per tier",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "decided: **[ASSUMED]** geometric, 100 coins at tier 1, ×1.5 per tier. Each damage tier adds +2 damage"
+          }
+        ],
+        "unit": "coins",
+        "value": null,
+        "curve": {
+          "type": "geometric",
+          "base": 100,
+          "perStep": null,
+          "ratio": 1.5,
+          "values": null,
+          "from": 1,
+          "rounding": "round-half-even"
+        },
+        "min": null,
+        "max": null,
+        "integer": false,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "upgrade-max-tier",
+        "name": "upgrade-max-tier",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "The Armory sells laser upgrades (damage, fire rate) in tiers 1–10. Upgrade cost per tier is not yet"
+          }
+        ],
+        "unit": "tier",
+        "value": 10,
+        "curve": null,
+        "min": 1,
+        "max": 20,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "upgrade-max-tier",
+        "name": "upgrade-max-tier",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"maxTier\": 10,"
+          }
+        ],
+        "unit": "tier",
+        "value": 10,
+        "curve": null,
+        "min": 1,
+        "max": 20,
+        "integer": true,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "damage-per-tier",
+        "name": "damage-per-tier",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "decided: **[ASSUMED]** geometric, 100 coins at tier 1, ×1.5 per tier. Each damage tier adds +2 damage"
+          }
+        ],
+        "unit": "damage",
+        "value": 2,
+        "curve": null,
+        "min": 0,
+        "max": 10,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "damage-per-tier",
+        "name": "damage-per-tier",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"damagePerTier\": 2"
+          }
+        ],
+        "unit": "damage",
+        "value": 2,
+        "curve": null,
+        "min": 0,
+        "max": 10,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "reroll-discount",
+        "name": "reroll-discount",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "ratio",
+        "value": 0.25,
+        "curve": null,
+        "min": 0,
+        "max": 0.9,
+        "integer": false,
+        "balanceFile": "economy"
+      },
+      {
+        "id": "upgrade-rerolls-per-day",
+        "name": "upgrade-rerolls-per-day",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "| Upgrade reroll             | S16→S17 | Reroll the discounted upgrade offer      | 3 per day **[ASSUMED]**      |"
+          }
+        ],
+        "unit": "count",
+        "value": 3,
+        "curve": null,
+        "min": 0,
+        "max": 10,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "upgrade-rerolls-per-day",
+        "name": "upgrade-rerolls-per-day",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"upgradeRerollsPerDay\": 3"
+          }
+        ],
+        "unit": "count",
+        "value": 3,
+        "curve": null,
+        "min": 0,
+        "max": 10,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "remove-ads-price-usd",
+        "name": "remove-ads-price-usd",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "Price **[ASSUMED]** $3.99."
+          }
+        ],
+        "unit": "usd",
+        "value": 3.99,
+        "curve": null,
+        "min": 0.99,
+        "max": 9.99,
+        "integer": false,
+        "balanceFile": "store"
+      },
+      {
+        "id": "interstitial-min-level",
+        "name": "interstitial-min-level",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "2. Only **from Level 3 onward** (the mission just won is L3 or later)."
+          }
+        ],
+        "unit": "level",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 5,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "interstitial-min-level",
+        "name": "interstitial-min-level",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"minLevel\": 3,"
+          }
+        ],
+        "unit": "level",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 5,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "interstitial-max-per-mission",
+        "name": "interstitial-max-per-mission",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "3. **Max 1 per mission.**"
+          }
+        ],
+        "unit": "count",
+        "value": 1,
+        "curve": null,
+        "min": 0,
+        "max": 3,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "interstitial-max-per-mission",
+        "name": "interstitial-max-per-mission",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"maxPerMission\": 1,"
+          }
+        ],
+        "unit": "count",
+        "value": 1,
+        "curve": null,
+        "min": 0,
+        "max": 3,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "interstitial-min-gap-seconds",
+        "name": "interstitial-min-gap-seconds",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "4. **At least 180 seconds apart.**"
+          }
+        ],
+        "unit": "seconds",
+        "value": 180,
+        "curve": null,
+        "min": 0,
+        "max": 600,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "interstitial-min-gap-seconds",
+        "name": "interstitial-min-gap-seconds",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"minGapSeconds\": 180"
+          }
+        ],
+        "unit": "seconds",
+        "value": 180,
+        "curve": null,
+        "min": 0,
+        "max": 600,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "max-revives-per-mission",
+        "name": "max-revives-per-mission",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "| Defeat revive              | S14→S15 | Revive at the current wave with full HP  | **Max 1 revive per mission** |"
+          }
+        ],
+        "unit": "count",
+        "value": 1,
+        "curve": null,
+        "min": 0,
+        "max": 3,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "max-revives-per-mission",
+        "name": "max-revives-per-mission",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "config/economy.json#L1-28",
+            "quote": "\"maxRevivesPerMission\": 1,"
+          }
+        ],
+        "unit": "count",
+        "value": 1,
+        "curve": null,
+        "min": 0,
+        "max": 3,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "banner-home-min-level",
+        "name": "banner-home-min-level",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "Shown on Home (only once the player has reached Level 3), Campaign Map, Armory, and Settings."
+          }
+        ],
+        "unit": "level",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 5,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "rewarded-ad-seconds",
+        "name": "rewarded-ad-seconds",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "seconds",
+        "value": 30,
+        "curve": null,
+        "min": 15,
+        "max": 60,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "interstitial-ad-seconds",
+        "name": "interstitial-ad-seconds",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "seconds",
+        "value": 15,
+        "curve": null,
+        "min": 5,
+        "max": 30,
+        "integer": true,
+        "balanceFile": "ads"
+      },
+      {
+        "id": "level-count",
+        "name": "level-count",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L44-63",
+            "quote": "| L5    | Grand Central Intersection  | Boss level                              |"
+          }
+        ],
+        "unit": "levels",
+        "value": 5,
+        "curve": null,
+        "min": 1,
+        "max": 10,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "boss-level",
+        "name": "boss-level",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L44-63",
+            "quote": "| L5    | Grand Central Intersection  | Boss level                              |"
+          }
+        ],
+        "unit": "level",
+        "value": 5,
+        "curve": null,
+        "min": 1,
+        "max": 10,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "hero-max-hp",
+        "name": "hero-max-hp",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L27-38",
+            "quote": "Base hero stats **[ASSUMED]**: 100 HP, laser damage 10 per shot, fire rate 4 shots per second."
+          }
+        ],
+        "unit": "hp",
+        "value": 100,
+        "curve": null,
+        "min": 50,
+        "max": 300,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "hero-max-hp",
+        "name": "hero-max-hp",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const int HeroMaxHp = 100;"
+          }
+        ],
+        "unit": "hp",
+        "value": 100,
+        "curve": null,
+        "min": 50,
+        "max": 300,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "laser-damage",
+        "name": "laser-damage",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L27-38",
+            "quote": "Base hero stats **[ASSUMED]**: 100 HP, laser damage 10 per shot, fire rate 4 shots per second."
+          }
+        ],
+        "unit": "damage",
+        "value": 10,
+        "curve": null,
+        "min": 1,
+        "max": 50,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "laser-damage",
+        "name": "laser-damage",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const int LaserDamage = 10;"
+          }
+        ],
+        "unit": "damage",
+        "value": 10,
+        "curve": null,
+        "min": 1,
+        "max": 50,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "fire-rate",
+        "name": "fire-rate",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L27-38",
+            "quote": "Base hero stats **[ASSUMED]**: 100 HP, laser damage 10 per shot, fire rate 4 shots per second."
+          }
+        ],
+        "unit": "shots/second",
+        "value": 4,
+        "curve": null,
+        "min": 1,
+        "max": 10,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "fire-rate",
+        "name": "fire-rate",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const float FireRatePerSecond = 4f;"
+          }
+        ],
+        "unit": "shots/second",
+        "value": 4,
+        "curve": null,
+        "min": 1,
+        "max": 10,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "drone-hp",
+        "name": "drone-hp",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L39-43",
+            "quote": "- **Swarm drone** — basic flying enemy, arrives in waves. 20 HP **[ASSUMED]**, deals 5 damage on contact **[ASSUMED]**."
+          }
+        ],
+        "unit": "hp",
+        "value": 20,
+        "curve": null,
+        "min": 5,
+        "max": 100,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "drone-hp",
+        "name": "drone-hp",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const int DroneHp = 20;"
+          }
+        ],
+        "unit": "hp",
+        "value": 20,
+        "curve": null,
+        "min": 5,
+        "max": 100,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "drone-contact-damage",
+        "name": "drone-contact-damage",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L39-43",
+            "quote": "- **Swarm drone** — basic flying enemy, arrives in waves. 20 HP **[ASSUMED]**, deals 5 damage on contact **[ASSUMED]**."
+          }
+        ],
+        "unit": "damage",
+        "value": 5,
+        "curve": null,
+        "min": 1,
+        "max": 30,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "drone-contact-damage",
+        "name": "drone-contact-damage",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const int DroneContactDamage = 5;"
+          }
+        ],
+        "unit": "damage",
+        "value": 5,
+        "curve": null,
+        "min": 1,
+        "max": 30,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "boss-phases",
+        "name": "boss-phases",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L39-43",
+            "quote": "- **Swarm command unit (boss)** — appears only in Level 5. Three phases **[ASSUMED]**, 1500 HP total **[ASSUMED]**."
+          }
+        ],
+        "unit": "phases",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 5,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "boss-phases",
+        "name": "boss-phases",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const int BossPhases = 3;"
+          }
+        ],
+        "unit": "phases",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 5,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "boss-total-hp",
+        "name": "boss-total-hp",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L39-43",
+            "quote": "- **Swarm command unit (boss)** — appears only in Level 5. Three phases **[ASSUMED]**, 1500 HP total **[ASSUMED]**."
+          }
+        ],
+        "unit": "hp",
+        "value": 1500,
+        "curve": null,
+        "min": 500,
+        "max": 5000,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "boss-total-hp",
+        "name": "boss-total-hp",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const int BossTotalHp = 1500;"
+          }
+        ],
+        "unit": "hp",
+        "value": 1500,
+        "curve": null,
+        "min": 500,
+        "max": 5000,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "combo-step",
+        "name": "combo-step",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "(+0.1x per kill, capped at 3x **[ASSUMED]**)."
+          }
+        ],
+        "unit": "x per kill",
+        "value": 0.1,
+        "curve": null,
+        "min": 0,
+        "max": 0.5,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "combo-step",
+        "name": "combo-step",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const float ComboStepPerKill = 0.1f;"
+          }
+        ],
+        "unit": "x per kill",
+        "value": 0.1,
+        "curve": null,
+        "min": 0,
+        "max": 0.5,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "combo-max",
+        "name": "combo-max",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "(+0.1x per kill, capped at 3x **[ASSUMED]**)."
+          }
+        ],
+        "unit": "x",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 5,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "combo-max",
+        "name": "combo-max",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const float ComboMax = 3f;"
+          }
+        ],
+        "unit": "x",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 5,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "near-miss-slowmo-seconds",
+        "name": "near-miss-slowmo-seconds",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "- **Near-miss slow-mo** — dodging a drone at the last moment triggers 1.5 s of slow motion **[ASSUMED]**."
+          }
+        ],
+        "unit": "seconds",
+        "value": 1.5,
+        "curve": null,
+        "min": 0,
+        "max": 3,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "near-miss-slowmo-seconds",
+        "name": "near-miss-slowmo-seconds",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public const float NearMissSlowMoSeconds = 1.5f;"
+          }
+        ],
+        "unit": "seconds",
+        "value": 1.5,
+        "curve": null,
+        "min": 0,
+        "max": 3,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "kill-cam-seconds",
+        "name": "kill-cam-seconds",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "seconds",
+        "value": 3,
+        "curve": null,
+        "min": 1,
+        "max": 6,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "waves-per-level",
+        "name": "waves-per-level",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L44-63",
+            "quote": "Waves per level **[ASSUMED]**: L1 3, L2 4, L3 5, L4 6, L5 6 plus the boss."
+          }
+        ],
+        "unit": "waves",
+        "value": null,
+        "curve": {
+          "type": "table",
+          "base": null,
+          "perStep": null,
+          "ratio": null,
+          "values": [
+            3,
+            4,
+            5,
+            6,
+            6
+          ],
+          "from": 1,
+          "rounding": null
+        },
+        "min": null,
+        "max": null,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "waves-per-level",
+        "name": "waves-per-level",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "src/Tuning.cs#L1-23",
+            "quote": "public static readonly int[] WavesPerLevel = { 3, 4, 5, 6, 6 };"
+          }
+        ],
+        "unit": "waves",
+        "value": null,
+        "curve": {
+          "type": "table",
+          "base": null,
+          "perStep": null,
+          "ratio": null,
+          "values": [
+            3,
+            4,
+            5,
+            6,
+            6
+          ],
+          "from": 1,
+          "rounding": null
+        },
+        "min": null,
+        "max": null,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "mission-seconds",
+        "name": "mission-seconds",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "seconds",
+        "value": 150,
+        "curve": null,
+        "min": 60,
+        "max": 360,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "boss-fight-seconds",
+        "name": "boss-fight-seconds",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "seconds",
+        "value": 120,
+        "curve": null,
+        "min": 60,
+        "max": 300,
+        "integer": true,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "base-win-chance",
+        "name": "base-win-chance",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability",
+        "value": 0.75,
+        "curve": null,
+        "min": 0,
+        "max": 1,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "skill-win-weight",
+        "name": "skill-win-weight",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability",
+        "value": 0.2,
+        "curve": null,
+        "min": 0,
+        "max": 1,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "upgrade-win-weight",
+        "name": "upgrade-win-weight",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability per tier",
+        "value": 0.02,
+        "curve": null,
+        "min": 0,
+        "max": 0.1,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "difficulty-step",
+        "name": "difficulty-step",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability per level",
+        "value": 0.1,
+        "curve": null,
+        "min": 0,
+        "max": 0.3,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "laser-trial-win-bonus",
+        "name": "laser-trial-win-bonus",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability",
+        "value": 0.1,
+        "curve": null,
+        "min": 0,
+        "max": 0.5,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "boss-base-win-chance",
+        "name": "boss-base-win-chance",
+        "description": null,
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability",
+        "value": 0.5,
+        "curve": null,
+        "min": 0,
+        "max": 1,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "boss-damage",
+        "name": "boss-damage",
+        "description": "Damage of each boss attack (one attempt per second).",
+        "assumed": true,
+        "evidence": [],
+        "unit": "hp per hit",
+        "value": 6,
+        "curve": null,
+        "min": 1,
+        "max": 30,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "base-accuracy",
+        "name": "base-accuracy",
+        "description": "Hit chance of a novice player.",
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability",
+        "value": 0.45,
+        "curve": null,
+        "min": 0,
+        "max": 1,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "skill-accuracy",
+        "name": "skill-accuracy",
+        "description": "Extra hit chance at skill 1.",
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability",
+        "value": 0.4,
+        "curve": null,
+        "min": 0,
+        "max": 1,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "base-dodge",
+        "name": "base-dodge",
+        "description": "Dodge chance of a novice player.",
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability",
+        "value": 0.25,
+        "curve": null,
+        "min": 0,
+        "max": 0.9,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "skill-dodge",
+        "name": "skill-dodge",
+        "description": "Extra dodge chance at skill 1.",
+        "assumed": true,
+        "evidence": [],
+        "unit": "probability",
+        "value": 0.3,
+        "curve": null,
+        "min": 0,
+        "max": 0.9,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "laser-trial-damage-bonus",
+        "name": "laser-trial-damage-bonus",
+        "description": "Extra laser damage from the briefing laser trial.",
+        "assumed": true,
+        "evidence": [],
+        "unit": "damage",
+        "value": 4,
+        "curve": null,
+        "min": 0,
+        "max": 20,
+        "integer": false,
+        "balanceFile": "gameplay"
+      },
+      {
+        "id": "boss-stage-seconds",
+        "name": "boss-stage-seconds",
+        "description": "A boss phase not finished in time is lost.",
+        "assumed": true,
+        "evidence": [],
+        "unit": "seconds",
+        "value": 90,
+        "curve": null,
+        "min": 30,
+        "max": 300,
+        "integer": false,
+        "balanceFile": "gameplay"
+      }
+    ],
+    "variables": [
+      {
+        "id": "consent-given",
+        "name": "consent-given",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L64-104",
+            "quote": "| S01 | Consent / Privacy     | menu     | First launch only.                                       |"
+          }
+        ],
+        "scope": "player",
+        "type": "bool",
+        "initial": false,
+        "enumValues": null,
+        "min": null,
+        "max": null
+      },
+      {
+        "id": "selected-hero",
+        "name": "selected-hero",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L27-38",
+            "quote": "Two launch heroes are selectable on the Home screen. They have **identical controls and identical"
+          }
+        ],
+        "scope": "player",
+        "type": "enum",
+        "initial": "relickeeper",
+        "enumValues": [
+          "relickeeper",
+          "vanguard"
+        ],
+        "min": null,
+        "max": null
+      },
+      {
+        "id": "highest-level-unlocked",
+        "name": "highest-level-unlocked",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L64-104",
+            "quote": "Continue → (S13 Interstitial when eligible) → S05 Campaign Map with the next district unlocked."
+          }
+        ],
+        "scope": "player",
+        "type": "int",
+        "initial": 1,
+        "enumValues": null,
+        "min": 1,
+        "max": 5
+      },
+      {
+        "id": "mission-level",
+        "name": "mission-level",
+        "description": "Level being played (the frontier level).",
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L64-104",
+            "quote": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay."
+          }
+        ],
+        "scope": "player",
+        "type": "int",
+        "initial": 1,
+        "enumValues": null,
+        "min": 1,
+        "max": 5
+      },
+      {
+        "id": "last-mission-result",
+        "name": "last-mission-result",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "5. **Never after a defeat.**"
+          }
+        ],
+        "scope": "mission",
+        "type": "enum",
+        "initial": "none",
+        "enumValues": [
+          "none",
+          "victory",
+          "defeat"
+        ],
+        "min": null,
+        "max": null
+      },
+      {
+        "id": "mission-coins",
+        "name": "mission-coins",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L173-190",
+            "quote": "Coins per victory **[ASSUMED]**: 50 + 25 × level, plus 10 per civilian saved **[ASSUMED]**."
+          }
+        ],
+        "scope": "mission",
+        "type": "int",
+        "initial": 0,
+        "enumValues": null,
+        "min": 0,
+        "max": null
+      },
+      {
+        "id": "died-in-boss",
+        "name": "died-in-boss",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L64-104",
+            "quote": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same"
+          }
+        ],
+        "scope": "mission",
+        "type": "bool",
+        "initial": false,
+        "enumValues": null,
+        "min": null,
+        "max": null
+      },
+      {
+        "id": "damage-tier",
+        "name": "damage-tier",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "The Armory sells laser upgrades (damage, fire rate) in tiers 1–10. Upgrade cost per tier is not yet"
+          }
+        ],
+        "scope": "player",
+        "type": "int",
+        "initial": 0,
+        "enumValues": null,
+        "min": 0,
+        "max": 10
+      },
+      {
+        "id": "upgrade-discount-active",
+        "name": "upgrade-discount-active",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L105-128",
+            "quote": "is offered at a discount."
+          }
+        ],
+        "scope": "player",
+        "type": "bool",
+        "initial": false,
+        "enumValues": null,
+        "min": null,
+        "max": null
+      },
+      {
+        "id": "laser-trial-active",
+        "name": "laser-trial-active",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "| Briefing laser trial       | S06→S07 | Stronger laser for the next mission only | Once per briefing            |"
+          }
+        ],
+        "scope": "player",
+        "type": "bool",
+        "initial": false,
+        "enumValues": null,
+        "min": null,
+        "max": null
+      },
+      {
+        "id": "remove-ads-purchased",
+        "name": "remove-ads-purchased",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "docs/GDD.md#L129-172",
+            "quote": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in)."
+          }
+        ],
+        "scope": "player",
+        "type": "bool",
+        "initial": false,
+        "enumValues": null,
+        "min": null,
+        "max": null
+      }
+    ]
+  }
+}
