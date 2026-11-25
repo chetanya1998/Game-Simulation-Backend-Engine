@@ -8,7 +8,7 @@ GameX Engine reads a game design document (and, optionally, your game repo), tur
 into your repo — `AGENTS.md`, balance files, formulas, backend contracts, golden tests and build tasks — so
 coding agents can build the backend straight from it.
 
-> Status: Phases 0–3 done (model, engine, Spec Pack + CLI). See [`docs/PLAN.md`](docs/PLAN.md).
+> Status: Phases 0–4 done (model, engine, Spec Pack + CLI, ingestion & extraction). See [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Quick start (development)
 
@@ -33,6 +33,15 @@ Write a Spec Pack into a game repo that has `gamex/game-model.json`:
 ```bash
 node packages/cli/dist/gamex.js sync --cwd path/to/game-repo
 ```
+
+Or start from a design document and code: GameX lists the files it would send, asks for
+confirmation, extracts a candidate model with Claude, lets you review it, and writes the Spec Pack:
+
+```bash
+ANTHROPIC_API_KEY=… node packages/cli/dist/gamex.js init --cwd path/to/game-repo
+```
+
+No API key? Use `--provider agent` to answer the extraction requests with your own agent session.
 
 Requires Node ≥ 22.18.
 

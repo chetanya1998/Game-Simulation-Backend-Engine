@@ -397,10 +397,11 @@ async function interactive(
     if (choice === 'quit') break;
     if (choice === 'skip') continue;
     if (choice === 'all') {
-      for (const rest of pending.slice(n)) ledger = decide(ledger, rest.ref, 'approve');
+      for (const rest of pending.slice(n))
+        ledger = decide(ledger, rest.ref, 'approve', { hash: rest.hash });
       break;
     }
-    ledger = decide(ledger, item.ref, choice);
+    ledger = decide(ledger, item.ref, choice, { hash: item.hash });
   }
   return ledger;
 }
@@ -528,6 +529,7 @@ async function reviewStep(io: Io, o: ReviewOptions): Promise<ReviewStep> {
           `  ✖ also left out ${d.ref}${d.in === undefined ? '' : ` (in ${d.in})`}: ${d.reason}`,
       ),
       ...summary.stale.map((r) => `  ⚠ decision for ${r} matches nothing in the candidate`),
+      ...summary.changed.map((r) => `  ⚠ ${r} changed since it was reviewed; review it again`),
       errors.length === 0
         ? `  Wrote ${MODEL_PATH} (model version ${String(version)}) and ${LEDGER_PATH}.`
         : `  ${MODEL_PATH} was not written; decisions saved to ${LEDGER_PATH}.`,

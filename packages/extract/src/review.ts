@@ -1,4 +1,11 @@
-import { validateGameModel, type GameModel, type Issue, type Provenance } from '@gamex/model';
+import {
+  canonicalStringify,
+  sha256Hex,
+  validateGameModel,
+  type GameModel,
+  type Issue,
+  type Provenance,
+} from '@gamex/model';
 import { z } from 'zod';
 import {
   NODE_ARRAYS,
@@ -23,6 +30,11 @@ export const ReviewLedgerSchema = z.strictObject({
       /** Typed ref of the item, e.g. "placement:rewarded-revive". */
       ref: z.string(),
       decision: z.enum(DECISIONS),
+      /**
+       * Content hash of the item the decision was made on (`itemHash`). When present and the item has
+       * changed since (e.g. after re-extraction), the decision no longer applies and the item is pending.
+       */
+      hash: z.string().optional(),
       /** For "edit": fields to replace on the item (null removes a field). The id cannot change. */
       set: z.record(z.string(), z.unknown()).optional(),
       note: z.string().optional(),
@@ -38,6 +50,7 @@ export interface ReviewItem {
   readonly name: string;
   readonly provenance: Provenance;
   readonly decision: Decision | 'pending';
+  readonly hash: string;
 }
 
 export interface PromoteSummary {
@@ -47,6 +60,8 @@ export interface PromoteSummary {
   readonly rejected: number;
   /** Items without a decision, left out of the model. */
   readonly pending: readonly string[];
+  /** Items whose content changed since their decision was recorded (now pending). */
+  readonly changed: readonly string[];
   /** Items removed because something they depend on was rejected or left out. */
   readonly cascaded: readonly Dropped[];
   /** Decisions for refs the candidate does not contain (e.g. after re-extraction). */
@@ -69,15 +84,33 @@ function listOf(model: GameModel, path: readonly string[]): AnyNode[] {
 
 /** Every reviewable item of a candidate, with its current decision. */
 export function reviewItems(candidate: GameModel, ledger: ReviewLedger): ReviewItem[] {
-  const decided = new Map(ledger.decisions.map((d) => [d.ref, d.decision]));
-  const fallback = ledger.default ?? 'pending';
+  const byRef = new Map(ledger.decisions.map((d) => [d.ref, d]));
   return NODE_ARRAYS.flatMap(([path, prefix]) =>
     listOf(candidate, path).map((n) => {
       const ref = `${prefix}:${n.id}`;
-      const decision = decided.get(ref) ?? (fallback === 'pending' ? 'pending' : fallback);
-      return { ref, name: n.name ?? n.id, provenance: n.provenance, decision };
+      const { decision } = decisionFor(byRef.get(ref), n, ledger);
+      return { ref, name: n.name ?? n.id, provenance: n.provenance, decision, hash: itemHash(n) };
     }),
   );
+}
+
+/** Hash of an item's content, ignoring its review status. */
+export function itemHash(node: object): string {
+  const { provenance, ...rest } = node as { provenance?: Record<string, unknown> };
+  const prov = Object.fromEntries(Object.entries(provenance ?? {}).filter(([k]) => k !== 'status'));
+  return sha256Hex(canonicalStringify({ ...rest, provenance: prov })).slice(0, 16);
+}
+
+function decisionFor(
+  entry: ReviewLedger['decisions'][number] | undefined,
+  node: object,
+  ledger: ReviewLedger,
+): { decision: Decision | 'pending'; changed: boolean } {
+  const changed = entry?.hash !== undefined && entry.hash !== itemHash(node);
+  const fallback = ledger.default ?? 'pending';
+  if (entry !== undefined && !changed) return { decision: entry.decision, changed };
+  // A changed item is asked about again, even under a default decision.
+  return { decision: changed ? 'pending' : fallback, changed };
 }
 
 /** Adds or replaces the decision for a ref. */
@@ -85,7 +118,7 @@ export function decide(
   ledger: ReviewLedger,
   ref: string,
   decision: Decision,
-  extra: { set?: Record<string, unknown>; note?: string } = {},
+  extra: { set?: Record<string, unknown>; note?: string; hash?: string } = {},
 ): ReviewLedger {
   return {
     ...ledger,
@@ -110,6 +143,7 @@ export function promote(candidate: GameModel, ledger: ReviewLedger): PromoteResu
   let edited = 0;
   let rejected = 0;
   const pending: string[] = [];
+  const changed: string[] = [];
 
   for (const [path, prefix] of NODE_ARRAYS) {
     const list = listOf(model, path);
@@ -118,7 +152,8 @@ export function promote(candidate: GameModel, ledger: ReviewLedger): PromoteResu
       const ref = `${prefix}:${node.id}`;
       seen.add(ref);
       const entry = byRef.get(ref);
-      const decision = entry?.decision ?? ledger.default ?? 'pending';
+      const { decision, changed: itemChanged } = decisionFor(entry, node, ledger);
+      if (itemChanged) changed.push(ref);
       if (decision === 'pending') {
         pending.push(ref);
         continue;
@@ -171,6 +206,7 @@ export function promote(candidate: GameModel, ledger: ReviewLedger): PromoteResu
       edited,
       rejected,
       pending,
+      changed,
       cascaded: repaired.dropped,
       stale: ledger.decisions.map((d) => d.ref).filter((r) => !seen.has(r)),
     },

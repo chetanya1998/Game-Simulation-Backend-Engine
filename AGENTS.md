@@ -7,20 +7,23 @@ GameX Engine). Design: `docs/ARCHITECTURE.md`. Plan and phase status: `docs/PLAN
 
 ## Commands
 
-| Command                                              | What it does                                                                                                         |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install`                                       | Install (Node ≥ 22.18, pnpm 10 via Corepack).                                                                        |
-| `pnpm build`                                         | Build every package (`tsc -b`), the CLI bundle (`tsup`) and the studio (`vite build`).                               |
-| `pnpm typecheck`                                     | Type-check sources **and tests** of every package. Needs dependencies built (turbo does it).                         |
-| `pnpm test`                                          | Vitest in every package, with coverage (≥ 85 % enforced for `model` and `engine`).                                   |
-| `pnpm lint`                                          | ESLint (type-aware, zero warnings) + Prettier check. `pnpm format` fixes formatting.                                 |
-| `pnpm depcruise`                                     | Architecture rules (no cycles, pure core, declared deps). Run after `pnpm build`.                                    |
-| `pnpm check`                                         | Everything above, in CI order.                                                                                       |
-| `pnpm --filter @gamex/<pkg> test`                    | One package.                                                                                                         |
-| `node packages/cli/dist/gamex.js doctor --json`      | Run the built CLI.                                                                                                   |
-| `pnpm --filter @gamex/model gen:schema`              | Regenerate `packages/model/schema/game-model.schema.json` after changing the Zod schema (a test fails until you do). |
-| `pnpm --filter @gamex/specpack gen:templates`        | Re-embed `packages/specpack/templates/runner/*.ts` after editing the reference runner (a test fails until you do).   |
-| `node packages/cli/dist/gamex.js <cmd> --cwd <repo>` | `validate`, `sim`, `explore`, `sync` against a game repo (`gamex/game-model.json`).                                  |
+| Command                                              | What it does                                                                                                                       |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install`                                       | Install (Node ≥ 22.18, pnpm 10 via Corepack).                                                                                      |
+| `pnpm build`                                         | Build every package (`tsc -b`), the CLI bundle (`tsup`) and the studio (`vite build`).                                             |
+| `pnpm typecheck`                                     | Type-check sources **and tests** of every package. Needs dependencies built (turbo does it).                                       |
+| `pnpm test`                                          | Vitest in every package, with coverage (≥ 85 % enforced for `model` and `engine`).                                                 |
+| `pnpm lint`                                          | ESLint (type-aware, zero warnings) + Prettier check. `pnpm format` fixes formatting.                                               |
+| `pnpm depcruise`                                     | Architecture rules (no cycles, pure core, declared deps). Run after `pnpm build`.                                                  |
+| `pnpm check`                                         | Everything above, in CI order.                                                                                                     |
+| `pnpm --filter @gamex/<pkg> test`                    | One package.                                                                                                                       |
+| `node packages/cli/dist/gamex.js doctor --json`      | Run the built CLI.                                                                                                                 |
+| `pnpm --filter @gamex/model gen:schema`              | Regenerate `packages/model/schema/game-model.schema.json` after changing the Zod schema (a test fails until you do).               |
+| `pnpm --filter @gamex/specpack gen:templates`        | Re-embed `packages/specpack/templates/runner/*.ts` after editing the reference runner (a test fails until you do).                 |
+| `node packages/cli/dist/gamex.js <cmd> --cwd <repo>` | `validate`, `sim`, `explore`, `sync` against a game repo (`gamex/game-model.json`).                                                |
+| `node packages/cli/dist/gamex.js init --cwd <repo>`  | `ingest` (confirm files) → `extract` (LLM; `--provider anthropic\|agent\|recorded`) → `review` → `sync`.                           |
+| `pnpm --filter @gamex/fixtures record`               | Re-hash the authored Swarm recordings after changing prompts or inputs (a test fails until you do); `--live` records real answers. |
+| `GAMEX_LIVE=1 pnpm --filter @gamex/extract test`     | The opt-in live extraction test (needs `ANTHROPIC_API_KEY`; `GAMEX_MODEL` picks the model).                                        |
 
 **Definition of done:** `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm depcruise` pass
 from a clean checkout, and the change has tests that would fail without it.
@@ -69,6 +72,9 @@ tooling/           shared Vitest config
 - Game Model files are canonical JSON (`serializeGameModel`); never hand-format them. The Swarm Rescue model
   (`fixtures/swarm-rescue/swarm-rescue.game-model.json`) must validate with zero errors and zero warnings.
 - New validation checks get a case in `packages/model/test/validate.test.ts` asserting code, JSON path and source line.
+- Extraction (ADR 0008): the LLM only proposes; `assembleCandidate` verifies quotes against the source, merges and
+  repairs deterministically, and nothing reaches `gamex/game-model.json` without a review decision. Tests use
+  `RecordedProvider` (and assert on its captured requests); never call a live API outside `test/live.test.ts`.
 - The Spec Pack format is ADR 0007. Expected results in golden tests come only from the engine; the reference runner
   (`packages/specpack/templates/runner/`) is an independent re-implementation and must agree on every case.
 - Engine semantics (step order, sessions, policy, churn) are in `docs/DECISIONS/0006-engine-semantics.md`; change

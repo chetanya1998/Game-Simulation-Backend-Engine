@@ -38,6 +38,7 @@ export {
   EMPTY_LEDGER,
   ReviewLedgerSchema,
   decide,
+  itemHash,
   promote,
   reviewItems,
 } from './review.js';

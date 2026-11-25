@@ -418,6 +418,16 @@ counterexample.
 
 ## 5. Ingestion & extraction
 
+> **As built (Phase 4):** see [ADR 0008](./DECISIONS/0008-extraction-and-review.md). It differs from this outline
+> in these ways:
+>
+> - The passes are `inventory → flow → monetization → gaps`, using LLM-friendly schemas.
+> - An answer that is still invalid after two retries fails the run instead of becoming a gap.
+> - There is no fuzzy name merging.
+> - Ledger decisions carry an optional content hash.
+> - Edits go through `set` in the ledger instead of `$EDITOR`.
+> - Handoff files live in `gamex/.work/handoff/`.
+
 ### 5.1 `@gamex/ingest`
 
 - `SafeFileSystem(root)` — the only reader for target repos:

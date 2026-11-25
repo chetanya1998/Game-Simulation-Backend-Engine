@@ -105,7 +105,7 @@ Tests / acceptance
 - Mutating one rule in the model makes the corresponding golden cases fail against the old runner (proves tests have teeth).
 - Existing user content in `AGENTS.md` preserved byte-for-byte; editable regions preserved; hand-edits to generated files reported as conflicts.
 
-### Phase 4 — Ingestion & extraction (≈ 3 sessions)
+### Phase 4 — Ingestion & extraction (≈ 3 sessions) — ✅ done (ADR 0008)
 
 Deliverables
 

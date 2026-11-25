@@ -4,6 +4,7 @@ import {
   assembleCandidate,
   decide,
   EMPTY_LEDGER,
+  itemHash,
   promote,
   reviewItems,
   type ReviewLedger,
@@ -192,5 +193,31 @@ describe('review', () => {
       set: { id: 'other' },
     });
     expect(() => promote(model, ledger)).toThrow(/cannot change "id"/);
+  });
+});
+
+describe('review after re-extraction', () => {
+  it('asks again about items that changed since their decision', () => {
+    const first = assembleCandidate(tinyOutputs(), CHUNKS).model;
+    const item = reviewItems(first, EMPTY_LEDGER).find((i) => i.ref === 'const:coins-per-win');
+    if (item === undefined) throw new Error('missing item');
+    let ledger: ReviewLedger = { ...EMPTY_LEDGER, default: 'approve' };
+    ledger = decide(ledger, item.ref, 'reject', { hash: item.hash });
+    expect(promote(first, ledger).model.constants.map((c) => c.id)).not.toContain('coins-per-win');
+
+    const outputs = tinyOutputs();
+    const coins = outputs.inventory[0]?.constants.find((c) => c.id === 'coins-per-win');
+    if (coins !== undefined) coins.value = 75;
+    const second = assembleCandidate(outputs, CHUNKS).model;
+    const { model, summary } = promote(second, ledger);
+    expect(summary.changed).toEqual(['const:coins-per-win']);
+    expect(summary.pending).toContain('const:coins-per-win');
+    expect(model.constants.map((c) => c.id)).not.toContain('coins-per-win');
+    expect(reviewItems(second, ledger).find((i) => i.ref === 'const:coins-per-win')?.decision).toBe(
+      'pending',
+    );
+    expect(itemHash({ id: 'x', provenance: { status: 'detected' } })).toBe(
+      itemHash({ id: 'x', provenance: { status: 'confirmed' } }),
+    );
   });
 });
