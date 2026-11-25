@@ -20,5 +20,11 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --coverage"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ignore": "^7.0.16",
+    "unpdf": "^2.2.2"
+  },
+  "devDependencies": {
+    "pdf-lib": "^1.17.1"
+  }
 }
