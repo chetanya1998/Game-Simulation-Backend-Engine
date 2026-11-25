@@ -16,9 +16,9 @@ import type { Io, JsonResult } from './types.js';
 
 export const MODEL_PATH = 'gamex/game-model.json';
 
-type IssueOut = JsonResult<unknown>['issues'][number];
+export type IssueOut = JsonResult<unknown>['issues'][number];
 
-class CliError extends Error {
+export class CliError extends Error {
   constructor(
     message: string,
     readonly exitCode: number,
@@ -29,13 +29,13 @@ class CliError extends Error {
   }
 }
 
-interface Common {
+export interface Common {
   json?: boolean;
   cwd?: string;
   model?: string;
 }
 
-function toIssue(i: Issue): IssueOut {
+export function toIssue(i: Issue): IssueOut {
   return {
     severity: i.severity,
     code: i.code,
@@ -45,7 +45,7 @@ function toIssue(i: Issue): IssueOut {
 }
 
 /** Loads and validates the Game Model; throws CliError (exit 3 missing file, 1 invalid model). */
-function loadModel(o: Common): { model: GameModel; path: string; issues: readonly Issue[] } {
+export function loadModel(o: Common): { model: GameModel; path: string; issues: readonly Issue[] } {
   const root = resolve(o.cwd ?? process.cwd());
   const path =
     o.model === undefined
@@ -76,7 +76,7 @@ function loadModel(o: Common): { model: GameModel; path: string; issues: readonl
   return { model: result.model, path, issues: result.issues };
 }
 
-function intOption(name: string, value: string | undefined, fallback: number): number {
+export function intOption(name: string, value: string | undefined, fallback: number): number {
   if (value === undefined) return fallback;
   const n = Number(value);
   if (!Number.isInteger(n) || n < (name === 'seed' ? Number.MIN_SAFE_INTEGER : 1))
@@ -106,44 +106,69 @@ function keyValues(list: readonly string[]): Record<string, number> {
 
 const collect = (value: string, previous: string[]): string[] => [...previous, value];
 
+interface Outcome {
+  ok: boolean;
+  data: unknown;
+  issues?: IssueOut[];
+  human: string;
+  /** Exit code when not ok (default 1). */
+  exitCode?: number;
+}
+
+function emit(io: Io, command: string, o: Common, r: Outcome): void {
+  if (o.json === true)
+    io.stdout(
+      `${JSON.stringify({ ok: r.ok, command, data: r.data, issues: r.issues ?? [] } satisfies JsonResult<unknown>)}\n`,
+    );
+  else io.stderr(r.human.endsWith('\n') ? r.human : `${r.human}\n`);
+  if (!r.ok) process.exitCode = r.exitCode ?? 1;
+}
+
+function fail(io: Io, command: string, o: Common, error: unknown): void {
+  let cli: CliError;
+  if (error instanceof CliError) cli = error;
+  else if (error instanceof EngineModelError) cli = new CliError(error.message, 1, 'MODEL_ERROR');
+  else cli = new CliError(error instanceof Error ? error.message : String(error), 3, 'INTERNAL');
+  const issues: IssueOut[] = [
+    ...((cli as CliError & { issues?: readonly Issue[] }).issues ?? []).map(toIssue),
+    {
+      severity: 'error',
+      code: cli.code,
+      message: cli.message,
+      ...(cli.hint === undefined ? {} : { hint: cli.hint }),
+    },
+  ];
+  if (o.json === true)
+    io.stdout(
+      `${JSON.stringify({ ok: false, command, data: null, issues } satisfies JsonResult<null>)}\n`,
+    );
+  else
+    io.stderr(
+      `${issues.map((i) => `✖ ${i.message}${i.hint === undefined || i.message.includes(i.hint) ? '' : ` — ${i.hint}`}`).join('\n')}\n`,
+    );
+  process.exitCode = cli.exitCode;
+}
+
 /** Runs a command body with uniform output, `--json` envelopes and exit codes. */
-function run(
+export function run(io: Io, command: string, o: Common, body: () => Outcome): void {
+  try {
+    emit(io, command, o, body());
+  } catch (error) {
+    fail(io, command, o, error);
+  }
+}
+
+/** Like `run`, for commands that do I/O asynchronously (ingest, extract, review, init). */
+export async function runAsync(
   io: Io,
   command: string,
   o: Common,
-  body: () => { ok: boolean; data: unknown; issues?: IssueOut[]; human: string },
-): void {
+  body: () => Promise<Outcome>,
+): Promise<void> {
   try {
-    const r = body();
-    if (o.json === true)
-      io.stdout(
-        `${JSON.stringify({ ok: r.ok, command, data: r.data, issues: r.issues ?? [] } satisfies JsonResult<unknown>)}\n`,
-      );
-    else io.stderr(r.human.endsWith('\n') ? r.human : `${r.human}\n`);
-    if (!r.ok) process.exitCode = 1;
+    emit(io, command, o, await body());
   } catch (error) {
-    let cli: CliError;
-    if (error instanceof CliError) cli = error;
-    else if (error instanceof EngineModelError) cli = new CliError(error.message, 1, 'MODEL_ERROR');
-    else cli = new CliError(error instanceof Error ? error.message : String(error), 3, 'INTERNAL');
-    const issues: IssueOut[] = [
-      ...((cli as CliError & { issues?: readonly Issue[] }).issues ?? []).map(toIssue),
-      {
-        severity: 'error',
-        code: cli.code,
-        message: cli.message,
-        ...(cli.hint === undefined ? {} : { hint: cli.hint }),
-      },
-    ];
-    if (o.json === true)
-      io.stdout(
-        `${JSON.stringify({ ok: false, command, data: null, issues } satisfies JsonResult<null>)}\n`,
-      );
-    else
-      io.stderr(
-        `${issues.map((i) => `✖ ${i.message}${i.hint === undefined || i.message.includes(i.hint) ? '' : ` — ${i.hint}`}`).join('\n')}\n`,
-      );
-    process.exitCode = cli.exitCode;
+    fail(io, command, o, error);
   }
 }
 
@@ -178,6 +203,27 @@ function humanSim(r: SimulationResult): string {
   if (r.findings.length > 0)
     lines.push('', 'Findings:', ...r.findings.map((f) => `  ${f.severity}: ${f.message}`));
   return lines.join('\n');
+}
+
+export interface SyncOptions {
+  force?: boolean;
+  dryRun?: boolean;
+  sensitivity?: boolean;
+  seed?: string;
+  days?: string;
+  players?: string;
+}
+
+/** Renders the Spec Pack for a model and writes it into the repo (sync, init). */
+export function syncPack(root: string, model: GameModel, o: SyncOptions) {
+  const pack = renderSpecPack(model, {
+    seed: intOption('seed', o.seed, 1),
+    days: intOption('days', o.days, 7),
+    playersPerPersona: intOption('players', o.players, 100),
+    sensitivity: o.sensitivity === true,
+  });
+  const r = writeSpecPack(root, pack, { force: o.force === true, dryRun: o.dryRun === true });
+  return { pack, r };
 }
 
 export function registerCommands(program: Command, io: Io): void {
@@ -347,16 +393,7 @@ export function registerCommands(program: Command, io: Io): void {
         run(io, 'sync', o, () => {
           const { model } = loadModel(o);
           const root = resolve(o.cwd ?? process.cwd());
-          const pack = renderSpecPack(model, {
-            seed: intOption('seed', o.seed, 1),
-            days: intOption('days', o.days, 7),
-            playersPerPersona: intOption('players', o.players, 100),
-            sensitivity: o.sensitivity === true,
-          });
-          const r = writeSpecPack(root, pack, {
-            force: o.force === true,
-            dryRun: o.dryRun === true,
-          });
+          const { pack, r } = syncPack(root, model, o);
           const count = (a: string): number => r.files.filter((f) => f.action === a).length;
           const changed = r.files.filter((f) => f.action !== 'unchanged' && f.action !== 'skip');
           const human = [

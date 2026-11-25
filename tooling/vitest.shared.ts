@@ -30,6 +30,8 @@ export function sharedConfig(options: SharedOptions = {}) {
     test: {
       include: ['test/**/*.test.ts', 'test/**/*.test.tsx'],
       environment: options.environment ?? 'node',
+      // Simulation and search tests take seconds; under turbo every package runs at once.
+      testTimeout: 30_000,
       coverage: {
         provider: 'v8',
         include: ['src/**'],

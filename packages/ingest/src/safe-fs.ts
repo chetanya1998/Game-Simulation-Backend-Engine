@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { lstatSync, readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import ignore, { type Ignore } from 'ignore';
@@ -172,8 +173,16 @@ export class SafeFileSystem {
   }
 
   /** Reads a text file after every rule, including the secret scan. Throws UnsafeReadError otherwise. */
-  readText(relPath: string): string {
-    const text = Buffer.from(this.readBytes(relPath)).toString('utf8');
+  readText(relPath: string, expectedSha256?: string): string {
+    const bytes = this.readBytes(relPath);
+    if (expectedSha256 !== undefined) {
+      const actual = createHash('sha256').update(bytes).digest('hex');
+      if (actual !== expectedSha256)
+        throw new UnsafeReadError(
+          `Refusing to read ${relPath}: it changed after the ingest plan was confirmed. Run \`gamex ingest\` again.`,
+        );
+    }
+    const text = Buffer.from(bytes).toString('utf8');
     const secret = scanForSecrets(text);
     if (secret !== undefined)
       throw new UnsafeReadError(

@@ -191,3 +191,14 @@ describe('readChunks', () => {
     expect(chunks[1] && locationOf(chunks[1], 1)).toBe('p.2');
   });
 });
+
+describe('plan confirmation', () => {
+  it('refuses to chunk a file that changed after the plan was made', async () => {
+    const dir = plantedRepo();
+    const plan = discoverInputs(dir);
+    writeFileSync(join(dir, 'config', 'economy.json'), '{ "changed": true }\n');
+    await expect(readChunks(plan)).rejects.toThrow(
+      /config\/economy\.json: it changed after the ingest plan was confirmed/,
+    );
+  });
+});

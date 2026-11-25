@@ -87,9 +87,18 @@ importers:
 
   packages/cli:
     dependencies:
+      '@anthropic-ai/sdk':
+        specifier: ^1.14.0
+        version: 1.14.0(zod@4.6.7)
       '@gamex/engine':
         specifier: workspace:*
         version: link:../engine
+      '@gamex/extract':
+        specifier: workspace:*
+        version: link:../extract
+      '@gamex/ingest':
+        specifier: workspace:*
+        version: link:../ingest
       '@gamex/model':
         specifier: workspace:*
         version: link:../model
@@ -99,6 +108,15 @@ importers:
       commander:
         specifier: ^15.1.0
         version: 15.1.0
+      ignore:
+        specifier: ^7.0.16
+        version: 7.0.16
+      unpdf:
+        specifier: ^2.2.2
+        version: 2.2.2
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
       tsup:
         specifier: ^9.0.0
@@ -2208,7 +2226,7 @@ snapshots:
       '@typescript-eslint/utils': 8.72.2(eslint@10.14.0)(typescript@6.0.3)
       '@typescript-eslint/visitor-keys': 8.72.2
       eslint: 10.14.0
-      ignore: 7.0.14
+      ignore: 7.0.16
       natural-compare: 1.4.0
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3

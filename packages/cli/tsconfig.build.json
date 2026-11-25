@@ -16,6 +16,12 @@
     },
     {
       "path": "../specpack/tsconfig.build.json"
+    },
+    {
+      "path": "../ingest/tsconfig.build.json"
+    },
+    {
+      "path": "../extract/tsconfig.build.json"
     }
   ]
 }

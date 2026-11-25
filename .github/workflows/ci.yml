@@ -48,3 +48,15 @@ jobs:
           git -C "$repo" diff --exit-code
           test -z "$(git -C "$repo" status --porcelain)"
           (cd "$repo" && node gamex/tests/runner/run-golden.ts)
+
+      - name: Extraction end to end (sample repo, recorded answers)
+        run: |
+          repo="$(mktemp -d)"
+          cp -r fixtures/swarm-rescue/sample-repo/. "$repo"
+          git -C "$repo" init -q && git -C "$repo" add -A && git -C "$repo" -c user.email=ci@example.com -c user.name=ci commit -qm base
+          node packages/cli/dist/gamex.js init --cwd "$repo" --yes \
+            --decisions fixtures/swarm-rescue/accept-all.json \
+            --provider recorded --recordings fixtures/swarm-rescue/recordings
+          node packages/cli/dist/gamex.js validate --cwd "$repo"
+          test -z "$(git -C "$repo" status --porcelain --ignored -- gamex/.work | grep -v '^!!')"
+          (cd "$repo" && node gamex/tests/runner/run-golden.ts)

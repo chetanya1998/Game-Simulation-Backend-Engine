@@ -1,4 +1,5 @@
-import { SafeFileSystem } from './safe-fs.js';
+import { createHash } from 'node:crypto';
+import { SafeFileSystem, UnsafeReadError } from './safe-fs.js';
 import type { IngestPlan, InputKind } from './discover.js';
 
 /** A located piece of an input file. `id` is stable and is what the LLM cites as evidence. */
@@ -106,10 +107,15 @@ export async function readChunks(
   const out: Chunk[] = [];
   for (const f of plan.files) {
     if (f.path.toLowerCase().endsWith('.pdf')) {
-      out.push(...(await pdfChunks(f.path, f.kind, fs.readBytes(f.path))));
+      const bytes = fs.readBytes(f.path);
+      if (createHash('sha256').update(bytes).digest('hex') !== f.sha256)
+        throw new UnsafeReadError(
+          `Refusing to read ${f.path}: it changed after the ingest plan was confirmed. Run \`gamex ingest\` again.`,
+        );
+      out.push(...(await pdfChunks(f.path, f.kind, bytes)));
       continue;
     }
-    const text = fs.readText(f.path).replace(/\r\n/g, '\n');
+    const text = fs.readText(f.path, f.sha256).replace(/\r\n/g, '\n');
     if (/\.(md|markdown)$/i.test(f.path)) out.push(...markdownChunks(f.path, f.kind, text));
     else {
       const lines = text.split('\n');

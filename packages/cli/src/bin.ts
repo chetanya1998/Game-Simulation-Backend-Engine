@@ -1,9 +1,19 @@
+import { createInterface, type Interface } from 'node:readline/promises';
 import { CommanderError } from 'commander';
 import { createProgram } from './program.js';
 
+let rl: Interface | undefined;
 const program = createProgram({
   stdout: (t) => process.stdout.write(t),
   stderr: (t) => process.stderr.write(t),
+  ...(process.stdin.isTTY
+    ? {
+        prompt: (question: string) => {
+          rl ??= createInterface({ input: process.stdin, output: process.stderr });
+          return rl.question(question);
+        },
+      }
+    : {}),
 });
 
 try {
@@ -15,4 +25,6 @@ try {
   } else {
     throw error;
   }
+} finally {
+  rl?.close();
 }
