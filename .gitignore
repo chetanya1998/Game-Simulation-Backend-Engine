@@ -9,3 +9,4 @@ coverage/
 .env.*
 # Planted canary files used by repo-safety tests (not real secrets).
 !fixtures/**/.env
+apps/studio/e2e-output/
