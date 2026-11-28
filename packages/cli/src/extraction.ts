@@ -42,7 +42,7 @@ export const REPORT_PATH = `${WORK_DIR}/extraction-report.json`;
 export const LEDGER_PATH = 'gamex/review.json';
 export const CONFIG_PATH = 'gamex/config.json';
 
-interface Base {
+export interface Base {
   json?: boolean;
   cwd?: string;
 }
@@ -53,7 +53,7 @@ interface IngestOptions extends Base {
   maxBytes?: string;
 }
 
-interface ExtractOptions extends Base {
+export interface ExtractOptions extends Base {
   provider?: string;
   recordings?: string;
   record?: string;
@@ -69,7 +69,7 @@ interface ReviewOptions extends Base {
 }
 
 /** The confirmed ingest plan, as saved in gamex/.work/ingest.json. */
-interface SavedPlan {
+export interface SavedPlan {
   version: 1;
   confirmed: true;
   include: string[];
@@ -79,9 +79,9 @@ interface SavedPlan {
   totalBytes: number;
 }
 
-const rootOf = (o: Base): string => resolve(o.cwd ?? process.cwd());
+export const rootOf = (o: Base): string => resolve(o.cwd ?? process.cwd());
 
-function positive(name: string, value: string | undefined): number | undefined {
+export function positive(name: string, value: string | undefined): number | undefined {
   if (value === undefined) return undefined;
   const n = Number(value);
   if (!Number.isInteger(n) || n < 1)
@@ -118,13 +118,13 @@ interface IngestStep {
   human: string[];
 }
 
-async function ingestStep(io: Io, o: IngestOptions): Promise<IngestStep> {
-  const root = rootOf(o);
-  const maxBytes = positive('max-bytes', o.maxBytes);
-  const plan = discoverInputs(root, {
-    include: o.include,
-    ...(maxBytes === undefined ? {} : { maxBytes }),
-  });
+/** Discovers the inputs and estimates the extraction cost (nothing is saved or sent). */
+export async function discoverPlan(
+  root: string,
+  include: readonly string[] = [],
+  maxBytes?: number,
+): Promise<{ plan: IngestPlan; estimate: ReturnType<typeof estimateExtraction> }> {
+  const plan = discoverInputs(root, { include, ...(maxBytes === undefined ? {} : { maxBytes }) });
   if (plan.files.length === 0) {
     throw new CliError(
       `No design documents, config or tuning code found in ${root}.`,
@@ -134,7 +134,33 @@ async function ingestStep(io: Io, o: IngestOptions): Promise<IngestStep> {
     );
   }
   const chunks = await readChunks(plan, maxBytes === undefined ? {} : { maxBytes });
-  const estimate = estimateExtraction(chunks);
+  return { plan, estimate: estimateExtraction(chunks) };
+}
+
+/** Saves a plan the user confirmed (gamex/.work/ingest.json). */
+export function savePlan(
+  root: string,
+  plan: IngestPlan,
+  include: readonly string[] = [],
+  maxBytes?: number,
+): SavedPlan {
+  const saved: SavedPlan = {
+    version: 1,
+    confirmed: true,
+    include: [...include],
+    ...(maxBytes === undefined ? {} : { maxBytes }),
+    files: [...plan.files],
+    excluded: [...plan.excluded],
+    totalBytes: plan.totalBytes,
+  };
+  writeWork(root, PLAN_PATH, `${JSON.stringify(saved, null, 2)}\n`);
+  return saved;
+}
+
+async function ingestStep(io: Io, o: IngestOptions): Promise<IngestStep> {
+  const root = rootOf(o);
+  const maxBytes = positive('max-bytes', o.maxBytes);
+  const { plan, estimate } = await discoverPlan(root, o.include, maxBytes);
   const human = [
     `Files that will be sent to the LLM (${String(plan.files.length)}, ${kb(plan.totalBytes)}, ≈${String(estimate.inputTokens)} input tokens over ${String(estimate.requests)} requests before caching):`,
     ...plan.files.map(
@@ -159,16 +185,7 @@ async function ingestStep(io: Io, o: IngestOptions): Promise<IngestStep> {
       throw new CliError('Not confirmed; nothing was sent.', 1, 'NOT_CONFIRMED');
     }
   }
-  const saved: SavedPlan = {
-    version: 1,
-    confirmed: true,
-    include: o.include,
-    ...(maxBytes === undefined ? {} : { maxBytes }),
-    files: [...plan.files],
-    excluded: [...plan.excluded],
-    totalBytes: plan.totalBytes,
-  };
-  writeWork(root, PLAN_PATH, `${JSON.stringify(saved, null, 2)}\n`);
+  const saved = savePlan(root, plan, o.include, maxBytes);
   return { plan: saved, human: [...human, `✔ Plan confirmed and saved to ${PLAN_PATH}`] };
 }
 
@@ -286,7 +303,7 @@ function reportLines(report: AssemblyReport, model: GameModel): string[] {
   ];
 }
 
-async function extractStep(io: Io, o: ExtractOptions): Promise<ExtractStep> {
+export async function extractStep(io: Io, o: ExtractOptions): Promise<ExtractStep> {
   const root = rootOf(o);
   const plan = confirmedPlan(root);
   const { provider, model } = makeProvider(root, o);
@@ -349,7 +366,7 @@ async function extractStep(io: Io, o: ExtractOptions): Promise<ExtractStep> {
 
 // ─── review ──────────────────────────────────────────────────────────────────────────────────────
 
-function loadLedger(root: string): ReviewLedger {
+export function loadLedger(root: string): ReviewLedger {
   const path = join(root, LEDGER_PATH);
   if (!existsSync(path)) return EMPTY_LEDGER;
   const parsed = ReviewLedgerSchema.safeParse(readJson(path, 'the review ledger'));
@@ -406,7 +423,7 @@ async function interactive(
   return ledger;
 }
 
-interface ReviewStep {
+export interface ReviewStep {
   ok: boolean;
   data: unknown;
   issues: IssueOut[];
@@ -417,8 +434,8 @@ function summaryLine(s: PromoteSummary): string {
   return `${String(s.approved)} approved, ${String(s.assumed)} assumed, ${String(s.edited)} edited, ${String(s.rejected)} rejected, ${String(s.pending.length)} without a decision (left out)`;
 }
 
-async function reviewStep(io: Io, o: ReviewOptions): Promise<ReviewStep> {
-  const root = rootOf(o);
+/** Reads gamex/.work/candidate.json (CliError when missing or invalid). */
+export function loadCandidate(root: string): GameModel {
   const candidatePath = join(root, CANDIDATE_PATH);
   if (!existsSync(candidatePath)) {
     throw new CliError(
@@ -439,7 +456,12 @@ async function reviewStep(io: Io, o: ReviewOptions): Promise<ReviewStep> {
     (err as CliError & { issues: unknown }).issues = parsed.issues;
     throw err;
   }
-  const candidate = parsed.model;
+  return parsed.model;
+}
+
+async function reviewStep(io: Io, o: ReviewOptions): Promise<ReviewStep> {
+  const root = rootOf(o);
+  const candidate = loadCandidate(root);
   let ledger = loadLedger(root);
   if (o.decisions !== undefined) {
     const file = ReviewLedgerSchema.safeParse(readJson(resolve(o.decisions), 'the decisions file'));
@@ -475,6 +497,11 @@ async function reviewStep(io: Io, o: ReviewOptions): Promise<ReviewStep> {
   ) {
     ledger = await interactive({ ...io, prompt: io.prompt }, candidate, ledger);
   }
+  return applyLedger(root, candidate, ledger);
+}
+
+/** Saves the ledger, promotes the candidate and writes gamex/game-model.json when the result is valid. */
+export function applyLedger(root: string, candidate: GameModel, ledger: ReviewLedger): ReviewStep {
   mkdirSync(join(root, 'gamex'), { recursive: true });
   writeFileSync(join(root, LEDGER_PATH), `${JSON.stringify(ledger, null, 2)}\n`);
 
@@ -499,20 +526,9 @@ async function reviewStep(io: Io, o: ReviewOptions): Promise<ReviewStep> {
     };
   }
   const { summary, issues } = promoted;
-  const model = promoted.model;
-  const modelPath = join(root, MODEL_PATH);
-  let version = 1;
-  if (existsSync(modelPath)) {
-    const previous = validateGameModel(readFileSync(modelPath, 'utf8')).model;
-    if (previous !== undefined) {
-      version =
-        previous.meta.modelVersion +
-        (computeContentHash(previous) === computeContentHash(model) ? 0 : 1);
-    }
-  }
-  model.meta.modelVersion = version;
   const errors = issues.filter((i) => i.severity === 'error');
-  if (errors.length === 0) writeFileSync(modelPath, serializeGameModel(model));
+  const version =
+    errors.length === 0 ? writeModelFile(root, promoted.model) : promoted.model.meta.modelVersion;
   return {
     ok: errors.length === 0,
     data: {
@@ -535,6 +551,27 @@ async function reviewStep(io: Io, o: ReviewOptions): Promise<ReviewStep> {
         : `  ${MODEL_PATH} was not written; decisions saved to ${LEDGER_PATH}.`,
     ],
   };
+}
+
+/**
+ * Writes gamex/game-model.json (canonical JSON). modelVersion goes up by one when the content changed;
+ * returns the version written.
+ */
+export function writeModelFile(root: string, model: GameModel): number {
+  const modelPath = join(root, MODEL_PATH);
+  let version = 1;
+  if (existsSync(modelPath)) {
+    const previous = validateGameModel(readFileSync(modelPath, 'utf8')).model;
+    if (previous !== undefined) {
+      version =
+        previous.meta.modelVersion +
+        (computeContentHash(previous) === computeContentHash(model) ? 0 : 1);
+    }
+  }
+  const out = { ...model, meta: { ...model.meta, modelVersion: version } };
+  mkdirSync(join(root, 'gamex'), { recursive: true });
+  writeFileSync(modelPath, serializeGameModel(out));
+  return version;
 }
 
 // ─── commands ────────────────────────────────────────────────────────────────────────────────────

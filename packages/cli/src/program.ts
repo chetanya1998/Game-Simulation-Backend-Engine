@@ -3,6 +3,7 @@ import { ENGINE_VERSION } from '@gamex/engine';
 import { SCHEMA_VERSION } from '@gamex/model';
 import { registerCommands } from './commands.js';
 import { registerExtractionCommands } from './extraction.js';
+import { registerStudioCommand } from './studio-command.js';
 import type { Io, JsonResult } from './types.js';
 
 export type { Io, JsonResult } from './types.js';
@@ -75,6 +76,7 @@ export function createProgram(io: Io, nodeVersion: string = process.versions.nod
 
   registerCommands(program, io);
   registerExtractionCommands(program, io);
+  registerStudioCommand(program, io);
 
   return program;
 }
