@@ -1,0 +1,294 @@
+{
+  "id": "gaps#1",
+  "requestHash": "d5b0f3a8043fe9582c41afef5bc58e62d2f941bb2daceeedd08ed64001dbc4aa",
+  "origin": "authored",
+  "response": {
+    "gaps": [
+      {
+        "id": "gap-web-build",
+        "name": "gap-web-build",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L191-198",
+            "quote": "- Will there be a **web build** (e.g. for playable ads or a browser version)?"
+          }
+        ],
+        "kind": "missing",
+        "question": "Will there be a web build (e.g. for playable ads or a browser version)?",
+        "related": [],
+        "blocking": false
+      },
+      {
+        "id": "gap-age-rating-coppa",
+        "name": "gap-age-rating-coppa",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L191-198",
+            "quote": "- What is the **age rating**? Does **COPPA** apply (is the game directed at children under 13)?"
+          }
+        ],
+        "kind": "missing",
+        "question": "What is the age rating, and does COPPA apply? This decides which ad formats and data collection are allowed.",
+        "related": [
+          "placement:interstitial-after-victory",
+          "placement:rewarded-revive",
+          "placement:banner-home"
+        ],
+        "blocking": true
+      },
+      {
+        "id": "gap-mediation-stack",
+        "name": "gap-mediation-stack",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L191-198",
+            "quote": "- Which **ad mediation stack** will we use (e.g. which mediation platform and networks)?"
+          }
+        ],
+        "kind": "missing",
+        "question": "Which ad mediation platform and networks will be used?",
+        "related": [],
+        "blocking": false
+      },
+      {
+        "id": "gap-iap-beyond-remove-ads",
+        "name": "gap-iap-beyond-remove-ads",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L191-198",
+            "quote": "- Will there be **IAP beyond Remove Ads** (coin packs, hero skins, a season pass)?"
+          }
+        ],
+        "kind": "missing",
+        "question": "Will there be IAP beyond Remove Ads (coin packs, hero skins, a season pass)?",
+        "related": [
+          "placement:iap-remove-ads"
+        ],
+        "blocking": false
+      },
+      {
+        "id": "gap-currency-and-upgrade-costs",
+        "name": "gap-currency-and-upgrade-costs",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L191-198",
+            "quote": "- What are the final **currency amounts and upgrade costs**?"
+          }
+        ],
+        "kind": "assumption",
+        "question": "Confirm coin rewards, chest contents, upgrade costs and the Remove Ads price.",
+        "related": [
+          "const:coins-victory-base",
+          "const:coins-victory-per-level",
+          "const:coins-per-civilian",
+          "const:daily-chest-coins",
+          "const:upgrade-cost",
+          "const:remove-ads-price-usd",
+          "res:coins"
+        ],
+        "blocking": false
+      },
+      {
+        "id": "gap-reroll-discount",
+        "name": "gap-reroll-discount",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L105-128",
+            "quote": "is offered at a discount."
+          }
+        ],
+        "kind": "ambiguous",
+        "question": "How large is the discount after an upgrade reroll, and how many rerolls per day?",
+        "related": [
+          "const:reroll-discount",
+          "const:upgrade-rerolls-per-day"
+        ],
+        "blocking": false
+      },
+      {
+        "id": "gap-screen-list",
+        "name": "gap-screen-list",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "## 5. Screen flow (22 states)"
+          }
+        ],
+        "kind": "assumption",
+        "question": "Confirm the 22 screens and the transitions between them.",
+        "related": [
+          "state:s00-loading",
+          "state:s01-consent",
+          "state:s02-home",
+          "state:s03-hq-rooftop",
+          "state:s04-safe-zone",
+          "state:s05-campaign-map",
+          "state:s06-briefing",
+          "state:s07-laser-trial",
+          "state:s08-gameplay",
+          "state:s09-boss-fight",
+          "state:s10-kill-cam",
+          "state:s11-victory",
+          "state:s12-claim-triple",
+          "state:s13-interstitial",
+          "state:s14-defeat",
+          "state:s15-revive-offer",
+          "state:s16-armory",
+          "state:s17-upgrade-reroll",
+          "state:s18-daily-chest",
+          "state:s19-settings",
+          "state:s20-store",
+          "state:s21-pause",
+          "transition:t-loading-to-consent",
+          "transition:t-loading-to-home",
+          "transition:t-consent-accept",
+          "transition:t-home-select-relickeeper",
+          "transition:t-home-select-vanguard",
+          "transition:t-home-to-hq",
+          "transition:t-hq-to-home",
+          "transition:t-home-to-safe-zone",
+          "transition:t-safe-zone-to-home",
+          "transition:t-home-to-map",
+          "transition:t-map-to-home",
+          "transition:t-home-to-settings",
+          "transition:t-settings-to-home",
+          "transition:t-home-to-store",
+          "transition:t-store-to-home",
+          "transition:t-hq-to-armory",
+          "transition:t-armory-to-hq",
+          "transition:t-safe-zone-to-chest",
+          "transition:t-chest-to-safe-zone",
+          "transition:t-store-buy-remove-ads",
+          "transition:t-armory-buy-upgrade",
+          "transition:t-armory-to-reroll",
+          "transition:t-reroll-to-armory",
+          "transition:t-chest-open",
+          "transition:t-chest-free-upgrade",
+          "transition:t-map-to-briefing",
+          "transition:t-briefing-to-map",
+          "transition:t-briefing-to-laser-trial",
+          "transition:t-laser-trial-to-briefing",
+          "transition:t-briefing-start-mission",
+          "transition:t-gameplay-win",
+          "transition:t-gameplay-to-boss",
+          "transition:t-gameplay-lose",
+          "transition:t-boss-win",
+          "transition:t-boss-lose",
+          "transition:t-gameplay-pause",
+          "transition:t-boss-pause",
+          "transition:t-pause-resume",
+          "transition:t-pause-quit",
+          "transition:t-kill-cam-to-victory",
+          "transition:t-victory-claim-triple",
+          "transition:t-claim-triple-to-victory",
+          "transition:t-victory-continue-interstitial",
+          "transition:t-victory-continue-map",
+          "transition:t-interstitial-to-map",
+          "transition:t-defeat-revive",
+          "transition:t-revive-to-gameplay",
+          "transition:t-revive-to-boss",
+          "transition:t-defeat-retry",
+          "transition:t-defeat-exit"
+        ],
+        "blocking": false
+      },
+      {
+        "id": "gap-mission-win-model",
+        "name": "gap-mission-win-model",
+        "description": null,
+        "assumed": false,
+        "evidence": [],
+        "kind": "assumption",
+        "question": "Confirm the mission win-probability model, mission lengths and civilians per mission (or add a combat model).",
+        "related": [
+          "const:civilians-per-mission",
+          "const:mission-seconds",
+          "const:boss-fight-seconds",
+          "const:base-win-chance",
+          "const:skill-win-weight",
+          "const:upgrade-win-weight",
+          "const:difficulty-step",
+          "const:laser-trial-win-bonus",
+          "const:boss-base-win-chance"
+        ],
+        "blocking": false
+      },
+      {
+        "id": "gap-combat-stats",
+        "name": "gap-combat-stats",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L27-38",
+            "quote": "Base hero stats **[ASSUMED]**: 100 HP, laser damage 10 per shot, fire rate 4 shots per second."
+          }
+        ],
+        "kind": "assumption",
+        "question": "Confirm hero, drone and boss stats, waves per level, combo and slow-mo numbers, and the boss-fight combat model (accuracy, dodge, boss damage).",
+        "related": [
+          "const:damage-per-tier",
+          "const:hero-max-hp",
+          "const:laser-damage",
+          "const:fire-rate",
+          "const:drone-hp",
+          "const:drone-contact-damage",
+          "const:boss-phases",
+          "const:boss-total-hp",
+          "const:combo-step",
+          "const:combo-max",
+          "const:near-miss-slowmo-seconds",
+          "const:waves-per-level",
+          "const:boss-damage",
+          "const:base-accuracy",
+          "const:skill-accuracy",
+          "const:base-dodge",
+          "const:skill-dodge",
+          "const:laser-trial-damage-bonus",
+          "const:boss-stage-seconds"
+        ],
+        "blocking": false
+      },
+      {
+        "id": "gap-ad-durations",
+        "name": "gap-ad-durations",
+        "description": null,
+        "assumed": false,
+        "evidence": [],
+        "kind": "assumption",
+        "question": "Confirm ad and kill-cam lengths used for simulated time.",
+        "related": [
+          "const:rewarded-ad-seconds",
+          "const:interstitial-ad-seconds",
+          "const:kill-cam-seconds"
+        ],
+        "blocking": false
+      },
+      {
+        "id": "gap-progression-targets",
+        "name": "gap-progression-targets",
+        "description": null,
+        "assumed": false,
+        "evidence": [],
+        "kind": "assumption",
+        "question": "What share of non-paying players should reach Level 5 by day 7?",
+        "related": [],
+        "blocking": false
+      }
+    ]
+  }
+}

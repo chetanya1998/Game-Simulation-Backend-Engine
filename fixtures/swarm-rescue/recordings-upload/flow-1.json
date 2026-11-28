@@ -1,0 +1,1825 @@
+{
+  "id": "flow#1",
+  "requestHash": "fd0f14d927cc7b4f97ffe14c5d23c417c6433836404bedf3183010ec6ea0fad3",
+  "origin": "authored",
+  "response": {
+    "constants": [],
+    "variables": [],
+    "initialState": "state:s00-loading",
+    "states": [
+      {
+        "id": "s00-loading",
+        "name": "Loading",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S00 | Loading               | loading  | App start. No ads.                                       |"
+          }
+        ],
+        "kind": "loading",
+        "code": "S00",
+        "durationSeconds": null
+      },
+      {
+        "id": "s01-consent",
+        "name": "Consent / Privacy",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S01 | Consent / Privacy     | menu     | First launch only.                                       |"
+          }
+        ],
+        "kind": "menu",
+        "code": "S01",
+        "durationSeconds": null
+      },
+      {
+        "id": "s02-home",
+        "name": "Home (hero select)",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S02 | Home (hero select)    | menu     | Banner from Level 3+.                                    |"
+          }
+        ],
+        "kind": "menu",
+        "code": "S02",
+        "durationSeconds": null
+      },
+      {
+        "id": "s03-hq-rooftop",
+        "name": "HQ Rooftop",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S03 | HQ Rooftop            | menu     |                                                          |"
+          }
+        ],
+        "kind": "menu",
+        "code": "S03",
+        "durationSeconds": null
+      },
+      {
+        "id": "s04-safe-zone",
+        "name": "Safe Zone",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S04 | Safe Zone             | menu     |                                                          |"
+          }
+        ],
+        "kind": "menu",
+        "code": "S04",
+        "durationSeconds": null
+      },
+      {
+        "id": "s05-campaign-map",
+        "name": "Campaign Map",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S05 | Campaign Map          | menu     | Banner.                                                  |"
+          }
+        ],
+        "kind": "menu",
+        "code": "S05",
+        "durationSeconds": null
+      },
+      {
+        "id": "s06-briefing",
+        "name": "Mission Briefing",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S06 | Mission Briefing      | menu     | Offers the laser trial (rewarded).                       |"
+          }
+        ],
+        "kind": "menu",
+        "code": "S06",
+        "durationSeconds": null
+      },
+      {
+        "id": "s07-laser-trial",
+        "name": "Laser Trial",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S07 | Laser Trial           | ad       | Rewarded video; grants a stronger laser for one mission. |"
+          }
+        ],
+        "kind": "ad",
+        "code": "S07",
+        "durationSeconds": "rewardedAdSeconds"
+      },
+      {
+        "id": "s08-gameplay",
+        "name": "Gameplay",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S08 | Gameplay              | gameplay | Live play. No UI ads.                                    |"
+          }
+        ],
+        "kind": "gameplay",
+        "code": "S08",
+        "durationSeconds": null
+      },
+      {
+        "id": "s09-boss-fight",
+        "name": "Boss Fight",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S09 | Boss Fight            | gameplay | L5 only. Live play. No UI ads.                           |"
+          }
+        ],
+        "kind": "gameplay",
+        "code": "S09",
+        "durationSeconds": null
+      },
+      {
+        "id": "s10-kill-cam",
+        "name": "Kill-cam",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S10 | Kill-cam              | gameplay | Final-blow kill-cam on the last drone / boss.            |"
+          }
+        ],
+        "kind": "gameplay",
+        "code": "S10",
+        "durationSeconds": "killCamSeconds"
+      },
+      {
+        "id": "s11-victory",
+        "name": "Victory (star reveal)",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S11 | Victory (star reveal) | result   | MREC. Offers Claim 3x.                                   |"
+          }
+        ],
+        "kind": "result",
+        "code": "S11",
+        "durationSeconds": null
+      },
+      {
+        "id": "s12-claim-triple",
+        "name": "Claim 3x",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S12 | Claim 3x              | ad       | Rewarded video; triples mission coins.                   |"
+          }
+        ],
+        "kind": "ad",
+        "code": "S12",
+        "durationSeconds": "rewardedAdSeconds"
+      },
+      {
+        "id": "s13-interstitial",
+        "name": "Interstitial",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S13 | Interstitial          | ad       | Only after Victory → Continue (see §7.2).                |"
+          }
+        ],
+        "kind": "ad",
+        "code": "S13",
+        "durationSeconds": "interstitialAdSeconds"
+      },
+      {
+        "id": "s14-defeat",
+        "name": "Defeat",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S14 | Defeat                | result   | MREC. Offers revive.                                     |"
+          }
+        ],
+        "kind": "result",
+        "code": "S14",
+        "durationSeconds": null
+      },
+      {
+        "id": "s15-revive-offer",
+        "name": "Revive Offer",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S15 | Revive Offer          | ad       | Rewarded video; revive once per mission.                 |"
+          }
+        ],
+        "kind": "ad",
+        "code": "S15",
+        "durationSeconds": "rewardedAdSeconds"
+      },
+      {
+        "id": "s16-armory",
+        "name": "Armory / Upgrades",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S16 | Armory / Upgrades     | meta     | Banner. Spend coins on upgrades.                         |"
+          }
+        ],
+        "kind": "meta",
+        "code": "S16",
+        "durationSeconds": null
+      },
+      {
+        "id": "s17-upgrade-reroll",
+        "name": "Upgrade Reroll",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S17 | Upgrade Reroll        | ad       | Rewarded video; reroll the offered upgrade.              |"
+          }
+        ],
+        "kind": "ad",
+        "code": "S17",
+        "durationSeconds": "rewardedAdSeconds"
+      },
+      {
+        "id": "s18-daily-chest",
+        "name": "Daily Chest",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S18 | Daily Chest           | meta     | Free once a day; rewarded video for a free upgrade.      |"
+          }
+        ],
+        "kind": "meta",
+        "code": "S18",
+        "durationSeconds": null
+      },
+      {
+        "id": "s19-settings",
+        "name": "Settings",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S19 | Settings              | menu     | Banner.                                                  |"
+          }
+        ],
+        "kind": "menu",
+        "code": "S19",
+        "durationSeconds": null
+      },
+      {
+        "id": "s20-store",
+        "name": "Store / Remove Ads",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S20 | Store / Remove Ads    | meta     | IAP: Remove Ads.                                         |"
+          }
+        ],
+        "kind": "meta",
+        "code": "S20",
+        "durationSeconds": null
+      },
+      {
+        "id": "s21-pause",
+        "name": "Pause",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "| S21 | Pause                 | overlay  | MREC / outstream video. Returns to the paused screen.    |"
+          }
+        ],
+        "kind": "overlay",
+        "code": "S21",
+        "durationSeconds": null
+      }
+    ],
+    "actions": [
+      {
+        "id": "play-mission",
+        "name": "Play the waves of a mission",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L105-128",
+            "quote": "number of drones; clearing all waves (and the boss on L5) wins the mission. Civilians trapped in the"
+          }
+        ],
+        "actor": "system",
+        "preconditions": [],
+        "costs": [],
+        "effects": [],
+        "limits": [],
+        "cooldownSeconds": null,
+        "outcomes": [
+          {
+            "id": "win",
+            "weight": "missionLevel == bossLevel ? 0 : clamp(baseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier - difficultyStep * (missionLevel - 1) + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95)",
+            "effects": [
+              {
+                "op": "set",
+                "target": "var:last-mission-result",
+                "value": "\"victory\""
+              },
+              {
+                "op": "set",
+                "target": "var:mission-coins",
+                "value": "coinsVictoryBase + coinsVictoryPerLevel * missionLevel + coinsPerCivilian * civiliansPerMission"
+              },
+              {
+                "op": "add",
+                "target": "res:coins",
+                "value": "coinsVictoryBase + coinsVictoryPerLevel * missionLevel + coinsPerCivilian * civiliansPerMission"
+              },
+              {
+                "op": "set",
+                "target": "var:highest-level-unlocked",
+                "value": "min(max(highestLevelUnlocked, missionLevel + 1), levelCount)"
+              },
+              {
+                "op": "set",
+                "target": "var:laser-trial-active",
+                "value": "false"
+              }
+            ]
+          },
+          {
+            "id": "waves-cleared",
+            "weight": "missionLevel == bossLevel ? clamp(baseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier - difficultyStep * (missionLevel - 1) + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95) : 0",
+            "effects": []
+          },
+          {
+            "id": "lose",
+            "weight": "1 - clamp(baseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier - difficultyStep * (missionLevel - 1) + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95)",
+            "effects": [
+              {
+                "op": "set",
+                "target": "var:last-mission-result",
+                "value": "\"defeat\""
+              },
+              {
+                "op": "set",
+                "target": "var:died-in-boss",
+                "value": "false"
+              },
+              {
+                "op": "set",
+                "target": "var:laser-trial-active",
+                "value": "false"
+              }
+            ]
+          }
+        ],
+        "durationSeconds": "missionSeconds",
+        "errorCode": "MISSION_UNAVAILABLE"
+      },
+      {
+        "id": "fight-boss",
+        "name": "Fight the boss",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L39-43",
+            "quote": "- **Swarm command unit (boss)** — appears only in Level 5. Three phases **[ASSUMED]**, 1500 HP total **[ASSUMED]**."
+          }
+        ],
+        "actor": "system",
+        "preconditions": [],
+        "costs": [],
+        "effects": [],
+        "limits": [],
+        "cooldownSeconds": null,
+        "outcomes": [
+          {
+            "id": "win",
+            "weight": "clamp(bossBaseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95)",
+            "effects": [
+              {
+                "op": "set",
+                "target": "var:last-mission-result",
+                "value": "\"victory\""
+              },
+              {
+                "op": "set",
+                "target": "var:mission-coins",
+                "value": "coinsVictoryBase + coinsVictoryPerLevel * missionLevel + coinsPerCivilian * civiliansPerMission"
+              },
+              {
+                "op": "add",
+                "target": "res:coins",
+                "value": "coinsVictoryBase + coinsVictoryPerLevel * missionLevel + coinsPerCivilian * civiliansPerMission"
+              },
+              {
+                "op": "set",
+                "target": "var:highest-level-unlocked",
+                "value": "min(max(highestLevelUnlocked, missionLevel + 1), levelCount)"
+              },
+              {
+                "op": "set",
+                "target": "var:laser-trial-active",
+                "value": "false"
+              }
+            ]
+          },
+          {
+            "id": "lose",
+            "weight": "1 - clamp(bossBaseWinChance + skillWinWeight * persona.skill + upgradeWinWeight * damageTier + (laserTrialActive ? laserTrialWinBonus : 0), 0.05, 0.95)",
+            "effects": [
+              {
+                "op": "set",
+                "target": "var:last-mission-result",
+                "value": "\"defeat\""
+              },
+              {
+                "op": "set",
+                "target": "var:died-in-boss",
+                "value": "true"
+              },
+              {
+                "op": "set",
+                "target": "var:laser-trial-active",
+                "value": "false"
+              }
+            ]
+          }
+        ],
+        "durationSeconds": "bossFightSeconds",
+        "errorCode": "BOSS_UNAVAILABLE"
+      },
+      {
+        "id": "claim-triple",
+        "name": "claim-triple",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L129-172",
+            "quote": "| Victory Claim 3x           | S11→S12 | Triples the mission's coin reward        | Once per victory             |"
+          }
+        ],
+        "actor": "ad-sdk",
+        "preconditions": [
+          "lastMissionResult == \"victory\""
+        ],
+        "costs": [],
+        "effects": [
+          {
+            "op": "add",
+            "target": "res:coins",
+            "value": "(claimMultiplier - 1) * missionCoins"
+          }
+        ],
+        "limits": [
+          {
+            "max": "1",
+            "per": "mission",
+            "errorCode": null
+          }
+        ],
+        "cooldownSeconds": null,
+        "outcomes": [],
+        "durationSeconds": "rewardedAdSeconds",
+        "errorCode": "CLAIM_NOT_AVAILABLE"
+      },
+      {
+        "id": "revive",
+        "name": "revive",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L129-172",
+            "quote": "| Defeat revive              | S14→S15 | Revive at the current wave with full HP  | **Max 1 revive per mission** |"
+          }
+        ],
+        "actor": "ad-sdk",
+        "preconditions": [
+          "lastMissionResult == \"defeat\""
+        ],
+        "costs": [],
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:last-mission-result",
+            "value": "\"none\""
+          }
+        ],
+        "limits": [
+          {
+            "max": "maxRevivesPerMission",
+            "per": "mission",
+            "errorCode": "REVIVE_LIMIT_REACHED"
+          }
+        ],
+        "cooldownSeconds": null,
+        "outcomes": [],
+        "durationSeconds": "rewardedAdSeconds",
+        "errorCode": "REVIVE_NOT_AVAILABLE"
+      },
+      {
+        "id": "accept-laser-trial",
+        "name": "accept-laser-trial",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L129-172",
+            "quote": "| Briefing laser trial       | S06→S07 | Stronger laser for the next mission only | Once per briefing            |"
+          }
+        ],
+        "actor": "ad-sdk",
+        "preconditions": [
+          "!laserTrialActive"
+        ],
+        "costs": [],
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:laser-trial-active",
+            "value": "true"
+          }
+        ],
+        "limits": [
+          {
+            "max": "1",
+            "per": "mission",
+            "errorCode": null
+          }
+        ],
+        "cooldownSeconds": null,
+        "outcomes": [],
+        "durationSeconds": "rewardedAdSeconds",
+        "errorCode": "LASER_TRIAL_NOT_AVAILABLE"
+      },
+      {
+        "id": "buy-damage-upgrade",
+        "name": "buy-damage-upgrade",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L105-128",
+            "quote": "The Armory sells laser upgrades (damage, fire rate) in tiers 1–10. Upgrade cost per tier is not yet"
+          }
+        ],
+        "actor": "player",
+        "preconditions": [
+          "damageTier < upgradeMaxTier"
+        ],
+        "costs": [
+          {
+            "amount": "upgradeDiscountActive ? floor(curve(upgradeCost, damageTier + 1) * (1 - rerollDiscount)) : curve(upgradeCost, damageTier + 1)",
+            "resource": "res:coins"
+          }
+        ],
+        "effects": [
+          {
+            "op": "add",
+            "target": "var:damage-tier",
+            "value": "1"
+          },
+          {
+            "op": "set",
+            "target": "var:upgrade-discount-active",
+            "value": "false"
+          }
+        ],
+        "limits": [],
+        "cooldownSeconds": null,
+        "outcomes": [],
+        "durationSeconds": null,
+        "errorCode": "UPGRADE_MAX_TIER"
+      },
+      {
+        "id": "reroll-upgrade-offer",
+        "name": "reroll-upgrade-offer",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L129-172",
+            "quote": "| Upgrade reroll             | S16→S17 | Reroll the discounted upgrade offer      | 3 per day **[ASSUMED]**      |"
+          }
+        ],
+        "actor": "ad-sdk",
+        "preconditions": [
+          "!upgradeDiscountActive && damageTier < upgradeMaxTier"
+        ],
+        "costs": [],
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:upgrade-discount-active",
+            "value": "true"
+          }
+        ],
+        "limits": [
+          {
+            "max": "upgradeRerollsPerDay",
+            "per": "day",
+            "errorCode": null
+          }
+        ],
+        "cooldownSeconds": null,
+        "outcomes": [],
+        "durationSeconds": "rewardedAdSeconds",
+        "errorCode": "REROLL_NOT_AVAILABLE"
+      },
+      {
+        "id": "open-daily-chest",
+        "name": "open-daily-chest",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L105-128",
+            "quote": "- **Daily chest** — once per day in the Safe Zone (see §8.3)."
+          }
+        ],
+        "actor": "player",
+        "preconditions": [
+          "claimDailyFreeUpgradeCountDay == 0"
+        ],
+        "costs": [],
+        "effects": [
+          {
+            "op": "add",
+            "target": "res:coins",
+            "value": "dailyChestCoins"
+          }
+        ],
+        "limits": [
+          {
+            "max": "1",
+            "per": "day",
+            "errorCode": null
+          }
+        ],
+        "cooldownSeconds": null,
+        "outcomes": [],
+        "durationSeconds": null,
+        "errorCode": "DAILY_CHEST_ALREADY_OPENED"
+      },
+      {
+        "id": "claim-daily-free-upgrade",
+        "name": "claim-daily-free-upgrade",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L129-172",
+            "quote": "| Daily chest / free upgrade | S18     | One free upgrade tier                    | Once per day                 |"
+          }
+        ],
+        "actor": "ad-sdk",
+        "preconditions": [
+          "openDailyChestCountDay == 0",
+          "damageTier < upgradeMaxTier"
+        ],
+        "costs": [],
+        "effects": [
+          {
+            "op": "add",
+            "target": "var:damage-tier",
+            "value": "1"
+          }
+        ],
+        "limits": [
+          {
+            "max": "1",
+            "per": "day",
+            "errorCode": null
+          }
+        ],
+        "cooldownSeconds": null,
+        "outcomes": [],
+        "durationSeconds": "rewardedAdSeconds",
+        "errorCode": "DAILY_CHEST_ALREADY_OPENED"
+      },
+      {
+        "id": "purchase-remove-ads",
+        "name": "purchase-remove-ads",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L129-172",
+            "quote": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in)."
+          }
+        ],
+        "actor": "store",
+        "preconditions": [
+          "!removeAdsPurchased"
+        ],
+        "costs": [],
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:remove-ads-purchased",
+            "value": "true"
+          }
+        ],
+        "limits": [],
+        "cooldownSeconds": null,
+        "outcomes": [],
+        "durationSeconds": null,
+        "errorCode": "ALREADY_PURCHASED"
+      },
+      {
+        "id": "victory-continue",
+        "name": "victory-continue",
+        "description": null,
+        "assumed": false,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L129-172",
+            "quote": "1. Shown **only after Victory → Continue** (S11 → S13)."
+          }
+        ],
+        "actor": "player",
+        "preconditions": [
+          "lastMissionResult == \"victory\""
+        ],
+        "costs": [],
+        "effects": [],
+        "limits": [],
+        "cooldownSeconds": null,
+        "outcomes": [],
+        "durationSeconds": null,
+        "errorCode": "NOT_AFTER_VICTORY"
+      }
+    ],
+    "transitions": [
+      {
+        "id": "t-loading-to-consent",
+        "name": "t-loading-to-consent",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Start:** S00 Loading → S01 Consent (first launch) → S02 Home. Later launches skip S01."
+          }
+        ],
+        "from": "state:s00-loading",
+        "to": "state:s01-consent",
+        "trigger": "auto",
+        "outcome": null,
+        "guard": "!consentGiven",
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-loading-to-home",
+        "name": "t-loading-to-home",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Start:** S00 Loading → S01 Consent (first launch) → S02 Home. Later launches skip S01."
+          }
+        ],
+        "from": "state:s00-loading",
+        "to": "state:s02-home",
+        "trigger": "auto",
+        "outcome": null,
+        "guard": "consentGiven",
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-consent-accept",
+        "name": "t-consent-accept",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Start:** S00 Loading → S01 Consent (first launch) → S02 Home. Later launches skip S01."
+          }
+        ],
+        "from": "state:s01-consent",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:consent-given",
+            "value": "true"
+          }
+        ],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-home-select-relickeeper",
+        "name": "t-home-select-relickeeper",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L27-38",
+            "quote": "Two launch heroes are selectable on the Home screen. They have **identical controls and identical"
+          }
+        ],
+        "from": "state:s02-home",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:selected-hero",
+            "value": "\"relickeeper\""
+          }
+        ],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-home-select-vanguard",
+        "name": "t-home-select-vanguard",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L27-38",
+            "quote": "Two launch heroes are selectable on the Home screen. They have **identical controls and identical"
+          }
+        ],
+        "from": "state:s02-home",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:selected-hero",
+            "value": "\"vanguard\""
+          }
+        ],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-home-to-hq",
+        "name": "t-home-to-hq",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s02-home",
+        "to": "state:s03-hq-rooftop",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-hq-to-home",
+        "name": "t-hq-to-home",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s03-hq-rooftop",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-home-to-safe-zone",
+        "name": "t-home-to-safe-zone",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s02-home",
+        "to": "state:s04-safe-zone",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-safe-zone-to-home",
+        "name": "t-safe-zone-to-home",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s04-safe-zone",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-home-to-map",
+        "name": "t-home-to-map",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay."
+          }
+        ],
+        "from": "state:s02-home",
+        "to": "state:s05-campaign-map",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-map-to-home",
+        "name": "t-map-to-home",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay."
+          }
+        ],
+        "from": "state:s05-campaign-map",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-home-to-settings",
+        "name": "t-home-to-settings",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s02-home",
+        "to": "state:s19-settings",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-settings-to-home",
+        "name": "t-settings-to-home",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s19-settings",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-home-to-store",
+        "name": "t-home-to-store",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s02-home",
+        "to": "state:s20-store",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-store-to-home",
+        "name": "t-store-to-home",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s20-store",
+        "to": "state:s02-home",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-hq-to-armory",
+        "name": "t-hq-to-armory",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s03-hq-rooftop",
+        "to": "state:s16-armory",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-armory-to-hq",
+        "name": "t-armory-to-hq",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s16-armory",
+        "to": "state:s03-hq-rooftop",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-safe-zone-to-chest",
+        "name": "t-safe-zone-to-chest",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s04-safe-zone",
+        "to": "state:s18-daily-chest",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-chest-to-safe-zone",
+        "name": "t-chest-to-safe-zone",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s18-daily-chest",
+        "to": "state:s04-safe-zone",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-store-buy-remove-ads",
+        "name": "t-store-buy-remove-ads",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L129-172",
+            "quote": "- **Remove Ads** — removes banners, MRECs and interstitials. Rewarded videos stay available (opt-in)."
+          }
+        ],
+        "from": "state:s20-store",
+        "to": "state:s20-store",
+        "trigger": "action:purchase-remove-ads",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-armory-buy-upgrade",
+        "name": "t-armory-buy-upgrade",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L105-128",
+            "quote": "The Armory sells laser upgrades (damage, fire rate) in tiers 1–10. Upgrade cost per tier is not yet"
+          }
+        ],
+        "from": "state:s16-armory",
+        "to": "state:s16-armory",
+        "trigger": "action:buy-damage-upgrade",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-armory-to-reroll",
+        "name": "t-armory-to-reroll",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s16-armory",
+        "to": "state:s17-upgrade-reroll",
+        "trigger": "action:reroll-upgrade-offer",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-reroll-to-armory",
+        "name": "t-reroll-to-armory",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Meta:** S02 Home ↔ S03 HQ Rooftop ↔ S16 Armory (↔ S17 Reroll); S02 ↔ S04 Safe Zone ↔ S18 Daily Chest;"
+          }
+        ],
+        "from": "state:s17-upgrade-reroll",
+        "to": "state:s16-armory",
+        "trigger": "auto",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-chest-open",
+        "name": "t-chest-open",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L173-190",
+            "quote": "Once per calendar day (player's local midnight reset). Contents **[ASSUMED]**: 100 coins, or one free"
+          }
+        ],
+        "from": "state:s18-daily-chest",
+        "to": "state:s18-daily-chest",
+        "trigger": "action:open-daily-chest",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-chest-free-upgrade",
+        "name": "t-chest-free-upgrade",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L173-190",
+            "quote": "Once per calendar day (player's local midnight reset). Contents **[ASSUMED]**: 100 coins, or one free"
+          }
+        ],
+        "from": "state:s18-daily-chest",
+        "to": "state:s18-daily-chest",
+        "trigger": "action:claim-daily-free-upgrade",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-map-to-briefing",
+        "name": "t-map-to-briefing",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay."
+          }
+        ],
+        "from": "state:s05-campaign-map",
+        "to": "state:s06-briefing",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [
+          {
+            "op": "set",
+            "target": "var:mission-level",
+            "value": "highestLevelUnlocked"
+          }
+        ],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-briefing-to-map",
+        "name": "t-briefing-to-map",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay."
+          }
+        ],
+        "from": "state:s06-briefing",
+        "to": "state:s05-campaign-map",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-briefing-to-laser-trial",
+        "name": "t-briefing-to-laser-trial",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay."
+          }
+        ],
+        "from": "state:s06-briefing",
+        "to": "state:s07-laser-trial",
+        "trigger": "action:accept-laser-trial",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-laser-trial-to-briefing",
+        "name": "t-laser-trial-to-briefing",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay."
+          }
+        ],
+        "from": "state:s07-laser-trial",
+        "to": "state:s06-briefing",
+        "trigger": "auto",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-briefing-start-mission",
+        "name": "t-briefing-start-mission",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Play:** S02 Home → S05 Campaign Map → S06 Briefing → (optional S07 Laser Trial → S06) → S08 Gameplay."
+          }
+        ],
+        "from": "state:s06-briefing",
+        "to": "state:s08-gameplay",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": true,
+        "endsMission": false
+      },
+      {
+        "id": "t-gameplay-win",
+        "name": "t-gameplay-win",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →"
+          }
+        ],
+        "from": "state:s08-gameplay",
+        "to": "state:s10-kill-cam",
+        "trigger": "action:play-mission",
+        "outcome": "win",
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-gameplay-to-boss",
+        "name": "t-gameplay-to-boss",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "On L5, S08 Gameplay → S09 Boss Fight after the last wave."
+          }
+        ],
+        "from": "state:s08-gameplay",
+        "to": "state:s09-boss-fight",
+        "trigger": "action:play-mission",
+        "outcome": "waves-cleared",
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-gameplay-lose",
+        "name": "t-gameplay-lose",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same"
+          }
+        ],
+        "from": "state:s08-gameplay",
+        "to": "state:s14-defeat",
+        "trigger": "action:play-mission",
+        "outcome": "lose",
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-boss-win",
+        "name": "t-boss-win",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →"
+          }
+        ],
+        "from": "state:s09-boss-fight",
+        "to": "state:s10-kill-cam",
+        "trigger": "action:fight-boss",
+        "outcome": "win",
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-boss-lose",
+        "name": "t-boss-lose",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same"
+          }
+        ],
+        "from": "state:s09-boss-fight",
+        "to": "state:s14-defeat",
+        "trigger": "action:fight-boss",
+        "outcome": "lose",
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-gameplay-pause",
+        "name": "t-gameplay-pause",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Pause:** from S08 or S09 → S21 Pause → Resume (back to the same screen) or Quit → S05 Campaign Map."
+          }
+        ],
+        "from": "state:s08-gameplay",
+        "to": "state:s21-pause",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-boss-pause",
+        "name": "t-boss-pause",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Pause:** from S08 or S09 → S21 Pause → Resume (back to the same screen) or Quit → S05 Campaign Map."
+          }
+        ],
+        "from": "state:s09-boss-fight",
+        "to": "state:s21-pause",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-pause-resume",
+        "name": "t-pause-resume",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Pause:** from S08 or S09 → S21 Pause → Resume (back to the same screen) or Quit → S05 Campaign Map."
+          }
+        ],
+        "from": "state:s21-pause",
+        "to": "return",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-pause-quit",
+        "name": "t-pause-quit",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Pause:** from S08 or S09 → S21 Pause → Resume (back to the same screen) or Quit → S05 Campaign Map."
+          }
+        ],
+        "from": "state:s21-pause",
+        "to": "state:s05-campaign-map",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": true
+      },
+      {
+        "id": "t-kill-cam-to-victory",
+        "name": "t-kill-cam-to-victory",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →"
+          }
+        ],
+        "from": "state:s10-kill-cam",
+        "to": "state:s11-victory",
+        "trigger": "auto",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-victory-claim-triple",
+        "name": "t-victory-claim-triple",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →"
+          }
+        ],
+        "from": "state:s11-victory",
+        "to": "state:s12-claim-triple",
+        "trigger": "action:claim-triple",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-claim-triple-to-victory",
+        "name": "t-claim-triple-to-victory",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Win:** last enemy defeated → S10 Kill-cam → S11 Victory → (optional S12 Claim 3x → S11) →"
+          }
+        ],
+        "from": "state:s12-claim-triple",
+        "to": "state:s11-victory",
+        "trigger": "auto",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-victory-continue-interstitial",
+        "name": "t-victory-continue-interstitial",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "Continue → (S13 Interstitial when eligible) → S05 Campaign Map with the next district unlocked."
+          }
+        ],
+        "from": "state:s11-victory",
+        "to": "state:s13-interstitial",
+        "trigger": "action:victory-continue",
+        "outcome": null,
+        "guard": "eligible(\"interstitial-after-victory\")",
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-victory-continue-map",
+        "name": "t-victory-continue-map",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "Continue → (S13 Interstitial when eligible) → S05 Campaign Map with the next district unlocked."
+          }
+        ],
+        "from": "state:s11-victory",
+        "to": "state:s05-campaign-map",
+        "trigger": "action:victory-continue",
+        "outcome": null,
+        "guard": "!eligible(\"interstitial-after-victory\")",
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": true
+      },
+      {
+        "id": "t-interstitial-to-map",
+        "name": "t-interstitial-to-map",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "Continue → (S13 Interstitial when eligible) → S05 Campaign Map with the next district unlocked."
+          }
+        ],
+        "from": "state:s13-interstitial",
+        "to": "state:s05-campaign-map",
+        "trigger": "auto",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": true
+      },
+      {
+        "id": "t-defeat-revive",
+        "name": "t-defeat-revive",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same"
+          }
+        ],
+        "from": "state:s14-defeat",
+        "to": "state:s15-revive-offer",
+        "trigger": "action:revive",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-revive-to-gameplay",
+        "name": "t-revive-to-gameplay",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same"
+          }
+        ],
+        "from": "state:s15-revive-offer",
+        "to": "state:s08-gameplay",
+        "trigger": "auto",
+        "outcome": null,
+        "guard": "!diedInBoss",
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-revive-to-boss",
+        "name": "t-revive-to-boss",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "- **Lose:** player HP reaches 0 → S14 Defeat → (optional S15 Revive Offer → back to S08/S09 at the same"
+          }
+        ],
+        "from": "state:s15-revive-offer",
+        "to": "state:s09-boss-fight",
+        "trigger": "auto",
+        "outcome": null,
+        "guard": "diedInBoss",
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": false
+      },
+      {
+        "id": "t-defeat-retry",
+        "name": "t-defeat-retry",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "wave) → Retry → S06 Briefing, or Exit → S05 Campaign Map."
+          }
+        ],
+        "from": "state:s14-defeat",
+        "to": "state:s06-briefing",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": true
+      },
+      {
+        "id": "t-defeat-exit",
+        "name": "t-defeat-exit",
+        "description": null,
+        "assumed": true,
+        "evidence": [
+          {
+            "chunk": "gamex/sources/GDD.md#L64-104",
+            "quote": "wave) → Retry → S06 Briefing, or Exit → S05 Campaign Map."
+          }
+        ],
+        "from": "state:s14-defeat",
+        "to": "state:s05-campaign-map",
+        "trigger": "ui",
+        "outcome": null,
+        "guard": null,
+        "effects": [],
+        "beginsMission": false,
+        "endsMission": true
+      }
+    ]
+  }
+}

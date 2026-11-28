@@ -70,6 +70,10 @@ const toPosix = (p: string): string => p.split(sep).join('/');
  * directory), the hard deny-list (secrets, keys, credentials), the extension allowlist, a size cap, never
  * follows symlinks, and scans text for secrets. A file that fails any check is never returned.
  */
+function entriesOf(dir: string) {
+  return readdirSync(dir, { withFileTypes: true }).sort((a, b) => (a.name < b.name ? -1 : 1));
+}
+
 export class SafeFileSystem {
   readonly root: string;
   readonly maxBytes: number;
@@ -96,8 +100,11 @@ export class SafeFileSystem {
   pathPolicy(relPath: string, isDirectory = false): string | undefined {
     const parts = relPath.split('/');
     if (parts.some((p) => p === '..' || p === '')) return 'outside the repository';
-    for (const p of parts.slice(0, isDirectory ? parts.length : -1))
-      if ((SKIPPED_DIRECTORIES as readonly string[]).includes(p)) return `inside ${p}/`;
+    // gamex/ holds GameX's own output and is skipped, except gamex/sources/ (documents uploaded in the studio).
+    const inSources = parts[0] === 'gamex' && parts[1] === 'sources';
+    for (const [i, p] of parts.slice(0, isDirectory ? parts.length : -1).entries())
+      if ((SKIPPED_DIRECTORIES as readonly string[]).includes(p) && !(inSources && i === 0))
+        return `inside ${p}/`;
     const denied = matchDenyList(relPath);
     if (denied !== undefined) return `denied: ${denied.reason}`;
     for (let i = 0; i < parts.length; i++) {
@@ -121,9 +128,7 @@ export class SafeFileSystem {
     const files: RepoFile[] = [];
     const excluded: ExcludedFile[] = [];
     const walk = (dirRel: string): void => {
-      const entries = readdirSync(join(this.root, dirRel), { withFileTypes: true }).sort((a, b) =>
-        a.name < b.name ? -1 : 1,
-      );
+      const entries = entriesOf(join(this.root, dirRel));
       for (const e of entries) {
         const rel = dirRel === '' ? e.name : `${dirRel}/${e.name}`;
         if (e.isSymbolicLink()) {
@@ -131,6 +136,17 @@ export class SafeFileSystem {
           continue;
         }
         if (e.isDirectory()) {
+          if (rel === 'gamex') {
+            const sources = entriesOf(join(this.root, 'gamex')).find((x) => x.name === 'sources');
+            if (sources?.isSymbolicLink() === true)
+              excluded.push({ path: 'gamex/sources', reason: 'symbolic link (never followed)' });
+            else if (
+              sources?.isDirectory() === true &&
+              this.pathPolicy('gamex/sources', true) === undefined
+            )
+              walk('gamex/sources');
+            continue;
+          }
           const why = this.pathPolicy(rel, true);
           if (why === undefined) walk(rel);
           else if (!(SKIPPED_DIRECTORIES as readonly string[]).includes(e.name))

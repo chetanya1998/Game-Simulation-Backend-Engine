@@ -202,3 +202,36 @@ describe('plan confirmation', () => {
     );
   });
 });
+
+describe('gamex/sources (studio uploads)', () => {
+  it('reads documents uploaded to gamex/sources/ but nothing else under gamex/', async () => {
+    const dir = plantedRepo();
+    mkdirSync(join(dir, 'gamex', 'sources'), { recursive: true });
+    mkdirSync(join(dir, 'gamex', 'balance'), { recursive: true });
+    writeFileSync(join(dir, 'gamex', 'sources', 'notes.md'), '# Notes\nRevive once.\n');
+    writeFileSync(join(dir, 'gamex', 'sources', '.env'), 'X=planted-canary-value-do-not-send\n');
+    writeFileSync(join(dir, 'gamex', 'balance', 'economy.json'), '{}');
+    writeFileSync(join(dir, 'gamex', 'game-model.json'), '{}');
+    const plan = discoverInputs(dir);
+    expect(plan.files.filter((f) => f.path.startsWith('gamex/'))).toEqual([
+      expect.objectContaining({ path: 'gamex/sources/notes.md', kind: 'design' }),
+    ]);
+    expect(plan.excluded.find((e) => e.path === 'gamex/sources/.env')?.reason).toMatch(/denied/);
+    const chunks = await readChunks(plan);
+    expect(chunks.map((c) => c.text).join('\n')).not.toContain('planted-canary');
+  });
+
+  it('does not follow a symlinked gamex/sources', () => {
+    const dir = plantedRepo();
+    const outside = mkdtempSync(join(tmpdir(), 'gamex-outside-'));
+    writeFileSync(join(outside, 'GDD.md'), '# outside\n');
+    mkdirSync(join(dir, 'gamex'));
+    symlinkSync(outside, join(dir, 'gamex', 'sources'));
+    const plan = discoverInputs(dir);
+    expect(plan.files.map((f) => f.path)).not.toContain('gamex/sources/GDD.md');
+    expect(plan.excluded).toContainEqual({
+      path: 'gamex/sources',
+      reason: 'symbolic link (never followed)',
+    });
+  });
+});

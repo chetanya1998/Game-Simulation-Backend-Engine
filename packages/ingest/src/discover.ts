@@ -45,6 +45,8 @@ function classify(
     case 'markdown':
     case 'txt':
     case 'pdf':
+      if (file.path.startsWith('gamex/sources/'))
+        return { kind: 'design', reason: 'uploaded in the studio (gamex/sources/)' };
       if (file.path.toLowerCase() === 'readme.md')
         return { kind: 'design', reason: 'project README' };
       if (DESIGN_NAME.test(name)) return { kind: 'design', reason: 'design-document name' };
@@ -55,6 +57,8 @@ function classify(
     case 'yml':
     case 'toml':
     case 'asset':
+      if (file.path.startsWith('gamex/sources/'))
+        return { kind: 'config', reason: 'uploaded in the studio (gamex/sources/)' };
       if (CONFIG_NAME.test(name)) return { kind: 'config', reason: 'balance/config name' };
       if (/(^|\/)(config|configs|data|balance|tuning)\//i.test(file.path))
         return { kind: 'config', reason: 'in a config/data folder' };

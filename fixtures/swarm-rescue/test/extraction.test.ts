@@ -190,3 +190,24 @@ describe('Swarm Rescue extraction from recorded answers', () => {
     expect(validateGameModel(model).ok).toBe(true);
   });
 });
+
+describe('Swarm Rescue extraction after a studio upload (gamex/sources/GDD.md)', () => {
+  it('replays the upload recordings and cites the uploaded file', async () => {
+    const { uploadScenarioRepo } = await import('../../scripts/scenarios.ts');
+    const repo = uploadScenarioRepo();
+    const chunks = await readChunks(discoverInputs(repo));
+    expect(chunks.map((c) => c.path)).toContain('gamex/sources/GDD.md');
+    const run = await runExtraction(
+      chunks,
+      RecordedProvider.fromDirectory(join(here, 'recordings-upload')),
+    );
+    const { model, report } = assembleCandidate(run.outputs, chunks);
+    expect(report.unverified).toEqual([]);
+    expect(
+      model.monetization.placements.find((p) => p.id === 'rewarded-revive')?.provenance,
+    ).toMatchObject({
+      source: 'gamex/sources/GDD.md',
+      location: '§7.1 / line 136',
+    });
+  });
+});
