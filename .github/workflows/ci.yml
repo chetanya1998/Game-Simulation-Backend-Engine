@@ -24,7 +24,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Install Chromium for the browser determinism test
+      - name: Install Chromium (browser determinism test, studio E2E)
         run: pnpm --filter @gamex/engine exec playwright install --with-deps chromium
       - run: pnpm lint
       - run: pnpm typecheck
@@ -60,3 +60,14 @@ jobs:
           node packages/cli/dist/gamex.js validate --cwd "$repo"
           test -z "$(git -C "$repo" status --porcelain --ignored -- gamex/.work | grep -v '^!!')"
           (cd "$repo" && node gamex/tests/runner/run-golden.ts)
+
+      - name: Studio end to end (Chromium)
+        run: pnpm --filter @gamex/studio test:e2e
+
+      - name: Upload studio screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-screenshots
+          path: apps/studio/e2e-output/
+          if-no-files-found: ignore

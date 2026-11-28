@@ -8,7 +8,7 @@ GameX Engine reads a game design document (and, optionally, your game repo), tur
 into your repo — `AGENTS.md`, balance files, formulas, backend contracts, golden tests and build tasks — so
 coding agents can build the backend straight from it.
 
-> Status: Phases 0–4 done (model, engine, Spec Pack + CLI, ingestion & extraction). See [`docs/PLAN.md`](docs/PLAN.md).
+> Status: Phases 0–5 done (model, engine, Spec Pack + CLI, ingestion & extraction, studio). See [`docs/PLAN.md`](docs/PLAN.md).
 
 ## Quick start (development)
 
@@ -42,6 +42,16 @@ ANTHROPIC_API_KEY=… node packages/cli/dist/gamex.js init --cwd path/to/game-re
 ```
 
 No API key? Use `--provider agent` to answer the extraction requests with your own agent session.
+
+Or do all of it in the browser: upload the GDD, review, tweak constants, simulate, compare variants and
+write the Spec Pack. The studio runs on 127.0.0.1 only; open the link it prints:
+
+```bash
+node packages/cli/dist/gamex.js studio --cwd path/to/game-repo
+```
+
+`apps/studio/dist` also works as a static offline site (import a `game-model.json`, download the Spec
+Pack as a zip).
 
 Requires Node ≥ 22.18.
 

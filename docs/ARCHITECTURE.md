@@ -551,6 +551,11 @@ explore, sync, drift, studio`. Conventions:
 
 ## 9. Studio (`apps/studio`)
 
+> **As built (Phase 5):** see [ADR 0009](./DECISIONS/0009-studio.md). `gamex studio` serves the studio on
+> 127.0.0.1 with a per-launch token, and uploads go to `gamex/sources/`. The worker pool splits runs into
+> player ranges and merges them with `aggregateResults`, so its hashes equal the CLI's. Without a token,
+> the same build runs in static mode (import a model, download the Spec Pack as a zip).
+
 - Vite + React + TS; state in a small store (Zustand); **React Flow** for entity map, economy graph,
   state machine (auto-layout with ELK); **ECharts** for time series, distributions, tornado.
 - Engine runs in a **Web Worker pool** (Comlink); runs are chunked by persona/player ranges — thanks to

@@ -123,7 +123,7 @@ Tests / acceptance
 - `init --yes --decisions accept-all.json` on the sample repo produces a valid model and a complete Spec Pack.
 - One opt-in live test (`GAMEX_LIVE=1`) against the real API.
 
-### Phase 5 — Studio (≈ 4–5 sessions)
+### Phase 5 — Studio (≈ 4–5 sessions) — ✅ done (ADR 0009)
 
 Deliverables: `gamex studio` local server + views 1–10, Worker pool, light/dark mode, static-offline mode.
 

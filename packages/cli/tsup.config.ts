@@ -16,7 +16,8 @@ export default defineConfig({
   banner: { js: '#!/usr/bin/env node' },
   // `gamex studio` serves the built studio from dist/studio (turbo builds @gamex/studio first).
   onSuccess: () => {
-    if (!existsSync(`${studio}index.html`)) throw new Error('apps/studio is not built; run `pnpm build`.');
+    if (!existsSync(`${studio}index.html`))
+      throw new Error('apps/studio is not built; run `pnpm build`.');
     rmSync(target, { recursive: true, force: true });
     cpSync(studio, target, { recursive: true });
     return Promise.resolve();
